@@ -18,6 +18,15 @@
 			"recommended": true,
 			"suspicious": {
 				"noUnknownAtRules": "off"
+			},
+			"a11y": {
+				"useSemanticElements": "off",
+				"useFocusableInteractive": "off",
+				"useKeyWithClickEvents": "off",
+				"useAriaPropsForRole": "off"
+			},
+			"correctness": {
+				"noNestedComponentDefinitions": "off"
 			}
 		}
 	},

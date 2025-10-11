@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './style.css';
+import '@/assets/style.css';
+import { Button } from '@/components/ui/button';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <div className="text-3xl font-bold underline bg-amber-600 p-4 text-white">
-      Hello, Activity Enhancer!
+    <div className="">
+      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <Button >Button</Button>
     </div>
   </React.StrictMode>,
 );

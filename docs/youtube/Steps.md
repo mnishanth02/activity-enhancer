@@ -8,4 +8,4 @@
 - configure the tailwind css
 - Configure biome
 - confiure shandcn components
--
+- Install all the shadncn components.

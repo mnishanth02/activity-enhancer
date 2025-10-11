@@ -24,7 +24,8 @@ Purpose: Enable AI assistants to quickly contribute to the AI Activity Enhancer 
 - Idempotency: Always tag processed DOM nodes (e.g. `data-ai-enhanced="1"`). Before injecting, check tag.
 - Avoid heavy re-query loops—MutationObserver should batch or filter new nodes only.
 - Prompt contract: Title <= 60 chars, Description <= 280 chars, faithful & motivational.
-- Minimal state: ephemeral in content script; persist only user config (API key, model) via `chrome.storage.sync`.
+- **Storage**: Use WXT's `storage.defineItem` API with area prefixes (`sync:`, `local:`, `session:`). Import from `wxt/utils/storage`. All keys must have area prefix (e.g., `sync:ae.settings`).
+- Minimal state: ephemeral in content script; persist user config via sync storage with zod validation.
 - Prefer graceful fallback: if AI fails, show original unchanged text and a retry affordance.
 
 ## 4. Error & Edge Handling

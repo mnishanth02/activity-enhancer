@@ -2,7 +2,7 @@ export function Header() {
 	return (
 		<header className="border-b px-6 py-4">
 			<div className="flex items-center gap-3">
-				<div 
+				<div
 					className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center"
 					aria-hidden="true"
 				>

@@ -116,8 +116,8 @@ Implement a tabbed "Activity Enhancer" popup (Status / Settings / Account) for t
 |------|-------------|-----------|------|
 | TASK-032 | Add lightweight test infra (if absent) using `vitest` + `@testing-library/react` |  |  |
 | TASK-033 | Write tests: schema validation (tones, endpoint URL), storage round-trip, query-state util |  |  |
-| TASK-034 | Add README snippet for popup usage & dev instructions |  |  |
-| TASK-035 | Update `.github/copilot-instructions.md` if new pattern introduced (query state util) |  |  |
+| TASK-034 | Add README snippet for popup usage & dev instructions | ✅ | 2025-10-12 |
+| TASK-035 | Update `.github/copilot-instructions.md` if new pattern introduced (query state util) | ✅ | 2025-10-12 |
 
 ## 3. Alternatives
 

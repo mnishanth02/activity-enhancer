@@ -56,7 +56,117 @@ State Handling: Lightweight in‑memory per tab; no persistent storage yet beyon
 
 ---
 
+## 🎯 Quick Start Guide
+
+### First Time Setup
+
+1. **Install the Extension**
+   - Load the extension in Chrome (see Development section below)
+   - Click the extension icon in your toolbar to open the popup
+
+2. **Configure Your Settings**
+   - Navigate to the **Settings** tab
+   - Choose your preferred enhancement tone (inspirational, motivational, casual, etc.)
+   - Enable/disable hashtag generation
+   - (Optional) Configure BYOK in Advanced Settings if you have your own API key
+
+3. **Enable for Your Sites**
+   - Visit a supported activity site (Strava, Garmin, etc.)
+   - Click the extension icon
+   - Toggle "Enable for this site" in the **Status** tab
+
+4. **Start Enhancing**
+   - Look for the "Enhance" button next to activities
+   - Click to generate AI-powered improvements
+   - Review and accept or cancel the suggestions
+
+### Managing Your Account
+
+**Free Tier**: 50 enhancements per month (auto-resets on the 1st)
+
+**Upgrade to PRO** for:
+- Unlimited enhancements
+- Weather context integration
+- Custom prompt templates
+- Priority support
+
+Click the **Account** tab to view pricing and upgrade options.
+
+---
+
 ## ⚙️ Configuration
+
+The extension provides a comprehensive popup interface for managing settings, monitoring usage, and accessing PRO features.
+
+### Popup Interface Overview
+
+The popup includes three main tabs accessible via the extension icon:
+
+#### 1. **Status Tab**
+- **Per-Site Toggle**: Enable/disable enhancement for the current domain
+- **Usage Metrics**: View monthly enhancement count and PRO status
+- **Quick Actions**: One-click access to upgrade or manage settings
+
+#### 2. **Settings Tab**
+General Settings:
+- **Default Tone**: Choose enhancement style (inspirational, motivational, casual, professional, humorous)
+- **Generate Hashtags**: Automatically add relevant hashtags to enhancements
+- **Include Weather Context** (PRO): Add weather information to activity descriptions
+- **Custom Prompts** (PRO): Create and save your own enhancement templates
+
+Advanced Settings (Bring Your Own Key):
+- **Provider Selection**: Choose from OpenAI, Anthropic, or Google AI
+- **Custom Endpoint**: Optionally specify a custom API endpoint
+- **API Key**: Securely store your API key (synced across devices)
+- **Test Connection**: Validate your API configuration
+
+#### 3. **Account Tab**
+Free User View:
+- Feature comparison list
+- Pricing plans (Monthly: $9/month, Annual: $81/year with 25% savings)
+- Sign-in option for existing accounts
+
+Pro User View:
+- Subscription details and billing information
+- Manage subscription (Stripe Customer Portal integration)
+- Logout functionality
+
+### Storage & Sync
+
+All settings are stored using Chrome's `storage.sync` API and synchronized across your devices:
+
+| Setting | Storage Key | Type | Default |
+|---------|-------------|------|---------|
+| General Settings | `sync:ae.settings` | Object | `{ tone: "inspirational", generateHashtags: false, includeWeather: false }` |
+| Advanced Settings | `sync:ae.advanced` | Object | `{ provider: undefined, endpoint: "", apiKey: "" }` |
+| Site Preferences | `sync:ae.site-prefs` | Record | `{}` (per-domain enable/disable) |
+| Account Info | `sync:ae.account` | Object | `{ pro: false }` |
+| Monthly Metrics | `local:ae.metrics` | Object | Auto-reset monthly |
+
+### Query State Management
+
+The popup uses URL query parameters for transient UI state (not persisted):
+- `?tab=status|settings|account` - Active tab selection
+- `?adv=1` - Advanced settings section expanded state
+
+This pattern ensures clean URLs on refresh while maintaining navigation context during the session.
+
+### PRO Features
+
+Unlock unlimited enhancements and premium features:
+- **Unlimited Enhancements**: No monthly limits
+- **Weather Context Integration**: Automatically include weather data
+- **Custom Prompt Templates**: Create personalized enhancement styles
+- **Bring Your Own Key (BYOK)**: Use your own AI provider API keys
+- **Priority Support**: Faster response times
+
+Monthly limits for free tier: 50 enhancements (auto-reset on 1st of each month).
+
+---
+
+## ⚙️ Legacy Configuration
+
+For advanced users or development purposes:
 
 | Setting | Where | Notes |
 |---------|-------|-------|
@@ -107,11 +217,55 @@ WXT dev mode will output an extension directory (e.g. `.output/chrome-mv3`) and 
 1. Open Chrome → Extensions → Enable Developer Mode
 2. Load Unpacked → select the generated build folder.
 
+### Development Commands
+
+```bash
+# Start development server with hot reload
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Type checking (no emit)
+pnpm compile
+
+# Lint and format (Biome)
+pnpm check
+pnpm check --write  # Auto-fix issues
+```
+
+### Popup Development
+
+The popup UI is built with React and uses lazy loading for performance:
+
+- **Entry Point**: `src/entrypoints/popup/main.tsx`
+- **Components**: `src/entrypoints/popup/components/`
+  - `StatusTab.tsx` - Domain toggle, metrics display
+  - `SettingsTab.tsx` - General settings + BYOK advanced section
+  - `AccountTab.tsx` - Free/Pro views with pricing
+  - `LoadingSkeletons.tsx` - Shared loading states
+  - `Header.tsx`, `TabsNavigation.tsx` - Layout components
+- **Utilities**: `src/lib/`
+  - `storage.ts` - WXT storage helpers with validation
+  - `settings-schema.ts` - Zod schemas (v3 compatibility)
+  - `query-state.ts` - URL param state management
+  - `metrics.ts` - Enhancement count tracking
+
+**Key Patterns**:
+- Forms use `react-hook-form` with `zodResolver`
+- Zod schemas imported from `"zod/v3"` for @hookform/resolvers compatibility
+- Transient UI state in query params (`?tab=status`, `?adv=1`)
+- Persistent data in `chrome.storage.sync` with `sync:` prefix
+- Toast notifications (Sonner) for all user actions
+- Specialized skeletons for loading states (not generic spinners)
+
 Build Production:
 
 ```bash
 pnpm build
 ```
+
+Build output typically ~600 kB total, with code-split chunks for each tab.
 
 ---
 
@@ -136,12 +290,34 @@ pnpm build
 
 ---
 
-## 🗺️ Roadmap (Short Term)
+## 🗺️ Roadmap
 
-1. MVP DOM injection + single model enhancement (current scope)
-2. Basic error & retry UX
-3. Model selector + persist choice
-4. Add two more platforms beyond initial four
+### ✅ Completed (Phase 1-5)
+- [x] Popup UI with tabbed interface (Status, Settings, Account)
+- [x] Per-site toggle with domain detection
+- [x] Settings management with form validation
+- [x] PRO feature gating and pricing display
+- [x] Bring Your Own Key (BYOK) advanced settings
+- [x] Monthly metrics tracking with auto-reset
+- [x] Comprehensive accessibility (ARIA labels, semantic HTML)
+- [x] Professional loading states (skeleton components)
+- [x] Robust error handling with toast notifications
+
+### 🚧 In Progress
+- [ ] Content script implementation (DOM injection + enhancement logic)
+- [ ] LLM integration (Vercel AI SDK)
+- [ ] Site adapters for Strava, Garmin, Fitbit, Nike Run Club
+
+### 📋 Next Up (Phase 6+)
+- [ ] Test infrastructure (vitest + @testing-library/react)
+- [ ] Component and utility tests
+- [ ] Backend authentication (OAuth/Stripe integration)
+- [ ] Streaming response UI
+- [ ] Custom prompt templates
+- [ ] Weather context integration
+- [ ] Additional platform support
+
+---
 5. Streaming response refinement (optimistic partial display)
 
 ---

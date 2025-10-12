@@ -2,6 +2,7 @@ import { lazy, StrictMode, Suspense, useMemo } from "react";
 import "@/assets/style.css";
 import ReactDOM from "react-dom/client";
 import { Spinner } from "@/components/ui/spinner";
+import { Toaster } from "@/components/ui/sonner";
 import { useQueryParam } from "@/lib/query-state";
 import { Header } from "./components/Header";
 import { StatusTab } from "./components/StatusTab";
@@ -31,21 +32,21 @@ function PopupApp() {
 	const tabElement = useMemo(() => {
 		switch (activeTab) {
 			case "status":
-				return <StatusTab domain={domain} />;
+				return <StatusTab domain={ domain } />;
 			case "settings":
 				return (
-					<Suspense fallback={<LoadingTab />}>
+					<Suspense fallback={ <LoadingTab /> }>
 						<SettingsTab />
 					</Suspense>
 				);
 			case "account":
 				return (
-					<Suspense fallback={<LoadingTab />}>
+					<Suspense fallback={ <LoadingTab /> }>
 						<AccountTab />
 					</Suspense>
 				);
 			default:
-				return <StatusTab domain={domain} />; // Fallback for unknown param
+				return <StatusTab domain={ domain } />; // Fallback for unknown param
 		}
 	}, [activeTab, domain]);
 
@@ -58,9 +59,10 @@ function PopupApp() {
 	return (
 		<div className="w-[420px] min-h-[500px] bg-background">
 			<Header />
-			<TabsNavigation activeTab={activeTab} onTabChange={setActiveTab}>
-				<TabsContent value={activeTab}>{tabElement}</TabsContent>
+			<TabsNavigation activeTab={ activeTab } onTabChange={ setActiveTab }>
+				<TabsContent value={ activeTab }>{ tabElement }</TabsContent>
 			</TabsNavigation>
+			<Toaster />
 		</div>
 	);
 }

@@ -91,20 +91,20 @@ export function StatusTab({ domain }: StatusTabProps) {
 
 	return (
 		<div className="p-6 space-y-6">
-			{/* Current Site Section */ }
+			{/* Current Site Section */}
 			<div className="space-y-2">
 				<h3 className="text-sm font-medium">Current Site</h3>
 				<p className="text-sm text-muted-foreground">
-					{ domain || "No active site detected" }
+					{domain || "No active site detected"}
 				</p>
 			</div>
 
-			{/* Enhancement Toggle */ }
-			{ domain && (
+			{/* Enhancement Toggle */}
+			{domain && (
 				<div className="flex items-center justify-between py-3 border-y">
 					<div className="space-y-1">
 						<label
-							htmlFor={ toggleId }
+							htmlFor={toggleId}
 							className="text-sm font-medium cursor-pointer"
 						>
 							Enable AI Enhancement
@@ -114,28 +114,28 @@ export function StatusTab({ domain }: StatusTabProps) {
 						</p>
 					</div>
 					<Switch
-						id={ toggleId }
-						checked={ isEnabled }
-						onCheckedChange={ handleToggle }
-						disabled={ isToggling }
+						id={toggleId}
+						checked={isEnabled}
+						onCheckedChange={handleToggle}
+						disabled={isToggling}
 						aria-label="Toggle AI enhancement for this site"
 					/>
 				</div>
-			) }
+			)}
 
-			{/* Monthly Enhancement Count */ }
+			{/* Monthly Enhancement Count */}
 			<div className="space-y-2">
 				<h3 className="text-sm font-medium">This Month</h3>
 				<div className="flex items-baseline gap-2">
-					<span className="text-2xl font-bold">{ enhancementCount }</span>
+					<span className="text-2xl font-bold">{enhancementCount}</span>
 					<span className="text-sm text-muted-foreground">
-						enhancement{ enhancementCount !== 1 ? "s" : "" }
+						enhancement{enhancementCount !== 1 ? "s" : ""}
 					</span>
 				</div>
 			</div>
 
-			{/* Pro Status or CTA */ }
-			{ isPro ? (
+			{/* Pro Status or CTA */}
+			{isPro ? (
 				<div className="rounded-lg border bg-accent/50 p-4 space-y-2">
 					<div className="flex items-center gap-2">
 						<Badge variant="default">PRO</Badge>
@@ -156,13 +156,13 @@ export function StatusTab({ domain }: StatusTabProps) {
 					<Button
 						size="sm"
 						className="w-full"
-						onClick={ handleUpgradeCTA }
+						onClick={handleUpgradeCTA}
 						aria-label="Upgrade to Pro plan"
 					>
 						View Plans
 					</Button>
 				</div>
-			) }
+			)}
 		</div>
 	);
 }

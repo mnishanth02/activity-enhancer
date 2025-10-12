@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v3";
 
 /**
  * Tone options for AI enhancements
@@ -28,7 +28,7 @@ export type Settings = z.infer<typeof SettingsSchema>;
  */
 export const AdvancedSchema = z.object({
 	provider: ProviderEnum.optional(),
-	endpoint: z.url().optional().or(z.literal("")),
+	endpoint: z.string().url().optional().or(z.literal("")),
 	apiKey: z.string().optional(),
 });
 export type AdvancedSettings = z.infer<typeof AdvancedSchema>;
@@ -46,7 +46,7 @@ export type DomainPrefs = z.infer<typeof DomainPrefsSchema>;
 export const AccountSchema = z.object({
 	pro: z.boolean().default(false),
 	userName: z.string().optional(),
-	email: z.email().optional(),
+	email: z.string().email().optional(),
 	planName: z.string().optional(),
 	nextBillingDate: z.string().optional(),
 });

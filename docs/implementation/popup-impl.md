@@ -76,14 +76,14 @@ Implement a tabbed "Activity Enhancer" popup (Status / Settings / Account) for t
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-015 | Create `SettingsTab.tsx` containing `react-hook-form` usage with zod resolver |  |  |
-| TASK-016 | Build form fields: tone select, hashtags checkbox (persist on submit) |  |  |
-| TASK-017 | Render pro gated controls disabled when `!pro`: weather checkbox, custom prompts button (disabled) with PRO badge component |  |  |
-| TASK-018 | Implement collapsible advanced section using existing `collapsible` / `accordion` component for BYOK |  |  |
-| TASK-019 | Add BYOK provider select, endpoint text input, apiKey password input with validation, Save & Test buttons |  |  |
-| TASK-020 | Provide `Test Connection` stub: basic fetch to endpoint if provided; show toast success/fail |  |  |
-| TASK-021 | Persist advanced settings separately to avoid saving partial invalid state (validate before write) |  |  |
-| TASK-022 | Sync advanced section open state to query param `adv=1` (transient) |  |  |
+| TASK-015 | Create `SettingsTab.tsx` containing `react-hook-form` usage with zod resolver | ✅ | 2025-10-12 |
+| TASK-016 | Build form fields: tone select, hashtags checkbox (persist on submit) | ✅ | 2025-10-12 |
+| TASK-017 | Render pro gated controls disabled when `!pro`: weather checkbox, custom prompts button (disabled) with PRO badge component | ✅ | 2025-10-12 |
+| TASK-018 | Implement collapsible advanced section using existing `collapsible` / `accordion` component for BYOK | ✅ | 2025-10-12 |
+| TASK-019 | Add BYOK provider select, endpoint text input, apiKey password input with validation, Save & Test buttons | ✅ | 2025-10-12 |
+| TASK-020 | Provide `Test Connection` stub: basic fetch to endpoint if provided; show toast success/fail | ✅ | 2025-10-12 |
+| TASK-021 | Persist advanced settings separately to avoid saving partial invalid state (validate before write) | ✅ | 2025-10-12 |
+| TASK-022 | Sync advanced section open state to query param `adv=1` (transient) | ✅ | 2025-10-12 |
 
 ### Implementation Phase 4
 

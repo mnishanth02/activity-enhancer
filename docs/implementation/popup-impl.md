@@ -64,11 +64,11 @@ Implement a tabbed "Activity Enhancer" popup (Status / Settings / Account) for t
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-010 | Create `StatusTab.tsx` with props: domain, domainEnabled, onToggle |  |  |
-| TASK-011 | Wire toggle to update domain prefs in storage, optimistic UI, handle errors gracefully |  |  |
-| TASK-012 | Add enhancement count retrieval (from `chrome.storage.sync` key `ae.metrics`) with default 0 |  |  |
-| TASK-013 | Add CTA button that sets `tab=account` when clicked if not pro |  |  |
-| TASK-014 | Show Pro badge message if pro status (placeholder logic reading `ae.account.pro=true`) |  |  |
+| TASK-010 | Create `StatusTab.tsx` with props: domain, domainEnabled, onToggle | ✅ | 2025-10-12 |
+| TASK-011 | Wire toggle to update domain prefs in storage, optimistic UI, handle errors gracefully | ✅ | 2025-10-12 |
+| TASK-012 | Add enhancement count retrieval (from `chrome.storage.sync` key `ae.metrics`) with default 0 | ✅ | 2025-10-12 |
+| TASK-013 | Add CTA button that sets `tab=account` when clicked if not pro | ✅ | 2025-10-12 |
+| TASK-014 | Show Pro badge message if pro status (placeholder logic reading `ae.account.pro=true`) | ✅ | 2025-10-12 |
 
 ### Implementation Phase 3
 

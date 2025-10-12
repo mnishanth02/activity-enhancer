@@ -1,12 +1,12 @@
 import { lazy, StrictMode, Suspense, useMemo } from "react";
 import "@/assets/style.css";
 import ReactDOM from "react-dom/client";
+import { Spinner } from "@/components/ui/spinner";
 import { useQueryParam } from "@/lib/query-state";
 import { Header } from "./components/Header";
 import { StatusTab } from "./components/StatusTab";
 import { TabsContent, TabsNavigation } from "./components/TabsNavigation";
 import { useCurrentDomain } from "./hooks/useCurrentDomain";
-import { Spinner } from "@/components/ui/spinner";
 
 // Lazy-load infrequently used tabs to reduce initial bundle evaluation cost
 const SettingsTab = lazy(() =>
@@ -31,21 +31,21 @@ function PopupApp() {
 	const tabElement = useMemo(() => {
 		switch (activeTab) {
 			case "status":
-				return <StatusTab domain={ domain } />;
+				return <StatusTab domain={domain} />;
 			case "settings":
 				return (
-					<Suspense fallback={ <LoadingTab /> }>
+					<Suspense fallback={<LoadingTab />}>
 						<SettingsTab />
 					</Suspense>
 				);
 			case "account":
 				return (
-					<Suspense fallback={ <LoadingTab /> }>
+					<Suspense fallback={<LoadingTab />}>
 						<AccountTab />
 					</Suspense>
 				);
 			default:
-				return <StatusTab domain={ domain } />; // Fallback for unknown param
+				return <StatusTab domain={domain} />; // Fallback for unknown param
 		}
 	}, [activeTab, domain]);
 
@@ -58,8 +58,8 @@ function PopupApp() {
 	return (
 		<div className="w-[420px] min-h-[500px] bg-background">
 			<Header />
-			<TabsNavigation activeTab={ activeTab } onTabChange={ setActiveTab }>
-				<TabsContent value={ activeTab }>{ tabElement }</TabsContent>
+			<TabsNavigation activeTab={activeTab} onTabChange={setActiveTab}>
+				<TabsContent value={activeTab}>{tabElement}</TabsContent>
 			</TabsNavigation>
 		</div>
 	);

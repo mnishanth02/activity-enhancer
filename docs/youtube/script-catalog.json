@@ -1,0 +1,62 @@
+{
+  "scripts": [
+    {
+      "id": "phase1-popup-foundation",
+      "title": "Phase 1: Popup Foundation - Type-Safe Storage, React Architecture & State Management",
+      "file_path": "docs/youtube/phase1-popup-foundation-20251012.md",
+      "created_date": "2025-10-12",
+      "commit_range": "4ccb07b..afec6de",
+      "complexity": "high",
+      "estimated_duration": "6-8 minutes",
+      "organization_type": "standalone",
+      "tech_stack": ["TypeScript", "React", "WXT", "Zod", "Chrome Extensions API"],
+      "status": "draft",
+      "production_status": {
+        "script_approved": false,
+        "recording_complete": false,
+        "editing_complete": false,
+        "published": false
+      },
+      "feature_summary": "Complete foundation setup including type-safe storage with WXT API, custom query state management, React component architecture, and zod validation",
+      "key_topics": [
+        "WXT storage.defineItem API",
+        "Zod schema validation",
+        "Custom query param state management",
+        "React hooks (useCurrentDomain)",
+        "Chrome tabs API integration",
+        "Metrics tracking with auto-reset"
+      ],
+      "files_covered": [
+        "src/lib/settings-schema.ts",
+        "src/lib/storage.ts",
+        "src/lib/query-state.ts",
+        "src/lib/metrics.ts",
+        "src/entrypoints/popup/main.tsx",
+        "src/entrypoints/popup/components/Header.tsx",
+        "src/entrypoints/popup/components/TabsNavigation.tsx",
+        "src/entrypoints/popup/components/StatusTab.tsx",
+        "src/entrypoints/popup/components/SettingsTab.tsx",
+        "src/entrypoints/popup/components/AccountTab.tsx",
+        "src/entrypoints/popup/hooks/useCurrentDomain.ts"
+      ],
+      "commits_referenced": [
+        "4ccb07b - feat: initialize project structure and add essential files",
+        "550d912 - feat: add project structure, components, and styling for AI Activity Enhancer",
+        "8928a02 - feat: add biome configuration and update package dependencies",
+        "f6c8195 - feat: add UI components including Skeleton, Slider, Sonner, etc.",
+        "1870492 - feat: implement useCurrentDomain hook to extract active tab's domain"
+      ],
+      "stats": {
+        "files_changed": 83,
+        "lines_added": 10754,
+        "lines_deleted": 70,
+        "feature_commits": 5
+      }
+    }
+  ],
+  "meta": {
+    "version": "1.0",
+    "last_updated": "2025-10-12",
+    "total_scripts": 1
+  }
+}

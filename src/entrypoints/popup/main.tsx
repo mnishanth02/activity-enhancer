@@ -2,9 +2,12 @@ import { lazy, StrictMode, Suspense, useMemo } from "react";
 import "@/assets/style.css";
 import ReactDOM from "react-dom/client";
 import { Toaster } from "@/components/ui/sonner";
-import { Spinner } from "@/components/ui/spinner";
 import { useQueryParam } from "@/lib/query-state";
 import { Header } from "./components/Header";
+import {
+	AccountLoadingSkeleton,
+	SettingsLoadingSkeleton,
+} from "./components/LoadingSkeletons";
 import { StatusTab } from "./components/StatusTab";
 import { TabsContent, TabsNavigation } from "./components/TabsNavigation";
 import { useCurrentDomain } from "./hooks/useCurrentDomain";
@@ -15,13 +18,6 @@ const SettingsTab = lazy(() =>
 );
 const AccountTab = lazy(() =>
 	import("./components/AccountTab").then((m) => ({ default: m.AccountTab })),
-);
-
-// Lightweight fallback while a lazy tab is loading
-const LoadingTab = () => (
-	<div className="flex items-center justify-center">
-		<Spinner />
-	</div>
 );
 
 function PopupApp() {
@@ -35,13 +31,13 @@ function PopupApp() {
 				return <StatusTab domain={domain} />;
 			case "settings":
 				return (
-					<Suspense fallback={<LoadingTab />}>
+					<Suspense fallback={<SettingsLoadingSkeleton />}>
 						<SettingsTab />
 					</Suspense>
 				);
 			case "account":
 				return (
-					<Suspense fallback={<LoadingTab />}>
+					<Suspense fallback={<AccountLoadingSkeleton />}>
 						<AccountTab />
 					</Suspense>
 				);

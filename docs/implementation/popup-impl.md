@@ -102,11 +102,11 @@ Implement a tabbed "Activity Enhancer" popup (Status / Settings / Account) for t
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-027 | Introduce shared `LoadingState` + skeletons for settings hydration |  |  |
-| TASK-028 | Add ARIA labels to interactive controls (toggle, selects, buttons) |  |  |
-| TASK-029 | Implement toast notifications (reuse `sonner` component) for save/test results |  |  |
-| TASK-030 | Add util to increment enhancement count externally (hook for content script) `incrementEnhancementCount()` |  |  |
-| TASK-031 | Defensive try/catch around storage operations with fallback defaults |  |  |
+| TASK-027 | Introduce shared `LoadingState` + skeletons for settings hydration | ✅ | 2025-10-12 |
+| TASK-028 | Add ARIA labels to interactive controls (toggle, selects, buttons) | ✅ | 2025-10-12 |
+| TASK-029 | Implement toast notifications (reuse `sonner` component) for save/test results | ✅ | 2025-10-12 |
+| TASK-030 | Add util to increment enhancement count externally (hook for content script) `incrementEnhancementCount()` | ✅ | 2025-10-12 |
+| TASK-031 | Defensive try/catch around storage operations with fallback defaults | ✅ | 2025-10-12 |
 
 ### Implementation Phase 6
 

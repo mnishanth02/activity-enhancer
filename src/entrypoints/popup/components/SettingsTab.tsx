@@ -21,6 +21,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import { SettingsLoadingSkeleton } from "@/entrypoints/popup/components/LoadingSkeletons";
 import { useQueryParam } from "@/lib/query-state";
 import {
 	AdvancedSchema,
@@ -119,7 +120,11 @@ export function SettingsTab() {
 				setIsPro(account.pro);
 			} catch (error) {
 				console.error("Failed to load settings:", error);
-				toast.error("Failed to load settings");
+				toast.error("Failed to load settings", {
+					description: "Using default values. Please try again.",
+				});
+				// Fallback to defaults - form already has defaultValues
+				setIsPro(false);
 			} finally {
 				if (!cancelled) {
 					setIsLoading(false);
@@ -142,7 +147,9 @@ export function SettingsTab() {
 			toast.success("Settings saved successfully");
 		} catch (error) {
 			console.error("Failed to save settings:", error);
-			toast.error("Failed to save settings");
+			toast.error("Failed to save settings", {
+				description: "Your changes were not saved. Please try again.",
+			});
 		} finally {
 			setIsSavingGeneral(false);
 		}
@@ -156,7 +163,9 @@ export function SettingsTab() {
 			toast.success("Advanced settings saved successfully");
 		} catch (error) {
 			console.error("Failed to save advanced settings:", error);
-			toast.error("Failed to save advanced settings");
+			toast.error("Failed to save advanced settings", {
+				description: "Your changes were not saved. Please try again.",
+			});
 		} finally {
 			setIsSavingAdvanced(false);
 		}
@@ -209,11 +218,7 @@ export function SettingsTab() {
 	}
 
 	if (isLoading) {
-		return (
-			<div className="p-6 flex items-center justify-center min-h-[200px]">
-				<Spinner />
-			</div>
-		);
+		return <SettingsLoadingSkeleton />;
 	}
 
 	return (

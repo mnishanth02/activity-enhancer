@@ -1,11 +1,12 @@
 import { useEffect, useId, useState } from "react";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { getEnhancementCount } from "@/lib/metrics";
 import { useQueryParam } from "@/lib/query-state";
 import { getAccount, getDomainPrefs, setDomainPref } from "@/lib/storage";
+import { TabLoadingSkeleton } from "./LoadingSkeletons";
 
 interface StatusTabProps {
 	domain: string | null;
@@ -41,6 +42,15 @@ export function StatusTab({ domain }: StatusTabProps) {
 				setEnhancementCount(count);
 			} catch (error) {
 				console.error("Failed to load status data:", error);
+				if (!cancelled) {
+					// Fallback to default values
+					setIsEnabled(true);
+					setIsPro(false);
+					setEnhancementCount(0);
+					toast.error("Failed to load status data", {
+						description: "Using default values. Please refresh the popup.",
+					});
+				}
 			} finally {
 				if (!cancelled) {
 					setIsLoading(false);
@@ -67,10 +77,19 @@ export function StatusTab({ domain }: StatusTabProps) {
 
 		try {
 			await setDomainPref(domain, checked);
+			toast.success(
+				checked ? "AI enhancement enabled" : "AI enhancement disabled",
+				{
+					description: `Changes saved for ${domain}`,
+				},
+			);
 		} catch (error) {
 			// Rollback on error
 			console.error("Failed to save domain preference:", error);
 			setIsEnabled(previousValue);
+			toast.error("Failed to save preference", {
+				description: "Please try again.",
+			});
 		} finally {
 			setIsToggling(false);
 		}
@@ -82,11 +101,7 @@ export function StatusTab({ domain }: StatusTabProps) {
 	}
 
 	if (isLoading) {
-		return (
-			<div className="p-6 flex items-center justify-center min-h-[200px]">
-				<Spinner />
-			</div>
-		);
+		return <TabLoadingSkeleton />;
 	}
 
 	return (

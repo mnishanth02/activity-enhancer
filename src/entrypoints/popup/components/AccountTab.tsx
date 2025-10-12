@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import { AccountLoadingSkeleton } from "@/entrypoints/popup/components/LoadingSkeletons";
 import type { Account } from "@/lib/settings-schema";
 import { getAccount, saveAccount } from "@/lib/storage";
 
@@ -24,6 +24,9 @@ export function AccountTab() {
 				console.error("Failed to load account data:", error);
 				if (!cancelled) {
 					setAccount({ pro: false });
+					toast.error("Failed to load account data", {
+						description: "Using guest mode. Please try again later.",
+					});
 				}
 			} finally {
 				if (!cancelled) {
@@ -83,11 +86,7 @@ export function AccountTab() {
 	}
 
 	if (isLoading) {
-		return (
-			<div className="p-6 flex items-center justify-center min-h-[200px]">
-				<Spinner />
-			</div>
-		);
+		return <AccountLoadingSkeleton />;
 	}
 
 	// Pro user view
@@ -156,6 +155,7 @@ export function AccountTab() {
 						variant="outline"
 						className="w-full"
 						onClick={ handleManageSubscription }
+						aria-label="Manage subscription and billing"
 					>
 						<ExternalLinkIcon className="h-4 w-4 mr-2" />
 						Manage Subscription
@@ -164,6 +164,7 @@ export function AccountTab() {
 						variant="ghost"
 						className="w-full text-muted-foreground"
 						onClick={ handleLogout }
+						aria-label="Logout from your account"
 					>
 						Logout
 					</Button>
@@ -236,6 +237,7 @@ export function AccountTab() {
 						type="button"
 						onClick={ () => handleUpgrade("monthly") }
 						className="relative rounded-lg border-2 border-border hover:border-primary p-4 text-left transition-colors cursor-pointer"
+						aria-label="Upgrade to monthly plan for $9 per month, billed monthly, cancel anytime"
 					>
 						<div className="space-y-1">
 							<div className="flex items-baseline justify-between">
@@ -256,6 +258,7 @@ export function AccountTab() {
 						type="button"
 						onClick={ () => handleUpgrade("annual") }
 						className="relative rounded-lg border-2 border-primary bg-primary/5 p-4 text-left transition-colors cursor-pointer hover:bg-primary/10"
+						aria-label="Upgrade to annual plan for $81 per year, save 25%, billed annually, best value"
 					>
 						<Badge
 							variant="default"
@@ -285,7 +288,7 @@ export function AccountTab() {
 					<p className="text-xs text-muted-foreground">
 						Already have an account?
 					</p>
-					<Button variant="ghost" size="sm" onClick={ handleSignIn }>
+					<Button variant="ghost" size="sm" onClick={ handleSignIn } aria-label="Sign in to your existing account">
 						Sign In
 					</Button>
 				</div>

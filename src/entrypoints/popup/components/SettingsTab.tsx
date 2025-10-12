@@ -218,42 +218,42 @@ export function SettingsTab() {
 
 	return (
 		<div className="p-6 space-y-6">
-			{/* General Settings Form */ }
-			<form onSubmit={ handleSubmitGeneral(onSaveGeneral) } className="space-y-6">
+			{/* General Settings Form */}
+			<form onSubmit={handleSubmitGeneral(onSaveGeneral)} className="space-y-6">
 				<div className="space-y-4">
 					<h3 className="text-sm font-semibold">General Settings</h3>
 
-					{/* Tone Select */ }
+					{/* Tone Select */}
 					<div className="space-y-2">
-						<Label htmlFor={ toneId }>Default Tone</Label>
+						<Label htmlFor={toneId}>Default Tone</Label>
 						<Select
-							value={ toneValue }
-							onValueChange={ (value) =>
+							value={toneValue}
+							onValueChange={(value) =>
 								setValueGeneral("tone", value as Settings["tone"])
 							}
 						>
-							<SelectTrigger id={ toneId } className="w-full">
+							<SelectTrigger id={toneId} className="w-full">
 								<SelectValue placeholder="Select tone" />
 							</SelectTrigger>
 							<SelectContent>
-								{ ToneEnum.options.map((tone) => (
-									<SelectItem key={ tone } value={ tone }>
-										{ tone.charAt(0).toUpperCase() + tone.slice(1) }
+								{ToneEnum.options.map((tone) => (
+									<SelectItem key={tone} value={tone}>
+										{tone.charAt(0).toUpperCase() + tone.slice(1)}
 									</SelectItem>
-								)) }
+								))}
 							</SelectContent>
 						</Select>
-						{ errorsGeneral.tone && (
+						{errorsGeneral.tone && (
 							<p className="text-xs text-destructive">
-								{ errorsGeneral.tone.message }
+								{errorsGeneral.tone.message}
 							</p>
-						) }
+						)}
 					</div>
 
-					{/* Generate Hashtags */ }
+					{/* Generate Hashtags */}
 					<div className="flex items-center justify-between py-2">
 						<div className="space-y-1">
-							<Label htmlFor={ hashtagsId } className="cursor-pointer">
+							<Label htmlFor={hashtagsId} className="cursor-pointer">
 								Generate Hashtags
 							</Label>
 							<p className="text-xs text-muted-foreground">
@@ -261,19 +261,19 @@ export function SettingsTab() {
 							</p>
 						</div>
 						<Checkbox
-							id={ hashtagsId }
-							checked={ watchGeneral("generateHashtags") }
-							onCheckedChange={ (checked) =>
+							id={hashtagsId}
+							checked={watchGeneral("generateHashtags")}
+							onCheckedChange={(checked) =>
 								setValueGeneral("generateHashtags", Boolean(checked))
 							}
 						/>
 					</div>
 
-					{/* Include Weather (PRO) */ }
+					{/* Include Weather (PRO) */}
 					<div className="flex items-center justify-between py-2 border-t">
 						<div className="space-y-1 flex-1">
 							<div className="flex items-center gap-2">
-								<Label htmlFor={ weatherId } className="cursor-pointer">
+								<Label htmlFor={weatherId} className="cursor-pointer">
 									Include Weather Context
 								</Label>
 								<Badge variant="default" className="text-xs">
@@ -285,47 +285,47 @@ export function SettingsTab() {
 							</p>
 						</div>
 						<Checkbox
-							id={ weatherId }
-							checked={ watchGeneral("includeWeather") }
-							onCheckedChange={ (checked) =>
+							id={weatherId}
+							checked={watchGeneral("includeWeather")}
+							onCheckedChange={(checked) =>
 								setValueGeneral("includeWeather", Boolean(checked))
 							}
-							disabled={ !isPro }
+							disabled={!isPro}
 						/>
 					</div>
 
-					{/* Custom Prompts Button (PRO) */ }
+					{/* Custom Prompts Button (PRO) */}
 					<div className="pt-2">
 						<Button
 							type="button"
 							variant="outline"
 							className="w-full"
-							onClick={ handleCustomPrompts }
-							disabled={ !isPro }
+							onClick={handleCustomPrompts}
+							disabled={!isPro}
 						>
 							<span>Custom Prompts</span>
-							{ !isPro && (
+							{!isPro && (
 								<Badge variant="default" className="ml-2 text-xs">
 									PRO
 								</Badge>
-							) }
+							)}
 						</Button>
 					</div>
 				</div>
 
-				{/* Save Button */ }
+				{/* Save Button */}
 				<Button
 					type="submit"
 					className="w-full"
-					disabled={ isSavingGeneral }
+					disabled={isSavingGeneral}
 					aria-label="Save general settings"
 				>
-					{ isSavingGeneral ? <Spinner className="size-4" /> : "Save Settings" }
+					{isSavingGeneral ? <Spinner className="size-4" /> : "Save Settings"}
 				</Button>
 			</form>
 
-			{/* Advanced Section (BYOK) */ }
-			<Collapsible open={ isAdvancedOpen } onOpenChange={ toggleAdvanced }>
+			{/* Advanced Section (BYOK) */}
+			<Collapsible open={isAdvancedOpen} onOpenChange={toggleAdvanced}>
 				<CollapsibleTrigger asChild>
 					<Button
 						variant="ghost"
@@ -335,106 +335,106 @@ export function SettingsTab() {
 						<span className="text-sm font-semibold">
 							Advanced (Bring Your Own Key)
 						</span>
-						{ isAdvancedOpen ? (
+						{isAdvancedOpen ? (
 							<ChevronUpIcon className="size-4" />
 						) : (
 							<ChevronDownIcon className="size-4" />
-						) }
+						)}
 					</Button>
 				</CollapsibleTrigger>
 				<CollapsibleContent className="pt-4">
 					<form
-						onSubmit={ handleSubmitAdvanced(onSaveAdvanced) }
+						onSubmit={handleSubmitAdvanced(onSaveAdvanced)}
 						className="space-y-4"
 					>
-						{/* Provider Select */ }
+						{/* Provider Select */}
 						<div className="space-y-2">
-							<Label htmlFor={ providerSelectId }>Provider</Label>
+							<Label htmlFor={providerSelectId}>Provider</Label>
 							<Select
-								value={ providerValue || "" }
-								onValueChange={ (value) =>
+								value={providerValue || ""}
+								onValueChange={(value) =>
 									setValueAdvanced(
 										"provider",
 										value as AdvancedSettings["provider"],
 									)
 								}
 							>
-								<SelectTrigger id={ providerSelectId } className="w-full">
+								<SelectTrigger id={providerSelectId} className="w-full">
 									<SelectValue placeholder="Select provider" />
 								</SelectTrigger>
 								<SelectContent>
-									{ ProviderEnum.options.map((provider) => (
-										<SelectItem key={ provider } value={ provider }>
-											{ provider.charAt(0).toUpperCase() + provider.slice(1) }
+									{ProviderEnum.options.map((provider) => (
+										<SelectItem key={provider} value={provider}>
+											{provider.charAt(0).toUpperCase() + provider.slice(1)}
 										</SelectItem>
-									)) }
+									))}
 								</SelectContent>
 							</Select>
-							{ errorsAdvanced.provider && (
+							{errorsAdvanced.provider && (
 								<p className="text-xs text-destructive">
-									{ errorsAdvanced.provider.message }
+									{errorsAdvanced.provider.message}
 								</p>
-							) }
+							)}
 						</div>
 
-						{/* Endpoint (Optional) */ }
+						{/* Endpoint (Optional) */}
 						<div className="space-y-2">
-							<Label htmlFor={ endpointId }>
-								Endpoint URL{ " " }
+							<Label htmlFor={endpointId}>
+								Endpoint URL{" "}
 								<span className="text-muted-foreground">(optional)</span>
 							</Label>
 							<Input
-								id={ endpointId }
+								id={endpointId}
 								type="url"
 								placeholder="https://api.example.com"
-								{ ...registerAdvanced("endpoint") }
+								{...registerAdvanced("endpoint")}
 							/>
-							{ errorsAdvanced.endpoint && (
+							{errorsAdvanced.endpoint && (
 								<p className="text-xs text-destructive">
-									{ errorsAdvanced.endpoint.message }
+									{errorsAdvanced.endpoint.message}
 								</p>
-							) }
+							)}
 						</div>
 
-						{/* API Key */ }
+						{/* API Key */}
 						<div className="space-y-2">
-							<Label htmlFor={ apiKeyId }>API Key</Label>
+							<Label htmlFor={apiKeyId}>API Key</Label>
 							<Input
-								id={ apiKeyId }
+								id={apiKeyId}
 								type="password"
 								placeholder="sk-..."
-								{ ...registerAdvanced("apiKey") }
+								{...registerAdvanced("apiKey")}
 								aria-label="API key (will be stored securely)"
 							/>
-							{ errorsAdvanced.apiKey && (
+							{errorsAdvanced.apiKey && (
 								<p className="text-xs text-destructive">
-									{ errorsAdvanced.apiKey.message }
+									{errorsAdvanced.apiKey.message}
 								</p>
-							) }
+							)}
 							<p className="text-xs text-muted-foreground">
 								Stored securely in browser sync storage
 							</p>
 						</div>
 
-						{/* Action Buttons */ }
+						{/* Action Buttons */}
 						<div className="flex gap-2 pt-2">
 							<Button
 								type="submit"
 								className="flex-1"
-								disabled={ isSavingAdvanced }
+								disabled={isSavingAdvanced}
 								aria-label="Save advanced settings"
 							>
-								{ isSavingAdvanced ? <Spinner className="size-4" /> : "Save" }
+								{isSavingAdvanced ? <Spinner className="size-4" /> : "Save"}
 							</Button>
 							<Button
 								type="button"
 								variant="outline"
 								className="flex-1"
-								onClick={ handleTestConnection }
-								disabled={ isTesting }
+								onClick={handleTestConnection}
+								disabled={isTesting}
 								aria-label="Test connection with current settings"
 							>
-								{ isTesting ? <Spinner className="size-4" /> : "Test Connection" }
+								{isTesting ? <Spinner className="size-4" /> : "Test Connection"}
 							</Button>
 						</div>
 					</form>

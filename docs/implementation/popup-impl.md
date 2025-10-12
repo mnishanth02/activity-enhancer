@@ -91,10 +91,10 @@ Implement a tabbed "Activity Enhancer" popup (Status / Settings / Account) for t
 
 | Task | Description | Completed | Date |
 |------|-------------|-----------|------|
-| TASK-023 | Create `AccountTab.tsx` with conditional view based on `account.pro` flag |  |  |
-| TASK-024 | Implement free view: feature list items, pricing buttons, sign-in link triggers sign-in flow stub |  |  |
-| TASK-025 | Implement pro view: show user name, plan, next billing date, manage subscription & logout stubs |  |  |
-| TASK-026 | Add placeholder integration points (events) for future Stripe/customer portal launch |  |  |
+| TASK-023 | Create `AccountTab.tsx` with conditional view based on `account.pro` flag | ✅ | 2025-10-12 |
+| TASK-024 | Implement free view: feature list items, pricing buttons, sign-in link triggers sign-in flow stub | ✅ | 2025-10-12 |
+| TASK-025 | Implement pro view: show user name, plan, next billing date, manage subscription & logout stubs | ✅ | 2025-10-12 |
+| TASK-026 | Add placeholder integration points (events) for future Stripe/customer portal launch | ✅ | 2025-10-12 |
 
 ### Implementation Phase 5
 

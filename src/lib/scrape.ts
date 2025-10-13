@@ -33,6 +33,7 @@ export function collectActivity(
 		if (stats.time) data.time = sanitize(stats.time);
 		if (stats.sport) data.sport = sanitize(stats.sport);
 		if (stats.elevationGain) data.elevationGain = sanitize(stats.elevationGain);
+		if (stats.date) data.date = sanitize(stats.date);
 	}
 
 	return data;

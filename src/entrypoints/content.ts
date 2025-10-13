@@ -18,10 +18,6 @@ export default defineContentScript({
 	runAt: "document_end",
 
 	async main() {
-		if (import.meta.env.DEV) {
-			console.log("🚀 Activity Enhancer content script loaded");
-		}
-
 		// Initialize enhancement
 		await initialize();
 
@@ -40,23 +36,13 @@ async function initialize(): Promise<void> {
 	const adapter = findAdapter(window.location);
 
 	if (!adapter) {
-		if (import.meta.env.DEV) {
-			console.log("ℹ️ No adapter found for:", window.location.href);
-		}
 		return;
 	}
 
 	// Check if domain is enabled
 	const enabled = await isDomainEnabled(window.location.host);
 	if (!enabled) {
-		if (import.meta.env.DEV) {
-			console.log("⏸️ Enhancement disabled for:", window.location.host);
-		}
 		return;
-	}
-
-	if (import.meta.env.DEV) {
-		console.log("✅ Adapter matched:", adapter.name);
 	}
 
 	// Use adapter's DOM ready hook if available

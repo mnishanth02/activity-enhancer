@@ -55,14 +55,14 @@ export interface SiteAdapter {
 	setDescription(doc: Document, value: string): void;
 
 	/**
-	 * Optional method to extract activity stats (distance, time, elevation, sport)
+	 * Optional method to extract activity stats (distance, time, elevation, sport, date)
 	 * @param doc - The document object
 	 * @returns Partial activity data with stats, or undefined if not available
 	 */
 	getStats?(
 		doc: Document,
 	): Partial<
-		Pick<ActivityData, "distance" | "time" | "sport" | "elevationGain">
+		Pick<ActivityData, "distance" | "time" | "sport" | "elevationGain" | "date">
 	>;
 
 	/**
@@ -95,6 +95,8 @@ export interface ActivityData {
 	sport?: string;
 	/** Elevation gain (e.g., "102 m", "335 ft") */
 	elevationGain?: string;
+	/** Activity date (e.g., "Oct 12, 2025") */
+	date?: string;
 }
 
 /**

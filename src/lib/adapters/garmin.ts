@@ -1,10 +1,10 @@
 /**
  * Garmin Connect activity edit page adapter
- * 
+ *
  * This adapter provides DOM selectors and field operations for Garmin Connect's
  * activity edit/detail pages where users can modify titles and descriptions.
- * 
- * NOTE: Selectors may need adjustment based on actual Garmin DOM structure.
+ *
+ * Garmin DOM selectors are provisional and may need verification/adjustment.
  * Test and update selectors as needed when running on live pages.
  */
 

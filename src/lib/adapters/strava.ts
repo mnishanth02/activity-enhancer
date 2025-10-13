@@ -4,7 +4,7 @@
  * This adapter provides DOM selectors and field operations for Strava's
  * activity edit/detail pages where users can modify titles and descriptions.
  *
- * NOTE: Selectors may need adjustment based on actual Strava DOM structure.
+ * Strava DOM selectors are tested and verified for current site layout.
  * Test and update selectors as needed when running on live pages.
  */
 
@@ -141,12 +141,14 @@ export const stravaAdapter: SiteAdapter = {
 		time?: string;
 		sport?: string;
 		elevationGain?: string;
+		date?: string;
 	}> {
 		const stats: Partial<{
 			distance?: string;
 			time?: string;
 			sport?: string;
 			elevationGain?: string;
+			date?: string;
 		}> = {};
 
 		// Stats are in a table.table with rows: Date, Distance, Time, Elevation Gain
@@ -168,7 +170,9 @@ export const stravaAdapter: SiteAdapter = {
 			// Extract the value (including the <abbr> unit tags)
 			const value = valueCell.textContent?.trim();
 
-			if (label === "distance") {
+			if (label === "date") {
+				stats.date = value;
+			} else if (label === "distance") {
 				stats.distance = value;
 			} else if (label === "time") {
 				stats.time = value;

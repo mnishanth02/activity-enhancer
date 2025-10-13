@@ -48,6 +48,17 @@ const metricsStorage = storage.defineItem<Metrics>("sync:ae.metrics", {
 });
 
 /**
+ * Check if error is due to extension context invalidation
+ */
+function isExtensionContextInvalidated(error: unknown): boolean {
+	return (
+		error instanceof Error &&
+		(error.message.includes("Extension context invalidated") ||
+			error.message.includes("context invalidated"))
+	);
+}
+
+/**
  * Get settings from storage with schema validation
  */
 export async function getSettings(): Promise<Settings> {
@@ -58,7 +69,16 @@ export async function getSettings(): Promise<Settings> {
 		const parsed = SettingsSchema.safeParse(data);
 		return parsed.success ? parsed.data : DEFAULT_SETTINGS;
 	} catch (error) {
-		console.error("Failed to load settings:", error);
+		if (isExtensionContextInvalidated(error)) {
+			// Show user-friendly message for extension context errors
+			if (typeof window !== "undefined") {
+				setTimeout(() => {
+					alert(
+						"Extension was updated. Please reload this page to continue using AI Enhancement features.",
+					);
+				}, 1000);
+			}
+		}
 		return DEFAULT_SETTINGS;
 	}
 }
@@ -86,8 +106,7 @@ export async function getAdvancedSettings(): Promise<AdvancedSettings> {
 
 		const parsed = AdvancedSchema.safeParse(data);
 		return parsed.success ? parsed.data : DEFAULT_ADVANCED;
-	} catch (error) {
-		console.error("Failed to load advanced settings:", error);
+	} catch {
 		return DEFAULT_ADVANCED;
 	}
 }
@@ -117,8 +136,7 @@ export async function getDomainPrefs(): Promise<DomainPrefs> {
 
 		const parsed = DomainPrefsSchema.safeParse(data);
 		return parsed.success ? parsed.data : {};
-	} catch (error) {
-		console.error("Failed to load domain preferences:", error);
+	} catch {
 		return {};
 	}
 }
@@ -150,8 +168,7 @@ export async function getAccount(): Promise<Account> {
 
 		const parsed = AccountSchema.safeParse(data);
 		return parsed.success ? parsed.data : DEFAULT_ACCOUNT;
-	} catch (error) {
-		console.error("Failed to load account:", error);
+	} catch {
 		return DEFAULT_ACCOUNT;
 	}
 }
@@ -179,8 +196,7 @@ export async function getMetrics(): Promise<Metrics> {
 
 		const parsed = MetricsSchema.safeParse(data);
 		return parsed.success ? parsed.data : DEFAULT_METRICS;
-	} catch (error) {
-		console.error("Failed to load metrics:", error);
+	} catch {
 		return DEFAULT_METRICS;
 	}
 }
@@ -208,8 +224,7 @@ export async function isDomainEnabled(domain: string): Promise<boolean> {
 		const prefs = await getDomainPrefs();
 		// Default to enabled if not explicitly set
 		return prefs[domain] !== false;
-	} catch (error) {
-		console.error("Failed to check domain preference:", error);
+	} catch {
 		// Default to enabled on error
 		return true;
 	}

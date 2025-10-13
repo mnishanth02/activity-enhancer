@@ -39,9 +39,6 @@ export function ensureInjected(
 	// Check if button already exists
 	const existing = doc.querySelector(`[${DOM_ATTRIBUTES.ENHANCE_BUTTON}]`);
 	if (existing) {
-		if (import.meta.env.DEV) {
-			console.log("✨ Enhance button already injected");
-		}
 		return;
 	}
 
@@ -64,10 +61,6 @@ export function ensureInjected(
 	} else {
 		// Fallback: append to anchor
 		anchor.appendChild(button);
-	}
-
-	if (import.meta.env.DEV) {
-		console.log("✨ Enhance button injected successfully");
 	}
 }
 
@@ -111,7 +104,6 @@ async function handleEnhance(
 		// 2. Build prompt
 		const settings = await getSettings();
 		const prompt = buildPrompt({ activity: originalData, settings });
-
 		// 3. Call LLM
 		const advancedSettings = await getAdvancedSettings();
 		const result = await enhanceActivity(prompt, advancedSettings);
@@ -132,16 +124,29 @@ async function handleEnhance(
 		console.error("Enhancement error:", error);
 		setButtonError(button);
 
+		// Check if it's an extension context error
+		let errorMessage = "Enhancement failed. Please try again.";
+		if (
+			error instanceof Error &&
+			error.message.includes("Extension context invalidated")
+		) {
+			errorMessage =
+				"Extension was updated. Please reload this page to continue.";
+		} else if (error instanceof Error) {
+			errorMessage = error.message;
+		}
+
 		// Show error panel
 		const errorPanel = createErrorPanel(
-			error instanceof Error
-				? error.message
-				: "Enhancement failed. Please try again.",
+			errorMessage,
 			() => {
 				removePreviewPanel(errorPanel);
 				resetButton(button);
 				enhanceInProgress = false;
-				handleEnhance(adapter, button, doc);
+				// Don't retry if extension context is invalidated
+				if (!errorMessage.includes("reload this page")) {
+					handleEnhance(adapter, button, doc);
+				}
 			},
 			() => {
 				removePreviewPanel(errorPanel);
@@ -178,10 +183,6 @@ function showPreviewPanel(
 				removePreviewPanel(panel);
 				resetButton(button);
 				enhanceInProgress = false;
-
-				if (import.meta.env.DEV) {
-					console.log("✅ Enhancement accepted and applied");
-				}
 			} catch (error) {
 				console.error("Failed to apply enhancement:", error);
 				alert("Failed to apply changes. Please try again.");
@@ -195,10 +196,6 @@ function showPreviewPanel(
 			removePreviewPanel(panel);
 			resetButton(button);
 			enhanceInProgress = false;
-
-			if (import.meta.env.DEV) {
-				console.log("❌ Enhancement cancelled");
-			}
 		},
 	);
 }
@@ -216,9 +213,6 @@ export function setupNavigationWatcher(onNavigate: () => void): () => void {
 		const currentUrl = window.location.href;
 		if (currentUrl !== lastUrl) {
 			lastUrl = currentUrl;
-			if (import.meta.env.DEV) {
-				console.log("🔄 Navigation detected:", currentUrl);
-			}
 			onNavigate();
 		}
 	}, NAVIGATION_CHECK_INTERVAL);

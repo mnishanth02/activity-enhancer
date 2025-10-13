@@ -8,6 +8,13 @@ export default defineConfig({
 		name: "Activity Enhancer",
 		description: "Enhance your activity experience on various platforms.",
 		version: "1.0.0",
-		permissions: ["storage", "tabs", "notifications", "activeTab", "scripting"],
+		permissions: [
+			"storage",
+			"tabs",
+			"notifications",
+			"activeTab",
+			"scripting",
+			"background",
+		],
 	}),
 });

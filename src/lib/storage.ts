@@ -197,3 +197,20 @@ export async function saveMetrics(metrics: Metrics): Promise<void> {
 		throw error;
 	}
 }
+
+/**
+ * Check if enhancement is enabled for a specific domain
+ * @param domain - The domain to check (e.g., "www.strava.com")
+ * @returns true if enabled or not set (default), false if explicitly disabled
+ */
+export async function isDomainEnabled(domain: string): Promise<boolean> {
+	try {
+		const prefs = await getDomainPrefs();
+		// Default to enabled if not explicitly set
+		return prefs[domain] !== false;
+	} catch (error) {
+		console.error("Failed to check domain preference:", error);
+		// Default to enabled on error
+		return true;
+	}
+}

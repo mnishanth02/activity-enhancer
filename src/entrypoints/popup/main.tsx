@@ -24,7 +24,6 @@ function PopupApp() {
 	const [activeTab, setActiveTab] = useQueryParam("tab", "status");
 	const { domain, error: domainError } = useCurrentDomain();
 
-	// Map tabs to their (potentially lazy) element factory; ensures single conditional switch
 	const tabElement = useMemo(() => {
 		switch (activeTab) {
 			case "status":
@@ -42,7 +41,7 @@ function PopupApp() {
 					</Suspense>
 				);
 			default:
-				return <StatusTab domain={ domain } />; // Fallback for unknown param
+				return <StatusTab domain={ domain } />;
 		}
 	}, [activeTab, domain]);
 

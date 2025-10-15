@@ -1,203 +1,396 @@
 /**
  * Injection manager for activity enhancement
  *
- * Handles DOM injection, MutationObserver setup, and navigation detection
- * to ensure the enhance button appears exactly once and persists across
- * SPA navigation changes.
+ * Handles dual-page workflow:
+ * - Details page: Extract data, trigger LLM, navigate to edit
+ * - Edit page: Show preview, allow insert/discard
  */
 
-import type { SiteAdapter } from "@/lib/adapters/types";
+import type { ExtendedActivityData, SiteAdapter } from "@/lib/adapters/types";
 import {
 	DOM_ATTRIBUTES,
 	ENHANCEMENT_DEBOUNCE_MS,
+	MAX_WAIT_FOR_ENHANCED_DATA_MS,
 	NAVIGATION_CHECK_INTERVAL,
 } from "@/lib/constants";
 import { enhanceActivity } from "@/lib/llm";
 import { incrementEnhancementCount } from "@/lib/metrics";
-import { buildPrompt, parseEnhancedActivity } from "@/lib/prompt";
-import { collectActivity, isValidActivityData } from "@/lib/scrape";
+import { buildEnhancedPrompt, parseEnhancedActivity } from "@/lib/prompt";
+import {
+	clearPendingEnhancement,
+	getPendingEnhancement,
+	type PendingEnhancement,
+	savePendingEnhancement,
+	updatePendingEnhancement,
+} from "@/lib/session";
 import { getAdvancedSettings, getSettings } from "@/lib/storage";
 import {
 	createEnhanceButton,
+	createEnhancementPreviewPanel,
 	createErrorPanel,
-	createPreviewPanel,
+	createResetButton,
 	removePreviewPanel,
 	resetButton,
 	setButtonError,
 	setButtonLoading,
+	showToast,
 } from "@/lib/ui/components";
 
 /**
- * Ensure the enhance button is injected on the page
- * @param adapter - The site adapter to use
- * @param doc - The document object
+ * Handle details page: inject AI Enhance button
  */
-export function ensureInjected(
-	adapter: SiteAdapter,
-	doc: Document = document,
-): void {
+export async function handleDetailsPage(adapter: SiteAdapter): Promise<void> {
 	// Check if button already exists
-	const existing = doc.querySelector(`[${DOM_ATTRIBUTES.ENHANCE_BUTTON}]`);
-	if (existing) {
-		return;
-	}
+	const existing = document.querySelector(`[${DOM_ATTRIBUTES.ENHANCE_BUTTON}]`);
+	if (existing) return;
 
-	// Locate the anchor element
-	const anchor = adapter.locateTitleRoot(doc);
+	// Locate button anchor (next to title)
+	const anchor = adapter.locateTitleRoot(document);
 	if (!anchor) {
-		console.warn("Cannot inject enhance button: anchor element not found");
+		console.warn("Cannot inject enhance button: anchor not found");
 		return;
 	}
 
-	// Create and inject the button
-	const button = createEnhanceButton(() => handleEnhance(adapter, button, doc));
+	// Create button with details page handler
+	const button = createEnhanceButton(() => handleDetailsPageEnhance(adapter));
 
-	// For Strava: anchor is div.media-middle which has h1 on left, Save button on right
-	// Insert our button in the middle (after h1, before Save button)
+	// Inject button (same positioning logic as before)
 	const h1 = anchor.querySelector("h1");
 	if (h1) {
-		// Insert after h1 but make it appear in the same line
 		h1.insertAdjacentElement("afterend", button);
 	} else {
-		// Fallback: append to anchor
 		anchor.appendChild(button);
 	}
 }
 
 /**
- * Handle enhancement flow
- * @param adapter - The site adapter
- * @param button - The enhance button element
- * @param doc - The document object
+ * Handle details page enhancement flow
  */
-let enhanceInProgress = false;
-let lastEnhanceTime = 0;
+let detailsEnhanceInProgress = false;
+let lastDetailsEnhanceTime = 0;
 
-async function handleEnhance(
-	adapter: SiteAdapter,
-	button: HTMLButtonElement,
-	doc: Document,
-): Promise<void> {
+async function handleDetailsPageEnhance(adapter: SiteAdapter): Promise<void> {
 	// Debounce rapid clicks
 	const now = Date.now();
-	if (now - lastEnhanceTime < ENHANCEMENT_DEBOUNCE_MS) {
+	if (now - lastDetailsEnhanceTime < ENHANCEMENT_DEBOUNCE_MS) {
 		return;
 	}
-	lastEnhanceTime = now;
+	lastDetailsEnhanceTime = now;
 
 	// Prevent concurrent enhancements
-	if (enhanceInProgress) {
+	if (detailsEnhanceInProgress) {
 		return;
 	}
 
-	enhanceInProgress = true;
+	const button = document.querySelector<HTMLButtonElement>(
+		`[${DOM_ATTRIBUTES.ENHANCE_BUTTON}]`,
+	);
+	if (!button) return;
+
+	detailsEnhanceInProgress = true;
 	setButtonLoading(button);
 
 	try {
-		// 1. Collect activity data
-		const originalData = collectActivity(adapter, doc);
-
-		if (!isValidActivityData(originalData)) {
-			throw new Error("No activity data found to enhance");
+		// 1. Extract comprehensive data
+		if (!adapter.extractDetailsPageData) {
+			throw new Error("Adapter does not support details page extraction");
 		}
 
-		// 2. Build prompt
+		const extractedData = adapter.extractDetailsPageData(document);
+
+		// 2. Save to session storage
+		const activityId = extractActivityId(window.location);
+		await savePendingEnhancement({
+			activityId,
+			extractedData,
+			originalTitle: extractedData.title,
+			originalDescription: extractedData.description,
+			timestamp: Date.now(),
+		});
+
+		// 3. Trigger LLM call (async, non-blocking)
+		void triggerEnhancementAPI(extractedData);
+
+		// 4. Navigate to edit page
+		const editButton = adapter.locateEditButton?.(document);
+		if (!editButton) {
+			throw new Error("Edit button not found");
+		}
+
+		// Click edit button programmatically
+		editButton.click();
+	} catch (error) {
+		console.error("Details page enhancement error:", error);
+		setButtonError(button);
+
+		// Show error panel
+		const errorPanel = createErrorPanel(
+			error instanceof Error ? error.message : "Enhancement failed",
+			() => {
+				removePreviewPanel(errorPanel);
+				resetButton(button);
+				detailsEnhanceInProgress = false;
+				handleDetailsPageEnhance(adapter);
+			},
+			() => {
+				removePreviewPanel(errorPanel);
+				resetButton(button);
+				detailsEnhanceInProgress = false;
+			},
+		);
+
+		document.body.appendChild(errorPanel);
+		detailsEnhanceInProgress = false;
+	}
+}
+
+/**
+ * Handle edit page: show enhanced content preview
+ */
+export async function handleEditPage(adapter: SiteAdapter): Promise<void> {
+	// Check for pending enhancement in session storage
+	const pending = await getPendingEnhancement();
+	if (!pending) return;
+
+	// Wait for enhanced data (LLM might still be processing)
+	try {
+		await waitForEnhancedData(pending);
+	} catch (error) {
+		console.warn("Enhanced data not ready:", error);
+		return;
+	}
+
+	// Show preview panels above actual fields
+	showEnhancementPreview(adapter, pending);
+}
+
+/**
+ * Show enhancement preview on edit page
+ */
+function showEnhancementPreview(
+	adapter: SiteAdapter,
+	pending: PendingEnhancement,
+): void {
+	if (!pending.enhancedTitle || !pending.enhancedDescription) {
+		console.warn("Enhanced data not available yet");
+		return;
+	}
+
+	// Locate title and description fields
+	const titleField = adapter.locateTitleField?.(document);
+	const descField = adapter.locateDescriptionField?.(document);
+
+	if (!titleField || !descField) {
+		console.warn("Cannot show preview: fields not found");
+		return;
+	}
+
+	// Create title preview
+	const titlePreview = createEnhancementPreviewPanel(
+		"title",
+		pending.enhancedTitle,
+		() => applyEnhancement("title", pending, adapter),
+		() => discardEnhancement("title"),
+	);
+
+	// Create description preview
+	const descPreview = createEnhancementPreviewPanel(
+		"description",
+		pending.enhancedDescription,
+		() => applyEnhancement("description", pending, adapter),
+		() => discardEnhancement("description"),
+	);
+
+	// Insert above actual fields - better positioning using labels as insertion points
+	// Insert after label but before field for cleaner layout
+
+	// Title: Insert after title label
+	const titleLabel = document.querySelector('label[for="activity_name"]');
+	if (titleLabel?.nextSibling) {
+		titleLabel.parentElement?.insertBefore(
+			titlePreview,
+			titleLabel.nextSibling,
+		);
+	} else {
+		// Fallback: insert before the field itself
+		titleField.parentElement?.insertBefore(titlePreview, titleField);
+	}
+
+	// Description: Insert after description label
+	const descLabel = document.querySelector('label[for="activity_description"]');
+	if (descLabel?.nextSibling) {
+		descLabel.parentElement?.insertBefore(descPreview, descLabel.nextSibling);
+	} else {
+		// Fallback: insert before the description field
+		descField.parentElement?.insertBefore(descPreview, descField);
+	}
+
+	// Create reset button (initially hidden)
+	const resetBtn = createResetButton(async () => {
+		// Restore original values
+		adapter.setTitle(document, pending.originalTitle);
+		adapter.setDescription(document, pending.originalDescription);
+
+		// Clear session storage
+		await clearPendingEnhancement();
+
+		// Remove all preview UI
+		titlePreview.remove();
+		descPreview.remove();
+		resetBtn.remove();
+
+		// Show success toast
+		showToast("Reset to original values", "success");
+	});
+
+	// Insert reset button after description field
+	descField.parentElement?.appendChild(resetBtn);
+}
+
+/**
+ * Apply enhancement to actual field
+ */
+async function applyEnhancement(
+	field: "title" | "description",
+	pending: PendingEnhancement,
+	adapter: SiteAdapter,
+): Promise<void> {
+	const value =
+		field === "title" ? pending.enhancedTitle : pending.enhancedDescription;
+	if (!value) return;
+
+	// Apply to actual field
+	if (field === "title") {
+		adapter.setTitle(document, value);
+	} else {
+		adapter.setDescription(document, value);
+	}
+
+	// Update preview UI state to "Applied"
+	const preview = document.querySelector(
+		`[data-ae-preview-field="${field}"]`,
+	) as HTMLElement;
+	if (preview) {
+		const applyButton = preview.querySelector<HTMLButtonElement>(
+			'[data-action="apply"]',
+		);
+		if (applyButton) {
+			applyButton.textContent = "Applied ✓";
+			applyButton.disabled = true;
+			applyButton.style.opacity = "0.6";
+		}
+	}
+
+	// Show reset button
+	const resetButton = document.querySelector<HTMLButtonElement>(
+		`[${DOM_ATTRIBUTES.RESET_BUTTON}]`,
+	);
+	if (resetButton) {
+		resetButton.style.display = "block";
+	}
+
+	showToast(
+		`${field === "title" ? "Title" : "Description"} applied`,
+		"success",
+	);
+}
+
+/**
+ * Discard enhancement preview
+ */
+async function discardEnhancement(
+	field: "title" | "description",
+): Promise<void> {
+	const preview = document.querySelector(`[data-ae-preview-field="${field}"]`);
+	if (preview) {
+		preview.remove();
+	}
+
+	// If both previews are discarded, clear session storage
+	const remainingPreviews = document.querySelectorAll(
+		"[data-ae-preview-field]",
+	);
+	if (remainingPreviews.length === 0) {
+		await clearPendingEnhancement();
+	}
+
+	showToast(`${field === "title" ? "Title" : "Description"} discarded`, "info");
+}
+
+/**
+ * Wait for enhanced data from LLM
+ */
+async function waitForEnhancedData(
+	_pending: PendingEnhancement,
+	maxWaitMs: number = MAX_WAIT_FOR_ENHANCED_DATA_MS,
+): Promise<void> {
+	const startTime = Date.now();
+
+	while (Date.now() - startTime < maxWaitMs) {
+		const updated = await getPendingEnhancement();
+
+		if (updated?.enhancedTitle && updated?.enhancedDescription) {
+			return; // Data is ready
+		}
+
+		// Wait 500ms before checking again
+		await new Promise((resolve) => setTimeout(resolve, 500));
+	}
+
+	throw new Error("Timeout waiting for enhanced data");
+}
+
+/**
+ * Trigger LLM API call in background
+ */
+async function triggerEnhancementAPI(
+	data: ExtendedActivityData,
+): Promise<void> {
+	try {
 		const settings = await getSettings();
-		const prompt = buildPrompt({ activity: originalData, settings });
-		// 3. Call LLM
 		const advancedSettings = await getAdvancedSettings();
+
+		// Build enhanced prompt with all extracted data
+		const prompt = buildEnhancedPrompt({ activity: data, settings });
+
+		// Call LLM
 		const result = await enhanceActivity(prompt, advancedSettings);
 
 		if (!result.success) {
 			throw new Error(result.error || "Enhancement failed");
 		}
 
-		// 4. Parse and validate response
-		const enhancedData = parseEnhancedActivity(
-			JSON.stringify(result),
-			originalData,
-		);
+		// Parse response
+		const enhanced = parseEnhancedActivity(JSON.stringify(result), {
+			title: data.title,
+			description: data.description,
+		});
 
-		// 5. Show preview panel
-		showPreviewPanel(originalData, enhancedData, adapter, button, doc);
+		// Update session storage with enhanced data
+		await updatePendingEnhancement({
+			enhancedTitle: enhanced.title,
+			enhancedDescription: enhanced.description,
+		});
+
+		// Increment metrics
+		await incrementEnhancementCount();
 	} catch (error) {
-		console.error("Enhancement error:", error);
-		setButtonError(button);
+		console.error("LLM enhancement error:", error);
 
-		// Check if it's an extension context error
-		let errorMessage = "Enhancement failed. Please try again.";
-		if (
-			error instanceof Error &&
-			error.message.includes("Extension context invalidated")
-		) {
-			errorMessage =
-				"Extension was updated. Please reload this page to continue.";
-		} else if (error instanceof Error) {
-			errorMessage = error.message;
-		}
-
-		// Show error panel
-		const errorPanel = createErrorPanel(
-			errorMessage,
-			() => {
-				removePreviewPanel(errorPanel);
-				resetButton(button);
-				enhanceInProgress = false;
-				// Don't retry if extension context is invalidated
-				if (!errorMessage.includes("reload this page")) {
-					handleEnhance(adapter, button, doc);
-				}
-			},
-			() => {
-				removePreviewPanel(errorPanel);
-				resetButton(button);
-				enhanceInProgress = false;
-			},
-		);
+		// Update session storage with error flag
+		await updatePendingEnhancement({
+			enhancedTitle: undefined,
+			enhancedDescription: undefined,
+		});
 	}
 }
 
 /**
- * Show the preview panel
+ * Extract activity ID from URL
  */
-function showPreviewPanel(
-	original: { title: string; description: string },
-	enhanced: { title: string; description: string },
-	adapter: SiteAdapter,
-	button: HTMLButtonElement,
-	doc: Document,
-): void {
-	const panel = createPreviewPanel(
-		original,
-		enhanced,
-		() => {
-			// Accept: Apply changes to DOM
-			try {
-				adapter.setTitle(doc, enhanced.title);
-				adapter.setDescription(doc, enhanced.description);
-
-				// Increment metrics
-				incrementEnhancementCount();
-
-				// Cleanup
-				removePreviewPanel(panel);
-				resetButton(button);
-				enhanceInProgress = false;
-			} catch (error) {
-				console.error("Failed to apply enhancement:", error);
-				alert("Failed to apply changes. Please try again.");
-				removePreviewPanel(panel);
-				resetButton(button);
-				enhanceInProgress = false;
-			}
-		},
-		() => {
-			// Cancel: Close panel without changes
-			removePreviewPanel(panel);
-			resetButton(button);
-			enhanceInProgress = false;
-		},
-	);
+function extractActivityId(location: Location): string {
+	const match = location.pathname.match(/\/activities\/(\d+)/);
+	return match?.[1] || "";
 }
 
 /**

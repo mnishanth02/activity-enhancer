@@ -11,6 +11,10 @@ export const DOM_ATTRIBUTES = {
 	PROCESSED: "data-ae-processed",
 	/** Marks the preview panel container */
 	PREVIEW_PANEL: "data-ae-preview",
+	/** Marks the enhancement preview panel on edit page */
+	ENHANCEMENT_PREVIEW: "data-ae-enhancement-preview",
+	/** Marks the reset button on edit page */
+	RESET_BUTTON: "data-ae-reset-btn",
 } as const;
 
 // CSS class names for injected elements
@@ -19,6 +23,8 @@ export const CSS_CLASSES = {
 	ENHANCE_BUTTON: "ae-enhance-btn",
 	/** Preview panel container */
 	PREVIEW_PANEL: "ae-preview-panel",
+	/** Enhancement preview panel on edit page */
+	ENHANCEMENT_PREVIEW: "ae-enhancement-preview",
 	/** Loading state indicator */
 	LOADING: "ae-loading",
 	/** Error state indicator */
@@ -58,3 +64,6 @@ export const NAVIGATION_CHECK_INTERVAL = 500;
 
 // Debounce delay for enhancement button clicks (ms)
 export const ENHANCEMENT_DEBOUNCE_MS = 500;
+
+// Maximum wait time for enhanced data from LLM (ms)
+export const MAX_WAIT_FOR_ENHANCED_DATA_MS = 30000;

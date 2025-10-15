@@ -5,13 +5,20 @@
  * the defined prompt contract (max lengths, tone, hashtags, etc.)
  */
 
-import type { ActivityData } from "@/lib/adapters/types";
+import type { ActivityData, ExtendedActivityData } from "@/lib/adapters/types";
 import { CONTENT_LIMITS } from "./constants";
 import type { Settings } from "./settings-schema";
 
 export interface PromptInput {
 	/** Original activity data */
 	activity: ActivityData;
+	/** User settings for enhancement */
+	settings: Settings;
+}
+
+export interface EnhancedPromptInput {
+	/** Extended activity data with 15+ fields */
+	activity: ExtendedActivityData;
 	/** User settings for enhancement */
 	settings: Settings;
 }
@@ -130,4 +137,88 @@ function truncateIfNeeded(text: string, maxLength: number): string {
 	}
 
 	return truncated.trim();
+}
+
+/**
+ * Build enhanced prompt with all extracted data from details page
+ * @param input - Extended activity data and user settings
+ * @returns The complete prompt string with all available fields
+ */
+export function buildEnhancedPrompt(input: EnhancedPromptInput): string {
+	const { activity, settings } = input;
+	const { tone, generateHashtags, includeWeather } = settings;
+
+	const systemPrompt = `You are an assistant that rewrites endurance activity titles & descriptions.
+
+Constraints:
+- Title <= ${CONTENT_LIMITS.TITLE_MAX} characters; motivational, concise; no emojis unless original had them.
+- Description <= ${CONTENT_LIMITS.DESCRIPTION_MAX} characters; positive tone; never fabricate stats.
+- Maintain factual data present in original text only.
+${generateHashtags ? `- Append ${CONTENT_LIMITS.HASHTAGS_MIN}-${CONTENT_LIMITS.HASHTAGS_MAX} lowercase hashtags at end of description (no duplicates).` : ""}
+${includeWeather ? "- Incorporate brief weather note if given." : ""}
+
+Return ONLY valid JSON in this exact format:
+{
+  "title": "enhanced title here",
+  "description": "enhanced description here"
+}`;
+
+	// Build comprehensive activity context with all available fields
+	let activityContext = `User Activity Input:
+Title: "${activity.title || "(none)"}"
+Description: "${activity.description || "(none)"}"`;
+
+	// Core stats
+	if (activity.sport) activityContext += `\nActivity Type: ${activity.sport}`;
+	if (activity.activityType)
+		activityContext += `\nActivity Type (Detailed): ${activity.activityType}`;
+	if (activity.workoutType)
+		activityContext += `\nWorkout Type: ${activity.workoutType}`;
+
+	// Athlete and location
+	if (activity.athleteName)
+		activityContext += `\nAthlete: ${activity.athleteName}`;
+	if (activity.location) activityContext += `\nLocation: ${activity.location}`;
+
+	// Time and date
+	if (activity.date) activityContext += `\nDate: ${activity.date}`;
+	if (activity.timeDisplay)
+		activityContext += `\nTime: ${activity.timeDisplay}`;
+	if (activity.timeISO) activityContext += `\nTime (ISO): ${activity.timeISO}`;
+
+	// Performance metrics
+	if (activity.distance) activityContext += `\nDistance: ${activity.distance}`;
+	if (activity.movingTime)
+		activityContext += `\nMoving Time: ${activity.movingTime}`;
+	if (activity.elapsedTime)
+		activityContext += `\nElapsed Time: ${activity.elapsedTime}`;
+	if (activity.time) activityContext += `\nDuration: ${activity.time}`;
+	if (activity.elevationGain)
+		activityContext += `\nElevation Gain: ${activity.elevationGain}`;
+	if (activity.calories) activityContext += `\nCalories: ${activity.calories}`;
+
+	// Averages
+	if (activity.averagePace)
+		activityContext += `\nAverage Pace: ${activity.averagePace}`;
+	if (activity.averageHeartRate)
+		activityContext += `\nAverage Heart Rate: ${activity.averageHeartRate}`;
+	if (activity.averageCadence)
+		activityContext += `\nAverage Cadence: ${activity.averageCadence}`;
+
+	// Weather conditions (if includeWeather is enabled and data is available)
+	if (includeWeather) {
+		if (activity.temperature)
+			activityContext += `\nTemperature: ${activity.temperature}`;
+		if (activity.humidity)
+			activityContext += `\nHumidity: ${activity.humidity}`;
+		if (activity.wind) activityContext += `\nWind: ${activity.wind}`;
+	}
+
+	activityContext += `\nTone: ${tone}`;
+
+	const userPrompt = `${activityContext}
+
+Please enhance this activity following the constraints above.`;
+
+	return `${systemPrompt}\n\n${userPrompt}`;
 }

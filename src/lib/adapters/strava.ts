@@ -8,7 +8,7 @@
  * Test and update selectors as needed when running on live pages.
  */
 
-import type { SiteAdapter } from "./types";
+import type { ExtendedActivityData, PageType, SiteAdapter } from "./types";
 
 export const stravaAdapter: SiteAdapter = {
 	id: "strava",
@@ -24,7 +24,14 @@ export const stravaAdapter: SiteAdapter = {
 	},
 
 	locateTitleRoot(doc: Document): HTMLElement | null {
-		// Strava's "Edit Activity" header is in: div.header > div.container > div.media.media-middle
+		// For details page: inject button next to activity header
+		// XPath: //*[@id="heading"]/header/h2
+		const detailsHeader = doc.querySelector<HTMLElement>("#heading header h2");
+		if (detailsHeader) {
+			return detailsHeader;
+		}
+
+		// For edit page: Strava's "Edit Activity" header is in: div.header > div.container > div.media.media-middle
 		// We want to inject the button in this header area
 		const headerContainer = doc.querySelector<HTMLElement>(
 			"div.header div.media.media-middle",
@@ -190,6 +197,115 @@ export const stravaAdapter: SiteAdapter = {
 		}
 
 		return stats;
+	},
+
+	detectPageType(location: Location): PageType {
+		if (location.host !== "www.strava.com") return "unknown";
+
+		const path = location.pathname;
+
+		// /activities/[id]/edit
+		if (/^\/activities\/\d+\/edit$/.test(path)) return "edit";
+
+		// /activities/[id]
+		if (/^\/activities\/\d+$/.test(path)) return "details";
+
+		return "unknown";
+	},
+
+	extractDetailsPageData(doc: Document): ExtendedActivityData {
+		// Helper to safely extract text by XPath
+		const getByXPath = (xpath: string): string => {
+			const result = doc.evaluate(
+				xpath,
+				doc,
+				null,
+				XPathResult.FIRST_ORDERED_NODE_TYPE,
+				null,
+			);
+			const node = result.singleNodeValue;
+			return node?.textContent?.trim() || "";
+		};
+
+		// Extract athlete name, activity type, workout type
+		const headerText = getByXPath('//*[@id="heading"]/header/h2/span');
+		const parts = headerText.split("-").map((s) => s.trim());
+		const athleteName = parts[0] || "";
+		const activityType = parts[1] || "";
+		const workoutType = parts[2] || "";
+
+		return {
+			title: getByXPath('//*[@id="heading"]/div/div/div[1]/div/div/h1'),
+			description: getByXPath(
+				'//*[@id="heading"]/div/div/div[1]/div/div/div[1]/div/div/p',
+			),
+			athleteName,
+			activityType,
+			workoutType,
+			timeDisplay: getByXPath(
+				'//*[@id="heading"]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div/p',
+			),
+			timeISO: getByXPath('//*[@id="heading"]/div/div/div[1]/div/div/time'),
+			location: getByXPath('//*[@id="heading"]/div/div/div[1]/div/div/span'),
+			distance: getByXPath('//*[@id="heading"]/div/div/div[2]/ul/li[1]/strong'),
+			movingTime: getByXPath(
+				'//*[@id="heading"]/div/div/div[2]/ul/li[2]/strong',
+			),
+			elevationGain: getByXPath(
+				'//*[@id="heading"]/div/div/div[2]/div[1]/div[1]/div[2]/strong',
+			),
+			elapsedTime: getByXPath(
+				'//*[@id="heading"]/div/div/div[2]/div[1]/div[1]/div[4]/strong',
+			),
+			calories: getByXPath(
+				'//*[@id="heading"]/div/div/div[2]/div[1]/div[1]/div[4]/strong',
+			),
+			averagePace: getByXPath(
+				'//*[@id="heading"]/div/div/div[2]/ul/li[3]/strong',
+			),
+			averageHeartRate: getByXPath(
+				'//*[@id="chart-controls"]/table/tbody/tr[2]/td[3]',
+			),
+			averageCadence: getByXPath(
+				'//*[@id="chart-controls"]/table/tbody/tr[2]/td[4]',
+			),
+			temperature: getByXPath(
+				'//*[@id="chart-controls"]/table/tbody/tr[2]/td[5]',
+			),
+			humidity: getByXPath('//*[@id="chart-controls"]/table/tbody/tr[2]/td[6]'),
+			wind: getByXPath('//*[@id="chart-controls"]/table/tbody/tr[2]/td[7]'),
+		};
+	},
+
+	locateEditButton(doc: Document): HTMLElement | null {
+		// XPath: /html/body/div[1]/div[3]/nav/div/a
+		const result = doc.evaluate(
+			"/html/body/div[1]/div[3]/nav/div/a",
+			doc,
+			null,
+			XPathResult.FIRST_ORDERED_NODE_TYPE,
+			null,
+		);
+		return result.singleNodeValue as HTMLElement | null;
+	},
+
+	locateTitleField(doc: Document): HTMLInputElement | null {
+		// XPath: //*[@id="activity_name"]
+		return doc.getElementById("activity_name") as HTMLInputElement | null;
+	},
+
+	locateDescriptionField(
+		doc: Document,
+	): HTMLTextAreaElement | HTMLElement | null {
+		// XPath: //*[@id="edit-activity"]/div[1]/div/div[1]/div[1]/div[1]/div/div/div/textarea
+		const container = doc.getElementById("edit-activity");
+		if (!container) return null;
+
+		const textarea = container.querySelector<HTMLTextAreaElement>(
+			"div > div > div:first-child > div:first-child > div:first-child > div > div > div > textarea",
+		);
+
+		return textarea;
 	},
 
 	onDomReady(cb: () => void): void {

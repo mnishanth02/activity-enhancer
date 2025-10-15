@@ -93,68 +93,68 @@ export function AccountTab() {
 	if (account?.pro) {
 		return (
 			<div className="p-6 space-y-6">
-				{/* Pro Badge */ }
+				{/* Pro Badge */}
 				<div className="flex items-center justify-center">
 					<Badge variant="default" className="text-base px-4 py-1">
 						PRO
 					</Badge>
 				</div>
 
-				{/* User Information */ }
+				{/* User Information */}
 				<div className="space-y-4">
 					<div className="text-center space-y-1">
 						<h3 className="text-lg font-semibold">
-							{ account.userName || "Pro User" }
+							{account.userName || "Pro User"}
 						</h3>
-						{ account.email && (
-							<p className="text-sm text-muted-foreground">{ account.email }</p>
-						) }
+						{account.email && (
+							<p className="text-sm text-muted-foreground">{account.email}</p>
+						)}
 					</div>
 
-					{/* Subscription Details */ }
+					{/* Subscription Details */}
 					<div className="rounded-lg border bg-accent/50 p-4 space-y-3">
 						<div className="space-y-2">
 							<div className="flex items-center justify-between text-sm">
 								<span className="text-muted-foreground">Plan</span>
 								<span className="font-medium">
-									{ account.planName || "Pro Plan" }
+									{account.planName || "Pro Plan"}
 								</span>
 							</div>
-							{ account.nextBillingDate && (
+							{account.nextBillingDate && (
 								<div className="flex items-center justify-between text-sm">
 									<span className="text-muted-foreground">Next Billing</span>
-									<span className="font-medium">{ account.nextBillingDate }</span>
+									<span className="font-medium">{account.nextBillingDate}</span>
 								</div>
-							) }
+							)}
 						</div>
 					</div>
 
-					{/* Pro Features List */ }
+					{/* Pro Features List */}
 					<div className="space-y-2">
 						<h4 className="text-sm font-medium">Your Benefits</h4>
 						<ul className="space-y-2">
-							{ [
+							{[
 								"Unlimited AI enhancements",
 								"Weather context integration",
 								"Custom prompt templates",
 								"Priority support",
 								"Advanced analytics",
 							].map((feature) => (
-								<li key={ feature } className="flex items-start gap-2 text-sm">
+								<li key={feature} className="flex items-start gap-2 text-sm">
 									<CheckIcon className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-									<span>{ feature }</span>
+									<span>{feature}</span>
 								</li>
-							)) }
+							))}
 						</ul>
 					</div>
 				</div>
 
-				{/* Actions */ }
+				{/* Actions */}
 				<div className="space-y-2 pt-2">
 					<Button
 						variant="outline"
 						className="w-full"
-						onClick={ handleManageSubscription }
+						onClick={handleManageSubscription}
 						aria-label="Manage subscription and billing"
 					>
 						<ExternalLinkIcon className="h-4 w-4 mr-2" />
@@ -163,7 +163,7 @@ export function AccountTab() {
 					<Button
 						variant="ghost"
 						className="w-full text-muted-foreground"
-						onClick={ handleLogout }
+						onClick={handleLogout}
 						aria-label="Logout from your account"
 					>
 						Logout
@@ -176,7 +176,7 @@ export function AccountTab() {
 	// Free user view
 	return (
 		<div className="p-6 space-y-6">
-			{/* Header */ }
+			{/* Header */}
 			<div className="text-center space-y-2">
 				<h3 className="text-xl font-bold">Upgrade to Pro</h3>
 				<p className="text-sm text-muted-foreground">
@@ -184,11 +184,11 @@ export function AccountTab() {
 				</p>
 			</div>
 
-			{/* Features List */ }
+			{/* Features List */}
 			<div className="space-y-3">
 				<h4 className="text-sm font-semibold">Pro Features</h4>
 				<ul className="space-y-3">
-					{ [
+					{[
 						{
 							title: "Unlimited Enhancements",
 							description:
@@ -213,29 +213,29 @@ export function AccountTab() {
 							description: "Get help faster with dedicated support",
 						},
 					].map((feature) => (
-						<li key={ feature.title } className="flex items-start gap-3">
+						<li key={feature.title} className="flex items-start gap-3">
 							<div className="rounded-full bg-primary/10 p-1 mt-0.5">
 								<CheckIcon className="h-3 w-3 text-primary" />
 							</div>
 							<div className="space-y-0.5 flex-1">
-								<p className="text-sm font-medium">{ feature.title }</p>
+								<p className="text-sm font-medium">{feature.title}</p>
 								<p className="text-xs text-muted-foreground">
-									{ feature.description }
+									{feature.description}
 								</p>
 							</div>
 						</li>
-					)) }
+					))}
 				</ul>
 			</div>
 
-			{/* Pricing Options */ }
+			{/* Pricing Options */}
 			<div className="space-y-3">
 				<h4 className="text-sm font-semibold">Choose Your Plan</h4>
 				<div className="grid gap-3">
-					{/* Monthly Plan */ }
+					{/* Monthly Plan */}
 					<button
 						type="button"
-						onClick={ () => handleUpgrade("monthly") }
+						onClick={() => handleUpgrade("monthly")}
 						className="relative rounded-lg border-2 border-border hover:border-primary p-4 text-left transition-colors cursor-pointer"
 						aria-label="Upgrade to monthly plan for $9 per month, billed monthly, cancel anytime"
 					>
@@ -253,10 +253,10 @@ export function AccountTab() {
 						</div>
 					</button>
 
-					{/* Annual Plan */ }
+					{/* Annual Plan */}
 					<button
 						type="button"
-						onClick={ () => handleUpgrade("annual") }
+						onClick={() => handleUpgrade("annual")}
 						className="relative rounded-lg border-2 border-primary bg-primary/5 p-4 text-left transition-colors cursor-pointer hover:bg-primary/10"
 						aria-label="Upgrade to annual plan for $81 per year, save 25%, billed annually, best value"
 					>
@@ -282,13 +282,18 @@ export function AccountTab() {
 				</div>
 			</div>
 
-			{/* Sign In Option */ }
+			{/* Sign In Option */}
 			<div className="pt-2 border-t">
 				<div className="text-center space-y-2">
 					<p className="text-xs text-muted-foreground">
 						Already have an account?
 					</p>
-					<Button variant="ghost" size="sm" onClick={ handleSignIn } aria-label="Sign in to your existing account">
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={handleSignIn}
+						aria-label="Sign in to your existing account"
+					>
 						Sign In
 					</Button>
 				</div>

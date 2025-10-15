@@ -1,1108 +1,535 @@
 
-<!-- Orion-App Layout -->
-<!DOCTYPE html>
-<html class='logged-in  feed3p0 old-login strava-orion responsive' dir='ltr' lang='en-US' xmlns='http://www.w3.org/TR/html5' xmlns:fb='http://www.facebook.com/2008/fbml' xmlns:og='http://opengraphprotocol.org/schema/'>
-<!--
-layout orion app
--->
-<head>
-<head>
-<meta charset='UTF-8'>
-<meta content='width = device-width, initial-scale = 1, maximum-scale = 5, user-scalable = yes' name='viewport'>
-<style nonce='' type='text/css'>
-.spinner, .spinner .status {
-  position: relative;
-}
-.spinner {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-.spinner .status {
-  top: 2px;
-  margin-left: 0.5em;
-}
-.spinner .status:empty {
-  display: none;
-}
-.spinner.lg .graphic {
-  border-width: 3px;
-  height: 32px;
-  width: 32px;
-}
-.spinner.tiny {
-  height: 10px;
-  width: 10px;
-}
-.spinner.centered, .spinner.vcentered {
-  box-sizing: border-box;
-  width: 100%;
-}
-.spinner.vcentered {
-  left: 0;
-  margin-top: -12px;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  top: 50%;
-}
-.spinner .graphic, .ajax-loading-image {
-  animation: spin 1.2s infinite linear;
-  box-sizing: border-box;
-  border-color: #eee;
-  border-radius: 50%;
-  border-style: solid;
-  border-top-color: #666;
-  border-top-style: solid;
-  border-width: 2px;
-  content: "";
-  display: inline-block;
-  height: 20px;
-  position: relative;
-  vertical-align: middle;
-  width: 20px;
-}
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(359deg);
-  }
-}
-</style>
+```html
+<div class="page container"><script id="custom-map-controls-show-privacy-fullscreen-template" type="text/template">
+<div id='map-control-container' style='padding: 5px'>
+<div class='js-map-control' id='map-control-container' index='1'>
+<div class='inline-inputs' id='strava-map-controls'>
+<a class='button' href='/maps/create?activityId=16112144168' id='create-route'>
+Save Route
+</a>
 
-<link rel="stylesheet" href="https://d3nn82uaxijpm6.cloudfront.net/assets/strava-app-icons-b1e0b294059427fdb5e1e821d3a4932376a1ec644a557f31da906b42aedd887b.css" media="screen" />
-<link rel="stylesheet" href="https://d3nn82uaxijpm6.cloudfront.net/assets/strava-orion-dafacf6b4b14675d2ae87c0e45f91cc7d321c84451ddd3b10cd08722967de14b.css" media="screen" />
+<a class='button' id='gpx-download'>GPX</a>
 
-<link href='https://d3nn82uaxijpm6.cloudfront.net/apple-touch-icon-180x180.png?v=dLlWydWlG8' rel='apple-touch-icon' sizes='180x180'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/apple-touch-icon-152x152.png?v=dLlWydWlG8' rel='apple-touch-icon' sizes='152x152'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/apple-touch-icon-144x144.png?v=dLlWydWlG8' rel='apple-touch-icon' sizes='144x144'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/apple-touch-icon-120x120.png?v=dLlWydWlG8' rel='apple-touch-icon' sizes='120x120'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/apple-touch-icon-114x114.png?v=dLlWydWlG8' rel='apple-touch-icon' sizes='114x114'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/apple-touch-icon-76x76.png?v=dLlWydWlG8' rel='apple-touch-icon' sizes='76x76'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/apple-touch-icon-72x72.png?v=dLlWydWlG8' rel='apple-touch-icon' sizes='72x72'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/apple-touch-icon-60x60.png?v=dLlWydWlG8' rel='apple-touch-icon' sizes='60x60'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/apple-touch-icon-57x57.png?v=dLlWydWlG8' rel='apple-touch-icon' sizes='57x57'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/favicon-32x32.png?v=dLlWydWlG8' rel='icon' sizes='32x32' type='image/png'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/icon-strava-chrome-192.png?v=dLlWydWlG8' rel='icon' sizes='192x192' type='image/png'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/favicon-96x96.png?v=dLlWydWlG8' rel='icon' sizes='96x96' type='image/png'>
-<link href='https://d3nn82uaxijpm6.cloudfront.net/favicon-16x16.png?v=dLlWydWlG8' rel='icon' sizes='16x16' type='image/png'>
-<link href='/manifest.json?v=dLlWydWlG8' rel='manifest'>
-<meta content='#FC5200' name='msapplication-TileColor'>
-<meta content='https://d3nn82uaxijpm6.cloudfront.net/mstile-144x144.png?v=dLlWydWlG8' name='msapplication-TileImage'>
-<meta content='#F7F7FA' name='theme-color'>
-<meta content='Strava' name='apple-mobile-web-app-title'>
-<meta content='Strava' name='application-name'>
-<meta content='yes' name='apple-mobile-web-app-capable'>
-<meta content='black' name='apple-mobile-web-app-status-bar-style'>
-
-<script type='application/ld+json'>
-{
-  "@context": "http://schema.org",
-  "@type": "Organization",
-  "name": "Strava",
-  "url": "https://www.strava.com/",
-  "logo": "https://d3nn82uaxijpm6.cloudfront.net/assets/website_v2/svgs/strava-orange-c33577e7257d5ac4a2e972564c5c7556037f3d005c5b5cb2f0e0d06ac7b84c47.svg",
-  "sameAs": [
-    "https://facebook.com/Strava",
-    "https://twitter.com/strava",
-    "https://instagram.com/strava",
-    "https://youtube.com/stravainc",
-    "https://www.linkedin.com/company/strava-inc./",
-    "https://stories.strava.com",
-    "https://github.com/strava",
-    "https://medium.com/strava-engineering"
-  ]
-}
-
-
-</script>
-<meta name="csrf-param" content="authenticity_token" />
-<meta name="csrf-token" content="q_z57zZO2zk7IlzMRztmNYnVHI-otNWArXD-Vtt1Vg482c_nULYSdOH1uKntWG6IxK-Hi1eUxNGEuv96zYEF3g" />
-<script>
-  window.StravaSentry = {
-   enabled: true,
-   release: "c5133864265f50525982670c2fb1120e94dee76c",
-   userId: 11694245,
-   environment: "production",
-   dsn: "https://6ffc1c27d92347b49d7659886aab9deb@o352714.ingest.sentry.io/5816222",
-   debug: "false",
-   sampleRate: 1,
-   pageProperties: null,
-   mobileOS: "Web",
-   isMobile: false
- }
-
- window.StravaDevTools = {
-   enabled: false
- }
-</script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/runtime-5249638f63713f1761ed.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/97118-3b90e2d145f9db07b842.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/29683-578789b04d1b506ba8ee.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/10603-0d2522db11b3d61a86c0.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/20459-3bc8c6cf573225ac4291.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/94409-be9b9c0ade04bc9f598f.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/23105-4f6a64d72511abe5a332.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/65827-430ab1b3999ebdf652b2.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/37661-2c44bb2d265d43f4cdf9.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/9406-76cff92023c8c5a02ce2.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/96757-47922202032b4b1aba56.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/55911-aadc1b6fd6ae178044bf.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/57426-9ed284831cf22206bd81.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/20132-f9fdf2ea14c20b384ae6.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/63406-71601e955c3889079880.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/26329-9446ab6fa688a7d282bb.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/73170-9564210b94bb3fed9a36.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/59859-c570120929189c07bc23.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/18010-71bf6c6921f21868cae9.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/74015-640507c902bd99d7a2b4.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/77399-91e56c432798c23876dc.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/97154-ed489471a3aec746430e.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/67871-c813150ef9dccb773025.js"></script>
-<script src="//d3nn82uaxijpm6.cloudfront.net/packs/js/strava_with_framework-743965ef61c425ae8b22.js"></script>
-
-<script>
-  !function() {
-   if (!!window.stravaPublicServiceEnv) {
-     // Object containing no secret key value pairs that are expected to be seen and used in the browser.
-     // This keys are commonly passed to 3rd party libs or tooling.
-     window.stravaPublicServiceEnv({
-       VIDEOJS_LOG_LEVEL: "error"
-     });
-   }
- }();
-</script>
-
-<script src="https://d3nn82uaxijpm6.cloudfront.net/assets/strava-head-fe23e12219a4ae9745e10ed4adbcf9831ae3a15ea4b4dc52eeeba18901eb3855.js"></script>
-
-
-<link href='https://www.strava.com/activities/16112144168/edit' rel='canonical'>
-<link href='https://www.strava.com/activities/16112144168/edit' hreflang='x-default' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit' hreflang='en' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=en-GB' hreflang='en-gb' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=fr-FR' hreflang='fr' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=de-DE' hreflang='de' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=pt-BR' hreflang='pt-br' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=es-ES' hreflang='es-es' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=it-IT' hreflang='it' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=ru-RU' hreflang='ru' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=es-419' hreflang='es-419' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=ja-JP' hreflang='ja' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=nl-NL' hreflang='nl' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=zh-TW' hreflang='zh-tw' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=pt-PT' hreflang='pt-pt' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=zh-CN' hreflang='zh-cn' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=id-ID' hreflang='id-id' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=pt-PT' hreflang='pt' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=es-ES' hreflang='es' rel='alternate'>
-<link href='https://www.strava.com/activities/16112144168/edit?hl=zh-CN' hreflang='zh' rel='alternate'>
-
-<title>Morning Run | Run | Strava</title>
-<link rel="stylesheet" href="//d3nn82uaxijpm6.cloudfront.net/packs/css/9406-f80446f6.css" media="screen" />
-<link rel="stylesheet" href="//d3nn82uaxijpm6.cloudfront.net/packs/css/26329-17ac5d40.css" media="screen" />
-<link rel="stylesheet" href="//d3nn82uaxijpm6.cloudfront.net/packs/css/strava_with_framework-f23862b9.css" media="screen" />
-<link rel="stylesheet" href="https://d3nn82uaxijpm6.cloudfront.net/assets/activities/edit-849ab6be8141187816a6ef1147614f8804ea1a39018d3383a8c9ccee215c768b.css" media="screen" />
-
-</head>
-
-<script>
-  !function(options){
-   window.Strava = window.Strava || {};
-   var _enabled = true;
-   var _options = options;
-   var _snowplowReady = null;
-
-   window.Strava.ExternalAnalytics = window.Strava.ExternalAnalytics || (
-     {
-       isEnabled: function() {
-         // snowplow script can be blocked by our consent management tool
-         // see https://strava.atlassian.net/wiki/x/DIBuzQ
-         return _enabled && snowplow !== undefined && typeof snowplow === 'function';
-       },
-       isDebug: function() {
-         return _options.debug;
-       },
-       track: function() {
-       },
-       trackV2: function(event) {
-         var eventData = {
-           'category': event.category,
-           'page': event.page,
-           'action': event.action,
-           'element': event.element || null,
-           'properties': event.properties || {}
-         }
-         if (this.isEnabled()) {
-           var a = snowplow('getUserId');
-           this.log("trackV2", {athleteId: a});
-           snowplow('trackSelfDescribingEvent', {
-             schema: 'iglu:com.strava/track/jsonschema/1-0-0',
-             data: eventData
-           });
-         } else {
-           if(this.isDebug()){
-             // toggle defined in - https://github.com/strava/active/blob/main/lib/strava/external_analytics.rb
-             // to turn on - Strava::ExternalAnalytics.turn_on_debug
-             // to turn off - Strava::ExternalAnalytics.turn_off_debug
-             !!console.table && console.table(eventData);
-           }
-         }
-       },
-       trackLink: function() {
-       },
-       trackForm: function() {
-       },
-       identifyV2: function () {
-       },
-       getExperimentContext: function(pageProperties) {
-         var experiment = ( pageProperties || {} ).experiment_info || {};
-         if (experiment.experiment_cohort && experiment.experiment_name) {
-           this.log('found experiment with values', experiment);
-           return {
-             schema: 'iglu:com.strava/web_experiment/jsonschema/1-0-0',
-             data: {
-               experiment_name: experiment.experiment_name,
-               cohort: experiment.experiment_cohort,
-               forced: experiment.experiment_forced === true
-             }
-           };
-         } else {
-           return null;
-         }
-       },
-       page: function(pageProperties) {
-         if(this.isEnabled()) {
-           snowplow('trackPageView');
-         }
-       },
-       identify: function(athleteId, options, eventName) {
-         if (this.isEnabled()) {
-           this.log("identify user", {athleteId: athleteId});
-           var properties = options || {}
-           properties.athlete_id = athleteId;
-           var eventData = {
-             'category': 'identify',
-             'page': null,
-             'action': eventName,
-             'element': null,
-             'properties': properties
-           };
-           snowplow('trackSelfDescribingEvent', {
-             schema: 'iglu:com.strava/track/jsonschema/1-0-0',
-             data: eventData
-           });
-         }
-       },
-       reset: function() {
-         if(this.isEnabled()) {
-           this.log("reseting athlete id",{});
-           snowplow('setUserId', null)
-           var spCookie = document.cookie.match('_sp_id\\.[a-f0-9]+')
-           if(spCookie != null) {
-             document.cookie = spCookie[0] + "= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
-           }
-         }
-       },
-       setup: function(athleteId, pageProperties) {
-         if(this.isEnabled()) {
-           this.log("setup snowplow", {athleteId: athleteId});
-           snowplow("newTracker", "cf", "c.strava.com", {
-             appId: "strava-web",
-             platform: "web"
-           });
-
-           /*
-           * Disable anonymous tracking and set userId if we have athleteId
-           * this assumes that performance consent is given at this point
-           * so we can enable non-anonymous tracking.
-           *
-           * Anonymous tracking could be enabled if an athlete revoked performance consent
-           * and before giving consent again.
-           */
-           snowplow('disableAnonymousTracking');
-           snowplow('setUserId', athleteId);
-           /*
-            * This allows sending of page pings after an initial page view
-            * is generated. This should allow us to track page pings when
-            * the user continues interacting with the page after the initial page
-            * view event is generated.
-            */
-           snowplow('enableActivityTracking', 30, 30);
-
-           var experimentContext = this.getExperimentContext(pageProperties);
-           if (experimentContext) {
-             snowplow('addGlobalContexts', [experimentContext]);
-           }
-           snowplow('enableFormTracking');
-         }
-       },
-       getDomainUserId: function() {
-         var d = jQuery.Deferred();
-         if (this.isEnabled()) {
-           if (!_snowplowReady) {
-             _snowplowReady = jQuery.Deferred();
-             snowplow(function(){
-               _snowplowReady.resolve(this.cf.getDomainUserId());
-             });
-           }
-           _snowplowReady.always(function(getDomainUserId){
-             d.resolve(getDomainUserId);
-           });
-         } else {
-           d.reject(null);
-         }
-         return d;
-       },
-       log: function(message, values) {
-         if(this.isDebug()) {
-           console.log(message, 'background-color: yellow; color: blue; font-size: medium;', values);
-         }
-       },
-       debug: function(value) {
-         _options.debug = value;
-       }
-     }
-   )
- }({
-   is_mobile: false,
-   os: "",
-   debug: false,
-   athlete_id: 11694245,
-   locale: "en-US"
- });
-</script>
-
-<script>
-  function loadSnowplow() {
-   var analytics = window.analytics = window.analytics || [];
-   if(analytics.invoked) {
-     window.console && console.error && console.error("Segment snippet included twice.");
-   } else {
-     (function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[];p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments)};p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1;n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script","https://d3nn82uaxijpm6.cloudfront.net/8f96b1247cf4359f8fec.js","snowplow"));
-     var pageProperties = null;
-     var athleteId = 11694245;
-     Strava.ExternalAnalytics.setup(athleteId, pageProperties);
-     Strava.ExternalAnalytics.page(pageProperties);
-   }
- }
-</script>
-<script>
-  loadSnowplow();
-</script>
-
-<script>
-  !function(debug){
-   window.Strava = window.Strava || {};
-   var _enabled = true;
-   var _debug = !!debug;
-   var _branchData = null;
-
-   window.Strava.BranchIO = window.Strava.BranchIO || (
-     {
-       isEnabled: function() {
-         return _enabled;
-       },
-       isDebug: function() {
-         return _debug;
-       },
-       dataToLocalStorage: function() {
-         if (!_branchData) {
-           _branchData = new Strava.BranchAnalytics.BranchData();
-         }
-
-         var d = this.data()
-         var that = this;
-         d.done(function(data) {
-           that.log('storing data %o to local storage', data)
-           _branchData.data(data)
-         });
-         d.fail(function(message) {
-           that.log('failed to retrieve data from branch');
-           _branchData.data({})
-         });
-         return d;
-       },
-       createLink: function(options) {
-         var d = jQuery.Deferred();
-         var data = null;
-         const that = this;
-         var callback = function(e, l) {
-           if (!e) {
-             d.resolve(l);
-           } else {
-             d.reject(e);
-           }
-         }
-
-         Strava.ExternalAnalytics
-           .getDomainUserId()
-           .always(function(domainUserId){
-             if (domainUserId) {
-               options.data['domainUserId'] = domainUserId;
-             }
-
-             if(that.isEnabled()) {
-               branch.link(options, callback);
-             };
-         });
-
-         return d;
-       },
-       dataFromLocalStorage: function() {
-         if (!_branchData) {
-           _branchData = new Strava.BranchAnalytics.BranchData();
-         }
-         return _branchData.data();
-       },
-       clearLocalStorage: function() {
-         if (!_branchData) {
-           _branchData = new Strava.BranchAnalytics.BranchData();
-         }
-         _branchData.data({});
-       },
-       data: function(checkLocalStorage) {
-         var d = jQuery.Deferred();
-         var that = this;
-         var c = function(message, meta_data) {
-           var storedData = null;
-
-           if(message) {
-             d.reject(message);
-           } else {
-             if (checkLocalStorage == true && (meta_data == null || meta_data.data == "" || meta_data.data == null)) {
-               storedData = that.dataFromLocalStorage();
-               that.clearLocalStorage();
-
-               d.resolve(storedData);
-             } else {
-               d.resolve(meta_data);
-             }
-           }
-         };
-
-         if(this.isEnabled()) {
-           branch.data(c);
-           this.log('%cdata (branch enabled)');
-         } else {
-           this.log('%cdata (branch disabled)');
-           d.resolve({});
-         }
-         return d;
-       },
-       identify: function(hashedAthleteId) {
-         var that = this;
-         var callback = function(error, data) {
-           if (error) {
-             console.log(error);
-           }
-         }
-         if(this.isEnabled() && hashedAthleteId) {
-           branch.setIdentity(hashedAthleteId, callback);
-           this.log('identifying athlete %o', hashedAthleteId);
-         }
-       },
-       logout: function() {
-         var that = this;
-         var callback = function(error) {
-           if (error) {
-             console.log(error);
-           }
-         }
-         branch.logout(callback);
-       },
-       track: function(eventName, metaData) {
-         var that = this;
-         var callback = function(error, data) {
-           if (error) {
-             console.log(error);
-           }
-         }
-         if(this.isEnabled()) {
-             this.log('tracking event - ', eventName);
-             branch.logEvent(eventName, metaData, callback);
-         }
-       },
-       log: function(message, values = '') {
-         if(this.isDebug()) {
-           console.log(`[branch] :::  ${message}`, values);
-         }
-       },
-       debug: function(value) {
-         _debug = value;
-       }
-     }
-   )
- }(false);
-</script>
-
-<script>
-  function loadBranch() {
-   // load Branch
-   (function(b,r,a,n,c,h,_,s,d,k){if(!b[n]||!b[n]._q){for(;s<_.length;)c(h,_[s++]);d=r.createElement(a);d.async=1;d.src="https://cdn.branch.io/branch-latest.min.js";k=r.getElementsByTagName(a)[0];k.parentNode.insertBefore(d,k);b[n]=h}})(window,document,"script","branch",function(b,r){b[r]=function(){b._q.push([r,arguments])}},{_q:[],_v:1},"addListener banner closeBanner closeJourney data deepview deepviewCta first init link logout removeListener setBranchViewData setIdentity track trackCommerceEvent logEvent disableTracking getBrowserFingerprintId crossPlatformIds lastAttributedTouchData setAPIResponseCallback qrCode".split(" "), 0);
-
-   var options = {"metadata":{"external_identity_version":5,"next":false,"external_identity_hash":"36b9c32176b94564ffcf15f53873c06fe02456784ebb6e8e0b29b1e8975fac52"},"tracking_disabled":true}
-
-   // clean legacy identities (non-hashed athlete ids)
-   var branchSessionIdentity = JSON.parse(sessionStorage.getItem('branch_session') || '{}').identity;
-   options.metadata.session_identity = branchSessionIdentity;
-
-   if(branchSessionIdentity && branchSessionIdentity.length !== 64) {
-     Strava.BranchIO.log('clearing legacy branch session identity %o', branchSessionIdentity);
-     sessionStorage.removeItem('branch_session');
-     options.metadata.session_identity_cleared = true;
-   }else{
-     options.metadata.session_identity_cleared = false;
-   }
-
-   // disable journeys on web
-   // we currently do not use journeys on web and they conflict with our cookie consent management
-   options.no_journeys = true;
-
-   // init Branch
-   branch.init("key_live_lmpPsfj2DP8CflI4rmzfiemerte7sgwm", options, (err, data) => {
-     const branchInitialized = new CustomEvent('BranchInitialized', { detail: { err, data } });
-     window.dispatchEvent(branchInitialized);
-
-     var identity = data && data['identity'];
-     var hashedAthleteId = "36b9c32176b94564ffcf15f53873c06fe02456784ebb6e8e0b29b1e8975fac52";
-
-     if(hashedAthleteId && identity && identity.length !== 64) {
-       Strava.BranchIO.log('purging branch session %o', identity);
-       Strava.BranchIO.track("web_session_reset", {identity: identity});
-       Strava.BranchIO.logout();
-       Strava.BranchIO.identify(hashedAthleteId);
-     }else{
-       if (hashedAthleteId) {
-         Strava.BranchIO.identify(hashedAthleteId);
-       }else{
-         Strava.BranchIO.log('no athlete to identify');
-         Strava.BranchIO.logout();
-       }
-     }
-   });
- }
-</script>
-<script>
-  loadBranch();
-</script>
-
-</head>
-<body>
-
-
-<header id='global-header'><!--
-deploy: c5133864265f50525982670c2fb1120e94dee76c
--->
-<!--[if lte IE 8]>
-<div class='alert alert-warning message warning mb-0 text-center'>
-<p>It looks like you're using a version of Internet Explorer that Strava no longer supports. Please <a href='http://www.microsoft.com/en-us/download/ie.aspx?q=internet+explorer'>upgrade your web browser</a> &mdash; <a href='https://strava.zendesk.com/entries/20420212-Supported-Browsers-on-Strava'>Learn more</a>.</p>
-</div>
-<![endif]-->
-<nav class='nav-bar container collapsable-nav' role='navigation'>
-<div title="Return to the Strava home page" class="branding"><a class="branding-content" href="/"><span class="sr-only">Strava</span></a></div>
-<!-- / Nav Menu Button -->
-<a href="#container-nav" aria-expanded="false" aria-controls="container-nav" data-toggle="collapse" class="btn btn-default btn-mobile-menu" role="button">Menu</a>
-<div class='nav-container collapse' id='container-nav'>
-<form id='global-search-bar'>
-<button class='btn btn-default btn-icon btn-icon-right' id='open-global-search-button' title='Search' type='button'>
-<span class="app-icon-wrapper  "><span class="app-icon icon-search icon-lg icon-dark"></span></span>
-</button>
-<div class='form-group bottomless global-search-hidden' id='global-search-form-group'>
-<div class='dropdown' id='global-search-filter'>
-<button aria-expanded='false' aria-haspopup='true' class='btn btn-default btn-icon btn-icon-right' data-toggle='dropdown' data-value='athletes'>
-<span class='btn-label'>Athletes</span>
-<span class="app-icon-wrapper  "><span class="app-icon icon-caret-down icon-dark icon-sm"></span></span>
-</button>
-<ul aria-labeledby='global-search-filter' class='dropdown-menu' role='menu'>
+<div class='drop-down-menu' id='map-type-control'>
+<a class='selection' data-map-type-id='standard' id='selected-map'>Standard Map</a>
+<ul class='options'>
 <li>
-<div class='clickable' data-value='activities'>
-Activities
-</div>
+<a class='map-type-selector' data-map-type-id='satellite'>Satellite Map</a>
 </li>
 <li>
-<div class='clickable' data-value='athletes'>
-Athletes
+<label>
+<input id='privacy_toggle' type='checkbox'>Show Privacy Zone</input>
+</label>
+</li>
+</ul>
 </div>
+
+<a class='button' id='toggle-fullscreen'></a>
+</div>
+</div>
+</div>
+</script>
+<script id="custom-map-controls-show-privacy-template" type="text/template">
+<div id='map-control-container' style='padding: 5px'>
+<div class='js-map-control' id='map-control-container' index='1'>
+<div class='inline-inputs' id='strava-map-controls'>
+<a class='button' href='/maps/create?activityId=16112144168' id='create-route'>
+Save Route
+</a>
+
+<a class='button' id='gpx-download'>GPX</a>
+
+<div class='drop-down-menu' id='map-type-control'>
+<a class='selection' data-map-type-id='standard' id='selected-map'>Standard Map</a>
+<ul class='options'>
+<li>
+<a class='map-type-selector' data-map-type-id='satellite'>Satellite Map</a>
 </li>
 <li>
-<div class='clickable' data-value='clubs'>
-Clubs
+<label>
+<input id='privacy_toggle' type='checkbox'>Show Privacy Zone</input>
+</label>
+</li>
+</ul>
 </div>
+
+</div>
+</div>
+</div>
+</script>
+<script id="custom-map-controls-fullscreen-template" type="text/template">
+<div id='map-control-container' style='padding: 5px'>
+<div class='js-map-control' id='map-control-container' index='1'>
+<div class='inline-inputs' id='strava-map-controls'>
+<a class='button' href='/maps/create?activityId=16112144168' id='create-route'>
+Save Route
+</a>
+
+<a class='button' id='gpx-download'>GPX</a>
+
+<div class='drop-down-menu' id='map-type-control'>
+<a class='selection' data-map-type-id='standard' id='selected-map'>Standard Map</a>
+<ul class='options'>
+<li>
+<a class='map-type-selector' data-map-type-id='satellite'>Satellite Map</a>
+</li>
+</ul>
+</div>
+
+<a class='button' id='toggle-fullscreen'></a>
+</div>
+</div>
+</div>
+</script>
+<script id="custom-map-controls-template" type="text/template">
+<div id='map-control-container' style='padding: 5px'>
+<div class='js-map-control' id='map-control-container' index='1'>
+<div class='inline-inputs' id='strava-map-controls'>
+<a class='button' href='/maps/create?activityId=16112144168' id='create-route'>
+Save Route
+</a>
+
+<a class='button' id='gpx-download'>GPX</a>
+
+<div class='drop-down-menu' id='map-type-control'>
+<a class='selection' data-map-type-id='standard' id='selected-map'>Standard Map</a>
+<ul class='options'>
+<li>
+<a class='map-type-selector' data-map-type-id='satellite'>Satellite Map</a>
+</li>
+</ul>
+</div>
+
+</div>
+</div>
+</div>
+</script>
+<script id="custom-map-controls-show-privacy-legend-fullscreen-template" type="text/template">
+<div id='map-control-container' style='padding: 5px'>
+<div class='js-map-control' id='map-control-container' index='1'>
+<div class='inline-inputs' id='strava-map-controls'>
+<a class='button' href='/maps/create?activityId=16112144168' id='create-route'>
+Save Route
+</a>
+
+<a class='button' id='gpx-download'>GPX</a>
+
+<div class='drop-down-menu' id='map-type-control'>
+<a class='selection' data-map-type-id='standard' id='selected-map'>Standard Map</a>
+<ul class='options'>
+<li>
+<a class='map-type-selector' data-map-type-id='satellite'>Satellite Map</a>
+</li>
+</ul>
+</div>
+
+<a class='button' id='toggle-fullscreen'></a>
+</div>
+<div id='privacy-legend'>
+<div class='legend-options'>
+<div class='legend-line' id='visible-line'></div>
+<div class='legend-label'>Visible</div>
+</div>
+<div class='legend-options'>
+<div class='legend-line' id='hidden-line'></div>
+<div class='legend-label'>Hidden</div>
+</div>
+</div>
+
+</div>
+</div>
+</script>
+<script id="custom-map-controls-show-privacy-legend-template" type="text/template">
+<div id='map-control-container' style='padding: 5px'>
+<div class='js-map-control' id='map-control-container' index='1'>
+<div class='inline-inputs' id='strava-map-controls'>
+<a class='button' href='/maps/create?activityId=16112144168' id='create-route'>
+Save Route
+</a>
+
+<a class='button' id='gpx-download'>GPX</a>
+
+<div class='drop-down-menu' id='map-type-control'>
+<a class='selection' data-map-type-id='standard' id='selected-map'>Standard Map</a>
+<ul class='options'>
+<li>
+<a class='map-type-selector' data-map-type-id='satellite'>Satellite Map</a>
+</li>
+</ul>
+</div>
+
+</div>
+<div id='privacy-legend'>
+<div class='legend-options'>
+<div class='legend-line' id='visible-line'></div>
+<div class='legend-label'>Visible</div>
+</div>
+<div class='legend-options'>
+<div class='legend-line' id='hidden-line'></div>
+<div class='legend-label'>Hidden</div>
+</div>
+</div>
+
+</div>
+</div>
+</script>
+<script id="custom-map-controls-pzones-admin-fullscreen-template" type="text/template">
+<div id='map-control-container' style='padding: 5px'>
+<div class='js-map-control' id='map-control-container' index='1'>
+<div class='inline-inputs' id='strava-map-controls'>
+<a class='button' href='/maps/create?activityId=16112144168' id='create-route'>
+Save Route
+</a>
+
+<a class='button' id='gpx-download'>GPX</a>
+
+<div class='drop-down-menu' id='map-type-control'>
+<a class='selection' data-map-type-id='standard' id='selected-map'>Standard Map</a>
+<ul class='options'>
+<li>
+<a class='map-type-selector' data-map-type-id='satellite'>Satellite Map</a>
 </li>
 <li>
-<div class='clickable' data-value='segments'>
+<label>
+<input id='privacy_toggle' type='checkbox'>Show Privacy Zone</input>
+</label>
+</li>
+</ul>
+</div>
+
+<a class='button' id='toggle-fullscreen'></a>
+</div>
+<div id='privacy-legend'>
+<div class='legend-options'>
+<div class='legend-line' id='visible-line'></div>
+<div class='legend-label'>Visible</div>
+</div>
+<div class='legend-options'>
+<div class='legend-line' id='hidden-line'></div>
+<div class='legend-label'>Hidden</div>
+</div>
+</div>
+
+</div>
+</div>
+</script>
+<script id="custom-map-controls-pzones-admin-template" type="text/template">
+<div id='map-control-container' style='padding: 5px'>
+<div class='js-map-control' id='map-control-container' index='1'>
+<div class='inline-inputs' id='strava-map-controls'>
+<a class='button' href='/maps/create?activityId=16112144168' id='create-route'>
+Save Route
+</a>
+
+<a class='button' id='gpx-download'>GPX</a>
+
+<div class='drop-down-menu' id='map-type-control'>
+<a class='selection' data-map-type-id='standard' id='selected-map'>Standard Map</a>
+<ul class='options'>
+<li>
+<a class='map-type-selector' data-map-type-id='satellite'>Satellite Map</a>
+</li>
+<li>
+<label>
+<input id='privacy_toggle' type='checkbox'>Show Privacy Zone</input>
+</label>
+</li>
+</ul>
+</div>
+
+</div>
+<div id='privacy-legend'>
+<div class='legend-options'>
+<div class='legend-line' id='visible-line'></div>
+<div class='legend-label'>Visible</div>
+</div>
+<div class='legend-options'>
+<div class='legend-line' id='hidden-line'></div>
+<div class='legend-label'>Hidden</div>
+</div>
+</div>
+
+</div>
+</div>
+</script>
+
+<nav class="sidenav">
+
+<ul class="pagenav" id="pagenav">
+<li class="track-click selected" data-tracking-element="overview">
+<a data-menu="overview" href="/activities/16112144168/overview">
+Overview
+</a>
+</li>
+<li class="group" id="premium-views">
+<div class="title">
+<div class="premium badge icon-xs" title="Subscriber">
+Subscriber
+</div>
+Analysis
+</div>
+<ul>
+<li class="">
+<a data-menu="pace-analysis" href="/activities/16112144168/pace-analysis">
+Pace Analysis
+</a>
+</li>
+<li class="">
+<a data-menu="pace" data-menu-alt="pace-zones" href="/activities/16112144168/pace">
+Pace Distribution
+</a>
+</li>
+<li class="">
+<a data-menu="heartrate" data-menu-alt="heartrate-zones" href="/activities/16112144168/heartrate">
+Heart Rate
+</a>
+</li>
+</ul>
+</li>
+<li class="track-click" data-tracking-element="segments">
+<a data-menu="segments" href="/activities/16112144168/segments">
 Segments
-</div>
+</a>
+</li>
+<li class="track-click" data-tracking-element="laps">
+<a data-menu="laps" href="/activities/16112144168/laps">
+Laps
+</a>
+</li>
+<li class="track-click" data-tracking-element="best_efforts">
+<a data-menu="best-efforts" href="/activities/16112144168/best-efforts">
+Best Efforts
+</a>
 </li>
 </ul>
+<div class="actions-menu">
+<a aria-label="Edit this activity" class="button" href="/activities/16112144168/edit" title="Edit this activity">
+<div class="app-icon-wrapper">
+<div class="app-icon icon-edit"></div>
 </div>
-<div class='input-group'>
-<input class='form-control' data-search-filter='athletes' id='global-search-field' placeholder='Search' type='text'>
-<button class='btn btn-white btn-icon btn-icon-only' id='global-search-button' title='Search'>
-<span class="app-icon-wrapper  "><span class="app-icon icon-search icon-lg icon-dark"></span></span>
-</button>
-<button class='btn btn-white btn-icon btn-icon-only' id='global-search-cancel' title='Cancel'>
-<span class="app-icon-wrapper  "><span class="app-icon icon-remove icon-sm icon-dark"></span></span>
-</button>
-</div>
-<div id='global-search-autocomplete-anchor'>
-<div id='global-search-autocomplete-container'></div>
+</a>
+<button class="slide-menu drop-down-menu enabled align-top">
+<div aria-label="Actions" class="selection" role="button" title="Actions">
+<div class="app-icon-wrapper">
+<div class="app-icon icon-nav-more"></div>
 </div>
 </div>
-</form>
-
-<ul class='global-nav nav-group'>
-<li class='nav-item drop-down-menu accessible-nav-dropdown selected' data-log-category='dashboard' data-log-page='dashboard'>
-<a class="selection nav-link accessible-nav-link" href="/dashboard">Dashboard
-</a><button aria-haspopup class='selection nav-link accessible-nav-arrow' data-toggle='dropdown ' id='dashboard-dropdown-arrow' title='Expand dashboard menu'>
-<span class="app-icon-wrapper  "><span class="app-icon icon-caret-down icon-dark"></span></span>
-</button>
-<ul aria-labelledby='dashboard-dropdown-arrow' class='options' role='menu'>
-<li class=''>
-<a href="/dashboard">Activity Feed</a>
+<ul class="options" style="">
+<li id="edit-map-visibility"><a href="/activities/16112144168/edit_map_visibility">Edit Map Visibility</a></li>
+<li><a href="/activities/16112144168/truncate">Crop</a></li>
+<li><a href="/activities/16112144168/split">Split</a></li>
+<li><a href="/maps/create?activityId=16112144168">Save Route</a></li>
+<li id="react-list-item">
+<div class="" data-is-published="" data-react-class="CorrectDistance" data-react-props="{&quot;isModalOpen&quot;:true,&quot;handleToggleModal&quot;:null,&quot;activityId&quot;:16112144168,&quot;activeSource&quot;:&quot;device&quot;,&quot;experiments&quot;:{}}" style=""><a href="#">Correct Distance</a></div>
 </li>
-<li class=''>
-<a href="/clubs/search">Clubs</a>
+<li id="react-list-item">
+<div class="" data-is-published="" data-react-class="CorrectElevation" data-react-props="{&quot;isModalOpen&quot;:true,&quot;handleToggleModal&quot;:null,&quot;activityId&quot;:16112144168,&quot;activeSource&quot;:&quot;device&quot;,&quot;adjusting&quot;:false,&quot;lookupExists&quot;:true,&quot;experiments&quot;:{}}" style=""><a href="#">Correct Elevation</a></div>
 </li>
-<li class=''>
-<a href="/athlete/segments/starred">My Segments</a>
+<li class="track-click" data-tracking-element="create_new_segment">
+<a href="/segments/new?id=16112144168">Create Segment</a>
 </li>
-<li class=''>
-<a href="/athlete/routes">My Routes</a>
-</li>
-<li class='premium opt-group'>
-<div class='text-caption4 subscription-callout'>
-SUBSCRIPTION
-</div>
-<ul>
-<li class='' data-log-element='my_goals'>
-<a href="/athlete/goals">My Goals
-</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class='nav-item drop-down-menu accessible-nav-dropdown' data-log-category='training' data-log-page='training'>
-<a class="selection nav-link accessible-nav-link" href="/athletes/11694245/training/log">Training
-</a><button aria-haspopup class='selection nav-link accessible-nav-arrow' data-toggle='dropdown ' id='dashboard-dropdown-arrow' title='Expand training menu'>
-<span class="app-icon-wrapper  "><span class="app-icon icon-caret-down icon-dark"></span></span>
-</button>
-<ul aria-labelledby='dashboard-dropdown-arrow' class='options' role='menu'>
-<li class=''>
-<a href="/athlete/calendar">Training Calendar</a>
-</li>
-<li class=''>
-<a href="/athlete/training">My Activities</a>
-</li>
-<li class='premium opt-group'>
-<div class='text-caption4 subscription-callout'>
-SUBSCRIPTION
-</div>
-<ul>
+<li><a href="/activities/16112144168/export_gpx">Export GPX</a></li>
+<li><a href="/activities/16112144168/export_original">Export Original</a></li>
+<li id="refresh-achievements"><a href="/activities/16112144168/share/facebook">Refresh Activity Achievements</a></li>
+<li><a href="/activities/16112144168/flags/new">Flag</a></li>
 <li>
-<a href="/athletes/11694245/training/log">Training Log</a>
-</li>
-<li class='' data-log-element='training_plans'>
-<a href="/training-plans">Training Plans
-</a></li>
-<li class='' data-log-element='power_curve'>
-<a href="/athlete/analysis">Power Curve
-</a></li>
-<li class='' data-log-element='fitness_and_freshness'>
-<a href="/athlete/fitness">Fitness &amp; Freshness
-</a></li>
-</ul>
+<a data-confirm="Are you sure? You can restore an activity for 30 days." rel="nofollow" data-method="delete" href="/activities/16112144168">Delete</a>
 </li>
 </ul>
-</li>
-<li class='nav-item'>
-<a class="nav-link" href="/maps">Maps
-</a></li>
-<li class='nav-item'>
-<a class="nav-link" href="/challenges">Challenges
-</a></li>
-</ul>
-
-<ul class='user-nav nav-group'>
-<li class='nav-item upgrade'>
-<a class="experiment btn btn-sm btn-primary" href="/subscribe?cta=free-trial&amp;element=link&amp;origin=global_nav">Start Trial
-</a></li>
-<li class='nav-item' id='notifications'>
-<div id='notifications-loading-placeholder' style='width: 46px;'></div>
-<link rel="preload" href="https://web-assets.strava.com/assets/federated/notifications/remoteEntry.js?t=2025-10-13T09:13:31+00:00" as="script">
-<div class='' data-is-published='' data-react-class='Microfrontend' data-react-props='{&quot;url&quot;:&quot;https://web-assets.strava.com/assets/federated/notifications/remoteEntry.js?t=2025-10-13T09:13:31+00:00&quot;,&quot;scope&quot;:&quot;strava_notifications&quot;,&quot;component&quot;:&quot;./Notifications&quot;,&quot;appContext&quot;:{},&quot;experiments&quot;:{}}' style='height: 100%'></div>
-
-</li>
-<li class='nav-item drop-down-menu user-menu accessible-nav-dropdown'>
-<a class='nav-link selection accessible-nav-link' href='/athletes/11694245'>
-<div class='avatar avatar-athlete'>
-
-<div class='' data-is-published='' data-react-class='AvatarWrapper' data-react-props='{&quot;src&quot;:&quot;https://dgalywyr863hv.cloudfront.net/pictures/athletes/11694245/6242157/12/large.jpg&quot;,&quot;type&quot;:&quot;athlete&quot;,&quot;name&quot;:&quot;Nishanth&quot;,&quot;size&quot;:&quot;small&quot;,&quot;badge&quot;:&quot;&quot;,&quot;alt&quot;:&quot;Nishanth&quot;,&quot;experiments&quot;:{}}' style=''></div>
-
-</div>
-<span class='athlete-name'>
-Nishanth Murugan
-</span>
-</a>
-<button aria-haspopup class='selection nav-link accessible-nav-arrow' data-toggle='dropdown ' id='dashboard-dropdown-arrow' title='Expand profile menu'>
-<span class="app-icon-wrapper  "><span class="app-icon icon-caret-down icon-dark"></span></span>
 </button>
-<ul class='options'>
-<li class='featured'><a href="/athletes/search">Find Friends</a></li>
-<li><a href="/athletes/11694245">My Profile</a></li>
-<li><a href="/settings/profile">Settings</a></li>
-<li><a href="/apps">Apps</a></li>
-<li><a href="/subscription/perks">Subscriber Perks</a></li>
-<li><a rel="nofollow" data-method="delete" href="/session">Log Out</a></li>
-</ul>
-</li>
-<li class='nav-item drop-down-menu upload-menu'>
-<a class='nav-link selection' href='/upload'>
-<div class='upload-button-wrapper'>
-<div class='upload-button icon-upload app-icon icon-sm'>
-Upload
 </div>
-</div>
-</a>
-<ul class='options'>
-<li>
-<a href='/upload'>
-<span class='upload-activity app-icon icon-upload-activity'></span>
-Upload activity
-</a>
-</li>
-<li>
-<a href='/upload/manual'>
-<span class='upload-activity-manual app-icon icon-upload-activity-manual'></span>
-Add manual entry
-</a>
-</li>
-<li>
-<a href='/maps/create'>
-<span class='upload-route app-icon icon-upload-route'></span>
-Create route
-</a>
-</li>
-<li>
-<a href='/athletes/11694245/posts/new'>
-<span class='create-post app-icon icon-create-post'></span>
-Create post
-</a>
-</li>
-</ul>
-</li>
-</ul>
 
-</div>
 </nav>
-</header>
 
-<div class='messages' id='system-messages-js'>
-<div class='hidden alert alert-warning' id='ie-deprecation-message' role='alert'>
-<div class='container'>
-It looks like you're using a browser that Strava no longer supports. <a href='https://support.strava.com/hc/en-us/articles/216917637-Supported-Browsers-on-Strava'>Learn more</a>.
-</div>
-</div>
-<div class='flash-messages'>
-</div>
-<div class='container'></div>
-</div>
+<section class="with-border" id="heading">
+<header>
+<h2 class="text-title3 text-book marginless">
 
-
-<div class='header'>
-<div class='container'>
-<div class='media media-middle'>
-<h1 class='media-body'>Edit Activity</h1>
-<div class='media-right'><button class="btn btn-primary save btn-save-activity">Save</button></div>
-</div>
-</div>
-<hr class='topless'>
-</div>
-<div class='container mb-xl'>
-<div class='row'>
-<form class="edit_activity" id="edit-activity" action="/activities/16112144168" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" autocomplete="off" /><input type="hidden" name="_method" value="patch" autocomplete="off" /><input type="hidden" name="authenticity_token" value="QE66RkaXgCJhnbieWdGDcspLy3dT_oPMU1uGx4saaAvXa4xOIG9Jb7tKXPvzsovPhzFQc6zekp16kYfrne472w" autocomplete="off" /><div class='col-md-8'>
-<div class='edit-form'><div class='row'>
-<div class='col-md-8'>
-<div class='form-group'>
-<label for="activity_name">Title</label>
-<input class="form-control mb-md" required="required" type="text" value="Morning Run" name="activity[name]" id="activity_name" />
-<label for="activity_description">Description</label>
-
-<div class='form-control mb-md description' data-is-published='' data-react-class='ActivityDescriptionEdit' data-react-props='{&quot;entity&quot;:&quot;activity&quot;,&quot;entityId&quot;:16112144168,&quot;placeHolder&quot;:&quot;How&#39;d it go? Share more about your activity and use @ to tag someone.&quot;,&quot;activityDescription&quot;:null,&quot;viewingAthleteId&quot;:11694245,&quot;clubMentionsEnabled&quot;:true,&quot;inputName&quot;:&quot;activity[description]&quot;,&quot;analyticsFields&quot;:{&quot;page&quot;:&quot;edit_activity&quot;,&quot;category&quot;:&quot;edit_activity&quot;},&quot;experiments&quot;:{}}' style=''></div>
-
-</div>
-
-<div class='edit-activity-rpe-input mb-md' data-is-published='' data-react-class='PerceivedExertionInput' data-react-props='{&quot;entityId&quot;:16112144168,&quot;inputName&quot;:&quot;activity[perceived_exertion]&quot;,&quot;toggleName&quot;:&quot;activity[prefer_perceived_exertion]&quot;,&quot;perceivedExertion&quot;:null,&quot;preferPerceivedExertion&quot;:false,&quot;showToggle&quot;:false,&quot;analytics&quot;:{&quot;category&quot;:&quot;edit_activity&quot;,&quot;page&quot;:{&quot;outer&quot;:&quot;edit_activity&quot;,&quot;inner&quot;:&quot;edit_activity&quot;},&quot;properties&quot;:{&quot;activity_id&quot;:16112144168}},&quot;experiments&quot;:{}}' style=''></div>
-
-<label for="activity_private_note">Private Notes</label>
-<textarea class="form-control mb-md private-note" placeholder="Jot down private notes here. Only you can see these." name="activity[private_note]" id="activity_private_note">
-</textarea>
-<label>Privacy Controls</label>
-
-<div class='edit-activity-visibility mb-md' data-is-published='' data-react-class='VisibilitySetting' data-react-props='{&quot;name&quot;:&quot;activity[visibility]&quot;,&quot;selectedValue&quot;:&quot;everyone&quot;,&quot;options&quot;:[{&quot;title&quot;:&quot;Everyone&quot;,&quot;detail&quot;:&quot;Anyone on Strava can view this activity. This activity will be visible on segment and challenge leaderboards, and other Strava features.&quot;,&quot;value&quot;:&quot;everyone&quot;},{&quot;title&quot;:&quot;Followers&quot;,&quot;detail&quot;:&quot;Only your followers will be able to access this activity&#39;s details. This activity will not appear on segment or challenge leaderboards, but may still count toward some challenge goals. Members who do not follow you may be able to view a summary of this activity depending on your other privacy settings.&quot;,&quot;value&quot;:&quot;followers_only&quot;},{&quot;title&quot;:&quot;Only You&quot;,&quot;detail&quot;:&quot;This activity is private. Only you can view it. If it counts toward a challenge, your followers may see updates on your progress. No one will see your activity page, and this activity won&#39;t show up on leaderboards or elsewhere on Strava, including group activities or Flybys.&quot;,&quot;value&quot;:&quot;only_me&quot;}],&quot;analytics&quot;:{&quot;category&quot;:&quot;edit_activity&quot;,&quot;page&quot;:{&quot;outer&quot;:&quot;edit_activity&quot;,&quot;inner&quot;:&quot;edit_activity&quot;},&quot;properties&quot;:{&quot;activity_id&quot;:16112144168}},&quot;experiments&quot;:{}}' style=''></div>
-
-<div class='form-group'>
-<label for="activity_stats_visibility">Hidden Details</label>
-
-<div class='' data-is-published='' data-react-class='HideStatsInfo' data-react-props='{&quot;experiments&quot;:{}}' style='display: inline-block'></div>
-
-<ul class='hide-stats-container'>
-<li>
-<input name="activity[stats_visibility][start_time]" type="hidden" value="everyone" autocomplete="off" /><input type="checkbox" value="only_me" name="activity[stats_visibility][start_time]" id="activity_stats_visibility_start_time" />
-<label for="activity_stats_visibility_start_time">Start Time</label>
-</li>
-<li>
-<input name="activity[stats_visibility][calories]" type="hidden" value="everyone" autocomplete="off" /><input type="checkbox" value="only_me" name="activity[stats_visibility][calories]" id="activity_stats_visibility_calories" />
-<label for="activity_stats_visibility_calories">Calories</label>
-</li>
-<li>
-<input name="activity[stats_visibility][heart_rate]" type="hidden" value="everyone" autocomplete="off" /><input type="checkbox" value="only_me" checked="checked" name="activity[stats_visibility][heart_rate]" id="activity_stats_visibility_heart_rate" />
-<label for="activity_stats_visibility_heart_rate">Heart rate</label>
-</li>
-<li class='pace-stat-checkbox'>
-<input name="activity[stats_visibility][pace]" type="hidden" value="everyone" autocomplete="off" /><input type="checkbox" value="only_me" name="activity[stats_visibility][pace]" id="activity_stats_visibility_pace" />
-<label for="activity_stats_visibility_pace">Pace</label>
-</li>
-<li class='speed-stat-checkbox'>
-<input name="activity[stats_visibility][speed]" type="hidden" value="everyone" autocomplete="off" /><input type="checkbox" value="only_me" name="activity[stats_visibility][speed]" id="activity_stats_visibility_speed" />
-<label for="activity_stats_visibility_speed">Speed</label>
-</li>
-</ul>
-</div>
-<div class='form-group'>
-<label for="activity_hide_from_home">Mute Activity</label>
-<div class='mute-activity'>
-<input type="checkbox" value="true" name="activity[hide_from_home]" id="activity_hide_from_home" />
-<label for="activity_hide_from_home">Don&#39;t publish to Home or Club feeds</label>
-</div>
-<small>This activity will still be visible on your profile</small>
-</div>
-</div>
-<div class='col-md-4'>
-<div class='row'>
-<div class='col-md-12'>
-<div class='form-group activity_type'>
-<label for="activity_type">Sport</label>
-<div class='sport-type-select'><select class="form-control mb-md" name="activity[sport_type]" id="activity_sport_type"><option selected="selected" value="Run">Run</option>
-<option value="Ride">Ride</option>
-<option value="Swim">Swim</option>
-<option value="Walk">Walk</option>
-<option value="Hike">Hike</option>
-<option value="TrailRun">Trail Run</option>
-<option value="MountainBikeRide">Mountain Bike Ride</option>
-<option value="GravelRide">Gravel Ride</option>
-<option value="EBikeRide">E-Bike Ride</option>
-<option value="EMountainBikeRide">E-Mountain Bike Ride</option>
-<option value="AlpineSki">Alpine Ski</option>
-<option value="Badminton">Badminton</option>
-<option value="BackcountrySki">Backcountry Ski</option>
-<option value="Canoeing">Canoe</option>
-<option value="Crossfit">Crossfit</option>
-<option value="Elliptical">Elliptical</option>
-<option value="Golf">Golf</option>
-<option value="IceSkate">Ice Skate</option>
-<option value="InlineSkate">Inline Skate</option>
-<option value="Handcycle">Handcycle</option>
-<option value="HighIntensityIntervalTraining">HIIT</option>
-<option value="Kayaking">Kayaking</option>
-<option value="Kitesurf">Kitesurf</option>
-<option value="NordicSki">Nordic Ski</option>
-<option value="Pickleball">Pickleball</option>
-<option value="Pilates">Pilates</option>
-<option value="Racquetball">Racquetball</option>
-<option value="RockClimbing">Rock Climb</option>
-<option value="RollerSki">Roller Ski</option>
-<option value="Rowing">Rowing</option>
-<option value="Sail">Sail</option>
-<option value="Skateboard">Skateboard</option>
-<option value="Snowboard">Snowboard</option>
-<option value="Snowshoe">Snowshoe</option>
-<option value="Soccer">Football (Soccer)</option>
-<option value="Squash">Squash</option>
-<option value="StandUpPaddling">Stand Up Paddling</option>
-<option value="StairStepper">Stair-Stepper</option>
-<option value="Surfing">Surfing</option>
-<option value="TableTennis">Table Tennis</option>
-<option value="Tennis">Tennis</option>
-<option value="Velomobile">Velomobile</option>
-<option value="WeightTraining">Weight Training</option>
-<option value="Windsurf">Windsurf</option>
-<option value="Wheelchair">Wheelchair</option>
-<option value="Workout">Workout</option>
-<option value="Yoga">Yoga</option></select></div>
-<div class='form-group ride-workout-types' style='display: none'>
-<label for="activity_workout_type">Type of Ride</label>
-<select class="form-control mb-md" disabled="disabled" name="activity[workout_type]" id="activity_workout_type"><option value="10"></option>
-<option value="11">Race</option>
-<option value="12">Workout</option></select>
-</div>
-<div class='form-group run-workout-types' style='display: none'>
-<label for="activity_workout_type">Type of Run</label>
-<select class="form-control mb-md" disabled="disabled" name="activity[workout_type]" id="activity_workout_type"><option value="0"></option>
-<option value="1">Race</option>
-<option value="3">Workout</option>
-<option value="2">Long Run</option></select>
-</div>
-</div>
-</div>
-</div>
-<label>Tags</label>
-<fieldset class='activity-tags topless mb-md'>
-<div class='inline-inputs marginless'>
-<div class='input-field'>
-<input name="activity[commute]" type="hidden" value="0" autocomplete="off" /><input type="checkbox" value="1" name="activity[commute]" id="activity_commute" />
-<label for="activity_commute"><div class='commute-label'>Commute</div>
-</label></div>
-<div class='input-field'>
-<input name="activity[trainer]" type="hidden" value="0" autocomplete="off" /><input type="checkbox" value="1" name="activity[trainer]" id="activity_trainer" />
-<label for="activity_trainer"><div class='trainer-label'>Treadmill</div>
-</label></div>
-</div>
-</fieldset>
-<div class='form-group ride-gear' id='gear-bike' style='display: none'>
-<label for="activity_bike_id">Bike</label>
-<select class="form-control" disabled="disabled" name="activity[bike_id]" id="activity_bike_id"><option value=""></option>
-<option value="4572381">B&#39;Twin Hybrid</option></select>
-<a class='new-gear ride-gear' href='/settings/gear' style='display: inline-block; margin-top: 20px' target='_blank'>
-<div class='gear-label new-ride-gear'>+ New Bike</div>
-</a>
-</div>
-<div class='form-group run-gear' id='gear-run' style='display: none'>
-<label for="activity_athlete_gear_id">Shoes</label>
-<select class="form-control" disabled="disabled" name="activity[athlete_gear_id]" id="activity_athlete_gear_id"><option value=""></option>
-<option selected="selected" value="11904800">Adidas boston 11</option>
-<option value="12473505">HOKA Clifton 8</option>
-<option value="11827182">Salomon Sense Ride 4</option></select>
-<a class='new-gear run-gear' href='/settings/gear' style='display: inline-block; margin-top: 20px' target='_blank'>
-<div class='gear-label new-run-gear'>+ New Shoes</div>
-</a>
-</div>
-</div>
-</div>
-<div class='form-group'>
-
-<div class='' data-is-published='' data-react-class='MediaUploader' data-react-props='{&quot;athleteId&quot;:11694245,&quot;media&quot;:[],&quot;defaultPhotoId&quot;:null,&quot;viewFeatureEdData&quot;:{&quot;is_eligible&quot;:false,&quot;count&quot;:15},&quot;activityId&quot;:16112144168,&quot;experiments&quot;:{}}' style=''></div>
-
-</div>
-<input type="submit" name="commit" value="Save" class="btn btn-primary mt-md" data-disable-with="Save" />
-</div>
-</div>
-<div class='col-md-4 stats-col'>
-<div class='stats-container'>
-<div class='form-group'>
-<label for="activity_selected_polyline_style">Map Type</label>
-
-<div class='' data-is-published='' data-react-class='MapTypeInfo' data-react-props='{&quot;experiments&quot;:{}}' style='display: inline-block; margin-top: -2px'></div>
-
-<select class="form-control mb-md" name="activity[selected_polyline_style]" id="activity_selected_polyline_style"><option selected="selected" value="default">Standard</option>
-<option disabled="disabled" value="fatmap_satellite_3d">3D</option>
-<option disabled="disabled" value="winter_3d">Winter 3D</option>
-<option value="surface_type">Dirt</option>
-<option disabled="disabled" value="elevation">Elevation</option>
-<option disabled="disabled" value="gradient">Gradient</option>
-<option disabled="disabled" value="heartrate">Heart Rate</option>
-<option disabled="disabled" value="pace">Pace</option>
-<option disabled="disabled" value="speed">Speed</option>
-<option disabled="disabled" value="temperature">Temperature</option>
-<option disabled="disabled" value="time">Time</option>
-<option disabled="disabled" value="heatmap">Heatmap</option>
-<option value="metro">Strava Metro</option>
-<option value="black_lives_matter">Black Lives Matter</option>
-<option value="pride">Pride</option>
-<option value="ukraine">Support Ukraine</option></select>
-</div>
-<div class='activity-map mb-sm'>
-<img alt='Activity Map' src='https://d3o5xota0a1fcr.cloudfront.net/v6/maps/5EBDAQE5QIWLDFMQEEBSASYWXGPSSWRYPH3MWPFCFAV4U7QLIX5KACU2XRHG2DW4ZR2NJ7D6ZDFMULEEVNND22QJY4U2QYZS5AJA===='>
-</div>
-<table class='table'>
-<tbody>
-<tr>
-<td>Date</td>
-<td>Oct 12, 2025</td>
-</tr>
-<tr>
-<td>Distance</td>
-<td>20.01<abbr class='unit' title='kilometers'> km</abbr></td>
-</tr>
-<tr>
-<td>Time</td>
-<td>2<abbr class='unit' title='hour'>h</abbr> 6<abbr class='unit' title='minute'>m</abbr></td>
-</tr>
-<tr>
-<td>Elevation Gain</td>
-<td>102<abbr class='unit' title='meters'> m</abbr></td>
-</tr>
-</tbody>
-</table>
-</div>
-
-</div>
-</form></div>
-</div>
-<script id='bike-dialog' type='text/template'>
-<form>
-<div class='inline-inputs'>
+<span class="title">
+<a class="minimal" href="/athletes/11694245">Nishanth Murugan</a>
+–
+Run
+</span>
+</h2>
+<div class="social">
+<div class="sharing">
+<button class="btn btn-default facebook button" title="Share on Facebook">
+<div class="icon-fb app-icon icon-sm icon-color"></div>
+</button>
+<a class="button twitter" title="Share on Twitter" href="https://twitter.com/intent/tweet?text=went for a 20.0 kilometer Run.&amp;url=https%3A%2F%2Fwww.strava.com%2Factivities%2F16112144168%3Futm_content%3D11694245%26utm_medium%3Dreferral%26utm_source%3Dtwitter&amp;hashtags=strava"><div class="icon-twitter app-icon icon-sm icon-color"></div>
+</a></div>
+<button class="btn button btn-default embed" title="Embed on Blog">
+<span class="icon-share app-icon icon-sm icon-dark">
+Embed on Blog
+</span>
+</button>
+<div id="kudos-comments-container">
 <span>
-<label for='name'>Name</label>
-<input id='name' name='name' type='text'>
+
+<div class="" data-is-published="" data-react-class="ADPKudosAndComments" data-react-props="{&quot;kudosCount&quot;:15,&quot;canKudo&quot;:false,&quot;commentsCount&quot;:0,&quot;entityId&quot;:&quot;16112144168&quot;,&quot;ownedByCurrentAthlete&quot;:true,&quot;commentsEnabled&quot;:true,&quot;entity&quot;:&quot;activity&quot;,&quot;ownerName&quot;:&quot;Nishanth Murugan&quot;,&quot;ownerAvatarUrl&quot;:&quot;https://dgalywyr863hv.cloudfront.net/pictures/athletes/11694245/6242157/12/medium.jpg&quot;,&quot;ownerAthleteId&quot;:11694245,&quot;activityName&quot;:&quot;Morning Run&quot;,&quot;comments&quot;:[],&quot;viewingAthlete&quot;:{&quot;id&quot;:&quot;11694245&quot;,&quot;name&quot;:&quot;Nishanth Murugan&quot;,&quot;avatarUrl&quot;:&quot;https://dgalywyr863hv.cloudfront.net/pictures/athletes/11694245/6242157/12/medium.jpg&quot;,&quot;memberType&quot;:&quot;&quot;},&quot;clubMentionsEnabled&quot;:true,&quot;shouldShowTrustMigratedReportingWeb&quot;:true,&quot;experiments&quot;:{}}" style=""><div class="ADPKudosAndComments--adp-kudos-comments-container--MTy6F"><div class="ADPKudosAndComments--kudos-button-container--die4d"><button class="Button--btn--1i5yb Button--default--qpKYH ADPKudosAndComments--social-button--9SpMW" type="button" title="View all kudos" data-testid="adp-kudos_button"><svg fill="#525252" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" width="16" height="16" data-testid="unfilled_kudos" class="ADPKudosAndComments--unfilled-kudo-icon--v4iCw"><path d="M6.18.36A.625.625 0 016.746 0h.366a2.625 2.625 0 012.609 2.918L9.374 6h3.69a2.185 2.185 0 011.68 3.584l-.119.142v1.291c0 .458-.16.902-.454 1.254l-.171.205v.399A2.125 2.125 0 0111.875 15H5.703c-.256 0-.507-.077-.72-.22l-1.157-.777a.042.042 0 00-.024-.007l-1.483.031A1.292 1.292 0 011 12.736V8.81c0-.38.168-.742.46-.988l2.032-1.711zm.964.89L4.566 6.765a.625.625 0 01-.163.213l-2.138 1.8a.042.042 0 00-.015.032v3.926c0 .023.02.042.043.041l1.483-.03c.266-.006.527.07.748.219l1.156.777a.042.042 0 00.023.007h6.172a.875.875 0 00.875-.875v-.851l.46-.553a.708.708 0 00.165-.454V9.274l.408-.49a.935.935 0 00-.718-1.534h-5.09l.504-4.471c.09-.805-.53-1.51-1.335-1.529z" fill=""></path></svg><div title="View all kudos"><span data-testid="kudos_count" class="ADPKudosAndComments--count--c2ecP">15</span></div></button></div><button class="Button--btn--1i5yb Button--default--qpKYH ADPKudosAndComments--social-button--9SpMW" type="button" data-testid="open_comment_modal_button" title="View all comments"><svg fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="ADPKudosAndComments--comment-icon--6CZny"><g fill=""><path d="M3 5.75h10V7H3zM3 8v1.25h7V8z"></path><path d="M0 3.958C0 2.877.877 2 1.958 2h12.084C15.123 2 16 2.877 16 3.958v7.084A1.958 1.958 0 0114.042 13H7.759l-2.636 2.636A1.243 1.243 0 013 14.756V13H1.958A1.958 1.958 0 010 11.042zm1.958-.708a.708.708 0 00-.708.708v7.084c0 .39.317.708.708.708H4.25v2.991l2.991-2.991h6.8a.708.708 0 00.709-.708V3.958a.708.708 0 00-.708-.708z"></path></g></svg><span data-testid="comments_count" class="ADPKudosAndComments--count--c2ecP">0</span></button></div></div>
+
 </span>
 </div>
-<label>Default Sports</label>
-<div class='default-sports'>
-<div class='checkbox-group'>
-<input type="checkbox" name="ebikeride" id="ebikeride" value="EBikeRide" class="default_sports" />
-<label for='ebikeride'>E-Bike Ride</label>
+<a class="collapse button">
+<div class="icon-collapse sprite">Collapse</div>
+</a>
 </div>
-<div class='checkbox-group'>
-<input type="checkbox" name="gravelride" id="gravelride" value="GravelRide" class="default_sports" />
-<label for='gravelride'>Gravel Ride</label>
+</header>
+<div class="collapsable container-fluid" style="">
+<div class="row no-margins activity-summary-container">
+<div class="spans8 activity-summary mt-md mb-md">
+<div class="details-container">
+<a class="avatar avatar-athlete" href="/athletes/11694245"><img alt="Nishanth" src="https://dgalywyr863hv.cloudfront.net/pictures/athletes/11694245/6242157/12/large.jpg">
+</a><div class="details">
+<time>
+6:34 AM on Sunday, October 12, 2025
+</time>
+<span class="location">Bengaluru, Karnataka</span>
+<h1 class="text-title1 marginless activity-name">Morning Run</h1>
+<div class="activity-description-container">
+<div class="activity-description-js activity-description">
+<div class="content"><p>Morning Run Des</p></div>
 </div>
-<div class='checkbox-group'>
-<input type="checkbox" name="virtualride" id="virtualride" value="VirtualRide" class="default_sports" />
-<label for='virtualride'>Virtual Ride</label>
+<a class="minimal button toggle-more-description" style="display: none" title="View more">•••</a>
 </div>
-<div class='checkbox-group'>
-<input type="checkbox" name="handcycle" id="handcycle" value="Handcycle" class="default_sports" />
-<label for='handcycle'>Handcycle</label>
+<div id="activity-photos-container">
 </div>
-<div class='checkbox-group'>
-<input type="checkbox" name="ride" id="ride" value="Ride" class="default_sports" />
-<label for='ride'>Ride</label>
-</div>
-<div class='checkbox-group'>
-<input type="checkbox" name="mountainbikeride" id="mountainbikeride" value="MountainBikeRide" class="default_sports" />
-<label for='mountainbikeride'>Mountain Bike Ride</label>
-</div>
-<div class='checkbox-group'>
-<input type="checkbox" name="velomobile" id="velomobile" value="Velomobile" class="default_sports" />
-<label for='velomobile'>Velomobile</label>
-</div>
-<div class='checkbox-group'>
-<input type="checkbox" name="emountainbikeride" id="emountainbikeride" value="EMountainBikeRide" class="default_sports" />
-<label for='emountainbikeride'>E-Mountain Bike Ride</label>
-</div>
-</div>
-<label for='frame_type'>Types</label>
-<select name="frame_type" id="frame_type"><option value="3">Road Bike</option>
-<option value="1">Mountain Bike</option>
-<option value="4">TT Bike</option>
-<option value="2">Cross Bike</option>
-<option value="5">Gravel Bike</option></select>
-<label for='weight'>Weight (kg)</label>
-<input class='short' id='weight' name='weight' type='text'>
-<label for='brand_name'>Brand</label>
-<input class='medium' id='brand_name' name='brand_name' type='text'>
-<label for='model_name'>Model</label>
-<input class='medium' id='model_name' name='model_name' type='text'>
-<label for='notes'>Notes</label>
-<textarea class='tall' id='notes' name='notes'></textarea>
-<br>
-<input type='submit' value='Save Bike'>
-</form>
-</script>
 
-<div class='hidden'><script id='glossary-template' type='text/template'>
+</div>
+</div>
+<section class="private-note-container">
+<a class="add-desc minimal button" href="/activities/16112144168/edit">Add private notes</a>
+</section>
+<section class="others-section-v2">
+<div class="other-athletes mt-sm">
+
+<div class="" data-is-published="" data-react-class="ActivityTagging" data-react-props="{&quot;groupActivity&quot;:false,&quot;activityId&quot;:16112144168,&quot;activityType&quot;:&quot;run&quot;,&quot;athleteName&quot;:&quot;Nishanth&quot;,&quot;athleteId&quot;:11694245,&quot;findFriendsUrl&quot;:&quot;http://strava.com/athletes/search&quot;,&quot;branchLinkData&quot;:{&quot;signature&quot;:&quot;e7c05c3274a58da16f122573b6a4758df4a35a0c24ebefa31c3f059ea1d46858:1760502392&quot;,&quot;desktopUrl&quot;:&quot;http://strava.com/activities/16112144168?sig=e7c05c3274a58da16f122573b6a4758df4a35a0c24ebefa31c3f059ea1d46858%3A1760502392&quot;,&quot;inviterAvatarUrl&quot;:&quot;https://dgalywyr863hv.cloudfront.net/pictures/athletes/11694245/6242157/12/large.jpg&quot;},&quot;experiments&quot;:{}}" style=""><div class="activity-athlete-tagging-inviter"><span>With someone who didn’t record?</span><button class="Button--btn--1i5yb Button--primary--Phrgk Tagging--btn-add-friend--LUbvS" type="button">Add Friends</button></div></div>
+
+</div>
+<div class="flybys mt-md">
+<div class="labs-logo"><img alt="Strava Labs" src="https://d3nn82uaxijpm6.cloudfront.net/assets/application/icons/logo-strava-labs-9fa54df9aeaf91a99205c5f6e08f7822836bb3c95746dbb59d83e95d5fc104c5.svg"></div>
+<a class="minimal flybys-link view-all-link with-sprite" href="https://labs.strava.com/flyby/viewer/#16112144168" target="_blank">View Flybys</a>
+</div>
+</section>
+<section class="visibility-section">
+<div class="visibility-notice">
+<span class="app-icon-wrapper  "><span class="app-icon icon-locked icon-sm icon-dark"></span></span>
+Only you can see: heart rate
+</div>
+</section>
+</div>
+<div class="spans8 activity-stats mt-md mb-md">
+<ul class="inline-stats section">
+<li>
+<strong>20.01<abbr class="unit" title="kilometers"> km</abbr></strong>
+<div class="label">Distance</div>
+</li>
+<li>
+<strong>2:06:30</strong>
+<div class="label">
+<span class="glossary-link run-version" data-glossary-term="definition-moving-time">
+Moving Time
+</span>
+</div>
+</li>
+<li>
+<strong>6:19<abbr class="unit" title="minutes per kilometer"> /km</abbr></strong>
+<div class="label">
+<span class="glossary-link run-version" data-glossary-term="definition-moving-time">
+Pace
+</span>
+</div>
+</li>
+</ul>
+<div class="section more-stats">
+<div class="row">
+<div class="spans5">Elevation</div>
+<div class="spans3">
+<strong>102<abbr class="unit" title="meters"> m</abbr></strong>
+</div>
+<div class="spans5">Calories</div>
+<div class="spans3">
+<strong>1,539</strong>
+</div>
+</div>
+<div class="row">
+<div class="spans5">
+<span class="glossary-link run-version" data-glossary-term="definition-elapsed-time">Elapsed Time</span>
+</div>
+<div class="spans3">
+<strong>2:09:49</strong>
+</div>
+</div>
+</div>
+<div class="section device-section">
+<div class="row">
+<div class="device spans8">
+Garmin Forerunner 935
+</div>
+<div class="gear spans8">
+Shoes:
+<span class="gear-name">
+Adidas boston 11
+(3,384.2 km)
+</span>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<footer class="achievements row">
+<div class="spans3 centered footer-achievements-title">
+<h3 class="h4">TOP<br>RESULTS</h3>
+</div>
+<ul class="spans13 footer-achievements-list">
+<li>
+<div class="app-icon icon-sm md icon-at-pr-3"></div>
+<span class="title">
+<strong>3rd fastest time</strong> on
+<a class="segment-achievement" data-tracking-properties="{&quot;segment_id&quot;:35041989,&quot;segment_effort_id&quot;:&quot;3412295750658493790&quot;,&quot;effort_rank&quot;:3,&quot;entry_type&quot;:&quot;pr&quot;}" href="/activities/16112144168/segments/3412295750658493790">
+Short Uphill in Lalbagh
+</a>
+</span>
+<time>(2:36)</time>
+</li>
+<li>
+<div class="app-icon icon-sm md icon-at-pr-3"></div>
+<span class="title">
+<strong>3rd fastest time</strong> on
+<a class="segment-achievement" data-tracking-properties="{&quot;segment_id&quot;:36317640,&quot;segment_effort_id&quot;:&quot;3412295750658665822&quot;,&quot;effort_rank&quot;:3,&quot;entry_type&quot;:&quot;pr&quot;}" href="/activities/16112144168/segments/3412295750658665822">
+Lalbag Uphill
+</a>
+</span>
+<time>(5:39)</time>
+</li>
+</ul>
+</footer>
+</div>
+</section>
+<section class="relative-effort-upsell mt-md mb-md">
+<div class="media">
+<div class="media-content">
+<div class="media-body">
+<div class="text-headline text-bold">
+This was harder than your usual effort.
+</div>
+<div class="text-subhead">
+Know when your training is on track and when to rest with heart rate-based metrics like Relative Effort. Tap to learn more.
+</div>
+<a class="btn btn-primary" href="/subscribe?code=web-adp-device-v2&amp;origin=relative_effort">
+Start Your Free Trial
+</a>
+</div>
+<div class="media-image">
+<img src="https://d3nn82uaxijpm6.cloudfront.net/assets/activities/relative_effort_upsell/hard@2x-c6342b7e79a771bfeddd7eb7759f40d4a85cd1078355aabb1bb7f65d6950f5d8.png">
+</div>
+</div>
+</div>
+</section>
+
+<!-- / Glossary - This is loading the content from the old activities glossary -->
+<script id="glossary-template" type="text/template">
 <div class='glossary-header'>
 <h3 class='mb-0'>Strava Glossary</h3>
 </div>
@@ -1139,7 +566,7 @@ Best Efforts
 <div class='main'></div>
 </div>
 </script>
-<script id='glossary-power-template' type='text/template'>
+<script id="glossary-power-template" type="text/template">
 <div class='glossary-header'>
 <h3 class='mb-0'>Strava Glossary</h3>
 </div>
@@ -1176,17 +603,17 @@ Power Zones
 <div class='main'></div>
 </div>
 </script>
-<script id='glossary-definition-segment-intensity-template' type='text/template'>
+<script id="glossary-definition-segment-intensity-template" type="text/template">
 <h4>Segment Intensity</h4>
 <p>Intensity on Segments gives you a simple visual indication of how hard you went on a given segment by comparing the effort with your best power for the duration of that segment over the last 6 weeks.</p>
 <p>For example, if you maintained 300<abbr title='Watts'>W</abbr> for a 10-minute segment and your best 10-minute power over the past 6 weeks was 330W, your segment intensity will be 90%.</p>
 </script>
-<script id='glossary-definition-ftp-template' type='text/template'>
+<script id="glossary-definition-ftp-template" type="text/template">
 <h4><abbr title='Functional Threshold Power'>FTP</abbr></h4>
 <p>Your Functional Threshold Power (FTP) is the maximum average power that you can hold for one continuous hour. For example, if you were to ride a 40k time trial in 60 minutes at an average power of 275<abbr title='Watts'>W</abbr>, your FTP would be 275W.</p>
 <p>FTP is the keystone to training with power. It allows Strava to determine how hard a ride is for you. You doing 300W might feel much different than someone less trained doing 300W and FTP allows us to gauge just how hard segments, rides, and even weeks or months of training were for you!</p>
 </script>
-<script id='glossary-definition-calculating-ftp-template' type='text/template'>
+<script id="glossary-definition-calculating-ftp-template" type="text/template">
 <h4>Calculating Your FTP</h4>
 <p>We recommend you test for your FTP at least every few weeks to a month while you&#39;re training. Here are some tips to get the most out of your FTP testing:</p>
 <p>It&#39;s extremely taxing on your body (and your training program) to continuously push out 60-minute max efforts. It&#39;s also difficult to find a stretch of road where you can ride for 60 minutes uninterrupted and maintain a steady wattage. Thus, the easiest way to calculate your FTP is to test your best average power for 20 minutes. We believe 20 minutes is enough time to stress the same physiological systems as a 60-minute effort would and it is easier to consistently do within your season.</p>
@@ -1196,15 +623,15 @@ Power Zones
 <li>Properly warm up</li>
 </ol>
 </script>
-<script id='glossary-definition-weighted-average-power-template' type='text/template'>
+<script id="glossary-definition-weighted-average-power-template" type="text/template">
 <h4>Weighted Average Power</h4>
 <p>When you ride with a power meter, you&#39;ll notice how your power jumps all over the place based on the terrain, grade, wind, and other factors. Weighted Average Power looks at all of this variation and provides an average power for your ride that is a better indicator of your effort than simply taking your average power. It is our best guess at your average power if you rode at the exact same wattage the entire ride.</p>
 </script>
-<script id='glossary-definition-total-work-template' type='text/template'>
+<script id="glossary-definition-total-work-template" type="text/template">
 <h4>Total Work</h4>
 <p>Total Work, expressed in kilojoules (kJ), is simply the sum of the watts generated during your ride. There is a close 1–to–1 ratio with Total Work and Calories expended during a ride.</p>
 </script>
-<script id='glossary-definition-intensity-template' type='text/template'>
+<script id="glossary-definition-intensity-template" type="text/template">
 <h4>Intensity</h4>
 <p>Intensity is our way of showing how difficult a ride was as compared to your <abbr title ='Functional Threshold Power'>FTP</abbr>. We look at your Weighted Average Power for the ride and compare it to your FTP. If your Weighted Average Power was 250<abbr title='Watts'>W</abbr> and your FTP 300<abbr title='Watts'>W</abbr>, the Intensity would be 83%. It's very possible to have an Intensity of over 100% if the ride was shorter than an hour.</p>
 <ul>
@@ -1215,7 +642,7 @@ Power Zones
 <li>Short Time Trial or Race – 105% and higher</li>
 </ul>
 </script>
-<script id='glossary-definition-training-load-template' type='text/template'>
+<script id="glossary-definition-training-load-template" type="text/template">
 <h4>Training Load</h4>
 <p>We calculate Training Load by comparing your power during your ride to your <abbr title='Functional Threshold Power'>FTP</abbr> and determining how much load you put on your body during the workout. Training Load is a great way to determine how much rest you need after your workouts. The guide below will tell you how long after a workout it will take you to fully recover:</p>
 <ul>
@@ -1225,12 +652,12 @@ Power Zones
 <li>At least 5 days – 400+</li>
 </ul>
 </script>
-<script id='glossary-definition-power-curve-template' type='text/template'>
+<script id="glossary-definition-power-curve-template" type="text/template">
 <h4>Power Curve</h4>
 <p>The Power Curve shows your best average power for time periods of 1 second up to the length of your ride. We search your entire ride and find these best efforts and you can compare them with your best efforts for your last 6 weeks, the current year, or years in the past!</p>
 <p>The Power Curve can be displayed in Watts (W) or Watts per Kilogram (W/kg.) on your own activity.</p>
 </script>
-<script id='glossary-definition-power-zones-template' type='text/template'>
+<script id="glossary-definition-power-zones-template" type="text/template">
 <h4>Power Zones</h4>
 <p>While the Power Curve shows your best efforts for given periods of time, Power Zone charts take each 1 second of power of your ride and put it into a bucket. The buckets are based on your <abbr title='Functional Threshold Power'>FTP</abbr> and are as follows:</p>
 <ol>
@@ -1243,35 +670,35 @@ Power Zones
 <li>Neuromuscular – Sprinting power that is taxing your neuromuscular system and can be maintained for 1-20 seconds.</li>
 </ol>
 </script>
-<script id='glossary-definition-suffer-score-template' type='text/template'>
+<script id="glossary-definition-suffer-score-template" type="text/template">
 <h4>Relative Effort</h4>
 <p>Relative Effort is an analysis of your heart rate data. By tracking your heart rate through your workout and its level relative to your maximum heart rate, we attach a value to show exactly how hard you worked. The more time you spend going full gas and the longer your activity, the higher the score. Compare your Relative Effort with friends and pros, see if you can do a truly epic workout and motivate yourself to push that extra bit harder! Relative Effort was inspired by the concept of TRIMP (TRaining IMPulse) coined by Dr. Eric Bannister.</p>
 </script>
-<script id='glossary-definition-perceived-exertion-template' type='text/template'>
+<script id="glossary-definition-perceived-exertion-template" type="text/template">
 <h4>Perceived Exertion</h4>
 <p>Perceived Exertion lets you manually record how intense your efforts feel on a 1-10 scale ranging from “Easy” to “Max Effort.” When tracking how difficult a workout feels overall, Perceived Exertion can stand in for an athlete’s heart rate data. That means Perceived Exertion can power features that otherwise require heart rate data, like Relative Effort and Fitness. Add Perceived Exertion to activities for a layer of qualitative data, or when you happen to forget your heart rate monitor.</p>
 </script>
-<script id='glossary-definition-energy-output-template' type='text/template'>
+<script id="glossary-definition-energy-output-template" type="text/template">
 <h4>Energy Output</h4>
 <p>Energy Output measures the amount of work you&#39;ve done during a ride, expressed in kilojoules (KJ). It is a factor of how much you&#39;re pedaling, how fast you&#39;re pedaling and how much force you&#39;re exerting on the pedals (measured in W). Power output is most accurately taken from a power meter, but if you don&#39;t have a power meter we give a rough approximation through our power estimator.</p>
 </script>
-<script id='glossary-definition-average-power-template' type='text/template'>
+<script id="glossary-definition-average-power-template" type="text/template">
 <h4>Average Power</h4>
 <p>Average power reflects your average power value during a ride, expressed in Watts (a measure of how much energy you are exerting onto the pedals). This is inclusive of the entire ride, and takes coasting into account as well. Average power is most accurately measured with a power meter, though if you don&#39;t have a power meter we give a rough approximation through our power estimator.</p>
 </script>
-<script id='glossary-definition-vam-template' type='text/template'>
+<script id="glossary-definition-vam-template" type="text/template">
 <h4><abbr title='Vertical ascent in meters/hour'>VAM</abbr></h4>
 <p>VAM measures your Vertical Ascent in Meters/hour – it measures how quickly you are traveling upward. VAM is useful for comparing your effort on different hills and segments, and is used by both cyclists and runners. To get a high VAM score, grades between 6-10% generally present the best opportunity to ascend quickly, as they are steep enough to avoid wind, and gradual enough to allow unrestricted motion.</p>
 </script>
-<script id='glossary-definition-intensity-template' type='text/template'>
+<script id="glossary-definition-intensity-template" type="text/template">
 <h4>Intensity</h4>
 <p>Intensity is a measure that describes running activities on a 10-point scale, with race pace set to 10. The pace used to calculate the intensity takes into account the distance of the run and elevation gained and lost over the run. Now you can instantly gauge how tough your pace is for a run, and see if you&#39;re slowing down enough on your recovery runs.</p>
 </script>
-<script id='glossary-definition-segment-template' type='text/template'>
+<script id="glossary-definition-segment-template" type="text/template">
 <h4>Segments</h4>
 <p>A segment is Strava&#39;s term for a specific section of a road, climb or trail. Strava athletes can create segments from their uploaded activities. Strava tracks your performance on each segment every time you run or ride so you can see how you&#39;re progressing over time, and compare your results with other athletes on Strava: your friends, local athletes and even the pros. Start creating segments and see where you land on the leaderboards.</p>
 </script>
-<script id='glossary-definition-best-efforts-template' type='text/template'>
+<script id="glossary-definition-best-efforts-template" type="text/template">
 <h4>Best Efforts</h4>
 <p>Best Efforts are calculated using your GPS-based running or cycling activities, and/or cycling activities with power data. Indoor Rides will only count towards power Best Efforts. Strava analyzes the activity to identify the fastest rolling time for benchmark distances, longest activities, activities with most elevation, biggest single climbs and best power outputs at benchmark time intervals. They are considered estimates because they are subject to normal discrepancies in GPS and power meter accuracy.</p>
 <p>
@@ -1283,7 +710,7 @@ How are all-time personal records different from Best Efforts?
 </ul>
 <p>Learn more about Best Efforts <a href='https://support.strava.com/hc/en-us/articles/19685360245005-Best-Efforts-Overview'>here</a>.</p>
 </script>
-<script id='glossary-definition-all-time-prs-template' type='text/template'>
+<script id="glossary-definition-all-time-prs-template" type="text/template">
 <h4>All-time Personal Records</h4>
 <p>All-time Personal Records (PRs) represent an athlete&#39;s fastest time ever run for benchmark distances. PRs are manually entered, and can be linked to official race results and Strava activities.</p>
 <p>Whether the PR is from a track, road, or trail race, the PR is often verified by a known time over the race distance. We know that PRs matter down to the second, and we know that GPS data isn&#39;t quite as accurate as a time over a verified race course.</p>
@@ -1293,435 +720,1174 @@ How are all-time personal records different from Best Efforts?
 <li>Best Efforts are training level insights in GPS and power-based activities.</li>
 </ul>
 </script>
-</div>
 
-<footer><div class='footer-promos'>
-<div class='container'>
+<script id="glossary-run-template" type="text/template">
+<div class='glossary-header'>
+<h3 class='mb-0'>Strava Glossary</h3>
+</div>
+<div class='glossary-body'>
+<div class='btn-group-vertical' role='group'>
+<button class='btn btn-default dt' data-glossary-term='definition-gap' role='group' type='button'>
+<abbr title='Grade Adjusted Pace (GAP)'>
+GAP
+</abbr>
+</button>
+<button class='btn btn-default dt' data-glossary-term='definition-moving-time' role='group' type='button'>
+Moving Time
+</button>
+<button class='btn btn-default dt' data-glossary-term='definition-elapsed-time' role='group' type='button'>
+Elapsed Time
+</button>
+<button class='btn btn-default dt' data-glossary-term='definition-pace-zones' role='group' type='button'>
+Pace Zones
+</button>
+</div>
+<div class='main'></div>
+</div>
+</script>
+<script id="glossary-definition-gap-template" type="text/template">
+<h4>Grade Adjusted Pace (GAP)</h4>
+<p>Grade Adjusted Pace estimates an equivalent pace when running on flat land, allowing the runner to compare hilly and flat runs more easily. Because running uphill requires extra effort, the Grade Adjusted Pace will be faster than the actual pace run. When running downhill, the Grade Adjusted Pace will be slower than the actual pace.</p>
+<p>The adjustment generally becomes larger as the grade steepens. Our athletes' data has shown that the downhill adjustment peaks around -10%, after which it becomes slightly less extreme. Note that GAP does not account for terrain differences or the technical difficulty of running downhill. For more about the determination of the GAP model from real-world data, please see <a href='https://medium.com/strava-engineering/an-improved-gap-model-8b07ae8886c3'>An Improved GAP Model</a>.</p>
+</script>
+<script id="glossary-definition-moving-time-template" type="text/template">
+<h4>Moving Time</h4>
+<p>The moving time feature on Strava is used for all running activities that don&#39;t depend on fair competition (races and segments).  We calculate moving time in two ways.</p>
+<ul>
+<li>If the runner doesn&#39;t use the pause feature on their Garmin device, we will automatically detect when the runner is resting, and we will calculate moving time and pace using only GPS data. The moving threshold is anything faster than 30 minute mile pace for running activities.</li>
+<li>If the runner chooses to pause their run activity on their Garmin device, we will honor that choice and represent moving time according to the time and pace shown on the GPS device.</li>
+</ul>
+</script>
+<script id="glossary-definition-elapsed-time-template" type="text/template">
+<h4>Elapsed Time</h4>
+<p>Elapsed time is used for the pace analysis of all running races, laps view, and segment efforts. Elapsed time measures the total elapsed time of the run, including stops and pauses. We believe that this is the most fair and accurate way to represent pace for workout efforts and competitive running activities.</p>
+</script>
+<script id="glossary-definition-pace-zones-template" type="text/template">
+<h4>Pace Zones</h4>
+<p>Strava uses a recent race or time trial to calculate running pace zones. Run data is bucketed into pace zones using Grade Adjusted Pace, which allows easy comparison of equivalent-effort pace on flat and hilly runs.</p>
+<ol>
+<li>Recovery - Very easy running. Usually done before or after a hard workout. Recovery is also the pace runners jog at during the recovery intervals between harder efforts.</li>
+<li>Endurance - Comfortable running. Sometimes referred to as &quot;conversational&quot; pace. This zone usually makes up the bulk of a runner&#39;s mileage.</li>
+<li>Tempo - This pace often matches the intensity of a Marathon, or up-tempo pace.</li>
+<li>Threshold - A pace that can be sustained for up to 60 minutes with some difficulty. Workouts in this zone can be run continuously or broken up into longer intervals.</li>
+<li>VO2 Max - The pace at which a runner reaches the maximum level of oxygen consumption. VO2 Max pace is typically run in intervals due to its intensity.</li>
+<li>Anaerobic - Extremely hard pace, often done as short intervals or longer time trials.</li>
+</ol>
+</script>
+
+<script id="facebook-open-graph-lightbox-template" type="text/template">
+<header class='modal-header'>
+<h3>Share on Facebook</h3>
+</header>
+<div class='content modal-body'>
+<div class='share-container'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div>
+</div>
+</div>
+</script>
+<script id="facebook-open-graph-lightbox-connect-template" type="text/template">
+<div class='share-container connect-with-facebook text-center'>
+<h4>
+<% if (type == 'activity') { %>
+Sign in to Facebook to share your Strava activity
+<% } else if (type == 'challenge' && challenge.isVirtualRace) { %>
+Sign in to Facebook to share this virtual race
+<% } else if (type == 'challenge') { %>
+Sign in to Facebook to share this challenge
+<% } else if (type == 'group_event') { %>
+Sign in to Facebook to share this club event
+<% } else { %>
+Sign in to Facebook
+<% } %>
+</h4>
+<button class='btn btn-facebook mb-md fb-button fb-connect fb-connect-js'>
+Connect with Facebook
+</button>
+<p>You can preview your share before posting after completing this step</p>
+</div>
+</script>
+<script id="facebook-request-publish-template" type="text/template">
+<div class='share-container request-publish-permission text-center'>
+<h4>
+<% if (type == 'activity') { %>
+Before sharing your activity, Strava needs your permission to post to Facebook.
+<% } else if (type == 'challenge' && challenge.isVirtualRace){ %>
+Before sharing this virtual race, Strava needs your permission to post to Facebook.
+<% } else if (type == 'challenge'){ %>
+Before sharing this challenge, Strava needs your permission to post to Facebook.
+<% } else if (type == 'group_event'){ %>
+Before sharing this club event, Strava needs your permission to post to Facebook.
+<% } else { %>
+Strava needs your permission to post to Facebook.
+<% } %>
+</h4>
+<button class='btn btn-facebook mb-md fb-button fb-request-permission-js'>
+Continue
+</button>
+<p>Strava will never post without your consent.</p>
+</div>
+</script>
+<script id="facebook-rejected-publish-template" type="text/template">
+<div class='share-container request-publish-permission text-center'>
+<h4>You previously rejected Facebook sharing permissions</h4>
+<button class='btn btn-facebook mb-md fb-button fb-request-permission-js'>
+Continue
+</button>
+<p>Strava will never post without your consent.</p>
+</div>
+</script>
+<script id="facebook-open-graph-lightbox-share-template" type="text/template">
+<form class='open-graph-form share-container'>
 <div class='row'>
-<div class='promo js-channel-footer-left col-sm-4'>
-<h4 class='topless'>Your Recent Activities</h4>
-<ul class='list-unstyled recent-activities'>
+<div class='message-container spans5 col-md-4'>
+<div class='form-group'>
+<label class='topless'>Message</label>
+<textarea class='form-control wide' name='message' placeholder='Tell your friends about this activity.'></textarea>
+</div>
+</div>
+<div class='friends spans5 col-md-4'>
+<div class='form-group'>
+<label class='topless'>{{ data.also_on_activity_str }}</label>
+<div class='friends-on-this-activity'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'>Loading friends...</span>
+    </div>
+</div>
+</div>
+</div>
+<div class='preview-container spans6 col-md-4'>
+<label class='topless'>Preview</label>
+<div class='preview'></div>
+</div>
+</div>
+<div class='control inline-inputs'>
+<span>
+<button class='btn btn-primary alt post-action'>Share</button>
+</span>
+<span class='checkbox'>
+<label>
+<input type="checkbox" name="autoshare" id="autoshare" value="1" />
+Automatically share activities in the future
+</label>
+</span>
+</div>
+</form>
+</script>
+<script id="facebook-open-graph-share-friends-template" type="text/template">
+<div class='tag-facebook-friends'></div>
+<ul class='strava-friends' style='display: none'></ul>
+</script>
+<script id="facebook-open-graph-share-preview-normal-privacy-template" type="text/template">
+<ul class='list-stats preview-stats bottomless'>
 <li>
-<span class="app-icon-wrapper  "><span class="app-icon icon-run icon-dark icon-sm">Run</span></span>
-<a class='minimal' href='/activities/16112144168?source=global-footer'>Morning Run</a>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.distance_unit-}</span>
+<b class='stat-text value'>{-data.distance-}</b>
+</div>
 </li>
 <li>
-<span class="app-icon-wrapper  "><span class="app-icon icon-run icon-dark icon-sm">Run</span></span>
-<a class='minimal' href='/activities/16091752994?source=global-footer'>Morning Run</a>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.duration_unit-}</span>
+<b class='stat-text value'>{-data.duration-}</b>
+</div>
 </li>
 <li>
-<span class="app-icon-wrapper  "><span class="app-icon icon-run icon-dark icon-sm">Run</span></span>
-<a class='minimal' href='/activities/16070466158?source=global-footer'>Morning Run</a>
-</li>
-<li>
-<span class="app-icon-wrapper  "><span class="app-icon icon-run icon-dark icon-sm">Run</span></span>
-<a class='minimal' href='/activities/16058532887?source=global-footer'>Morning Run</a>
-</li>
-<li>
-<span class="app-icon-wrapper  "><span class="app-icon icon-run icon-dark icon-sm">Run</span></span>
-<a class='minimal' href='/activities/16016207224?source=global-footer'>Morning Run</a>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.speed_pace_unit-}</span>
+<b class='stat-text value'>{-data.speed_pace-}</b>
+</div>
 </li>
 </ul>
+<div class='facebook-share-preview-map'></div>
+</script>
+<script id="facebook-open-graph-share-preview-no-latlng-stream-template" type="text/template">
+<ul class='list-stats preview-stats bottomless'>
+<li>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.distance_unit-}</span>
+<b class='stat-text value'>{-data.distance-}</b>
 </div>
-<div class='promo js-channel-footer-center col-sm-4'>
-<h4 class='topless'>Strava Stories</h4>
-<p>
-With athlete profiles, training tips and advice, and the latest product updates, <a href="https://stories.strava.com">Strava Stories</a> is the place to discover the latest content from Strava.
-</p>
+</li>
+<li>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.duration_unit-}</span>
+<b class='stat-text value'>{-data.duration-}</b>
+</div>
+</li>
+<li>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.speed_pace_unit-}</span>
+<b class='stat-text value'>{-data.speed_pace-}</b>
+</div>
+</li>
+</ul>
+<div class='facebook-share-no-preview'>
+A map of your activity will not be shared on Facebook because it does not have position coordinates.
+</div>
+</script>
+<script id="facebook-open-graph-pending-share" type="text/template">
+<div class='status-message'>
+<div class='alert-message pending'>
+Sharing on Facebook
+&hellip;
 </div>
 </div>
+</script>
+<script id="facebook-open-graph-share-success" type="text/template">
+<div class='status-message'>
+<div class='alert alert-success alert-message success'>
+Successfully shared!
 </div>
 </div>
-<div class='footer-global container' role='navigation'>
+</script>
+<script id="facebook-open-graph-share-failure" type="text/template">
+<div class='status-message'>
+<div class='alert alert-danger alert-message error'>
+Looks like something went wrong. Please try again.
+</div>
+</div>
+</script>
+<script id="share-success-template" type="text/template">
+<div class='status-message'>
+<div class='alert alert-success alert-message success'>
+{{ successMessage }}
+</div>
+</div>
+</script>
+<script id="share-failure-template" type="text/template">
+<div class='status-message'>
+<div class='alert alert-danger alert-message error'>
+{{ message }}
+</div>
+</div>
+</script>
+<script id="tabbed-share-lightbox" type="text/template">
+<header class='modal-header'>
+<h3>{{header}}</h3>
+</header>
+<div class='content' style='display: none'>
+<div class='main share-area container-fluid'></div>
+<ul class='tabs tabs-inset' id='share-tabs'>
+<li id='invite-tab'>
+<span class='tab'>
+<div class='app-icon icon-strava icon-sm icon-dark'></div>
+Invite Strava Friends
+</span>
+</li>
+</ul>
+<div class='tab-contents' id='share-tab-contents'></div>
+</div>
+<div class='centered' id='spinner'><div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div></div>
+</script>
+<script id="facebook-share-tab" type="text/template">
+<div class='content'>
+<div class='share-container'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div>
+</div>
+</div>
+</script>
+<script id="facebook-simple-share-template" type="text/template">
+<form class='facebook-message'>
+<div class='avatar avatar-athlete'>
+<div class='avatar-content'>
+<img class='avatar-img' id='fb-avatar-img'>
+</div>
+</div>
+<div class='form-group message-container'>
+<textarea class='form-control input-block' id='message'>{{ facebook.message }}</textarea>
+</div>
+<div class='form-actions'>
+<button class='btn btn-facebook alt post-action' id='share-fb'>
+Post
+</button>
+</div>
+</form>
+</script>
+<script id="facebook-message-template" type="text/template">
 <div class='row'>
-<div class='col-sm-2'>
-<div title="Return to the Strava home page" class="branding logo-bw"><a class="branding-content" href="/"><span class="sr-only">Strava</span></a></div>
-<div class='copyright'>
-© 2025 Strava
+<div class='spans8'>
+<div class='invite-facebook-friends'>
+<h3>Invite Facebook Friends to this club</h3>
+<input class='facebook-friend-autocomplete' type='text'>
 </div>
 </div>
-<div class='col-sm-2'>
-<h4>About</h4>
-<ul class='list-unstyled'>
-<li><a href="/about">About</a></li>
-<li><a href="/features">Features</a></li>
-<li><a href="/mobile">Mobile</a></li>
-<li><a href="/subscribe?cta=subscription&amp;element=nav&amp;origin=global_footer&amp;source=global_footer">Subscription</a></li>
-<li><a href="/family?origin=global_footer">Family Plan</a></li>
-<li><a href="/student?origin=global_footer">Student Discount</a></li>
-<li><a href="/subscribe?origin=global_footer#discount-plans">Teacher, Military &amp; Medical Discount (US Only)</a></li>
-<li><a href="/gift?origin=global_footer">Send a Gift</a></li>
-<li><a href="/legal/privacy">Privacy Policy</a></li>
-<li><a href="/legal/cookie_policy">Cookie Policy</a></li>
-<li><link rel="preload" href="https://web-assets.strava.com/assets/federated/cpra-compliance-cta-wrapper/remoteEntry.js?t=2025-10-13T09:13:31+00:00" as="script">
-<div class='' data-is-published='' data-react-class='Microfrontend' data-react-props='{&quot;scope&quot;:&quot;strava_cpra_compliance_cta_wrapper&quot;,&quot;url&quot;:&quot;https://web-assets.strava.com/assets/federated/cpra-compliance-cta-wrapper/remoteEntry.js?t=2025-10-13T09:13:31+00:00&quot;,&quot;component&quot;:&quot;./CPRAComplianceCTAWrapper&quot;,&quot;appContext&quot;:{&quot;isLoggedIn&quot;:true},&quot;experiments&quot;:{}}' style=''></div>
-</li>
-<li><a href="/legal/terms">Terms</a></li>
-<li><a href="https://support.strava.com/hc/en-us/articles/216917717-About-Strava-Maps">About Our Maps</a></li>
-</ul>
+<div class='spans8'>
+<ul class='facebook-friends'></ul>
 </div>
-<div class='col-sm-2'>
-<h4>Explore</h4>
-<ul class='list-unstyled'>
-<li><a href="/routes/hiking/usa">Routes</a></li>
-</ul>
-
 </div>
-<div class='col-sm-2'>
-<h4>Follow</h4>
-<ul class='list-unstyled'>
-<li><a target="_blank" href="http://www.facebook.com/Strava">Facebook</a></li>
-<li><a target="_blank" href="http://twitter.com/strava">Twitter</a></li>
-<li><a target="_blank" href="http://instagram.com/strava">Instagram</a></li>
-<li><a target="_blank" href="http://www.youtube.com/stravainc">YouTube</a></li>
-<li><a target="_blank" href="https://www.linkedin.com/company/strava-inc./">LinkedIn</a></li>
-<li><a href="https://stories.strava.com">Stories</a></li>
-</ul>
-</div>
-<div class='col-sm-2'>
-<h4>Help</h4>
-<ul class='list-unstyled'>
-<li><a href="https://strava.zendesk.com/home">Strava Support</a></li>
-</ul>
-
-</div>
-<div class='col-sm-2'>
-<h4>More</h4>
-<ul class='list-unstyled'>
-<li><a href="/careers">Careers</a></li>
-<li><a href="https://press.strava.com">Press</a></li>
-<li><a href="https://partners.strava.com/business?utm_source=footer&amp;utm_medium=referral">Business</a></li>
-<li><a href="https://partners.strava.com">Partner Center</a></li>
-<li><a href="http://labs.strava.com/developers">Developers</a></li>
-<li><a href="http://labs.strava.com">Labs</a></li>
-<li><a href="/community-standards">Strava Community Standards</a></li>
-</ul>
-<div class='dropdown drop-down-menu drop-down-xs' id='language-picker'>
-<button class='btn btn-default btn-xs dropdown-selection btn-white selection'>English (US)</button>
-<ul class='options dropdown-menu anchor-right anchor-bottom'>
-<li>
-<div class='replace-selection clickable language-pick' language-code='id-ID'>Bahasa Indonesia</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='en-GB'>British English</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='de-DE'>Deutsch</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='en-US'>English (US)</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='es-ES'>español</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='es-419'>español latinoamericano</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='fr-FR'>français</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='it-IT'>italiano</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='nl-NL'>Nederlands</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='pt-PT'>português</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='pt-BR'>português do Brasil</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='ru-RU'>русский</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='ja-JP'>日本語</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='zh-CN'>简体中文</div>
-</li>
-<li>
-<div class='replace-selection clickable language-pick' language-code='zh-TW'>繁體中文</div>
-</li>
-</ul>
-</div>
-
+</script>
+<script id="friend-template" type="text/template">
+<div class='avatar avatar-athlete'>
+<div class='avatar-content'>
+<img class='avatar-img profile-picture' height='40' src='{{ data.picture }}' width='40'>
+<div class='avatar-body'>
+<div class='avatar-primary name'>
+{{ data.first_name }} {{ data.last_name }}
+<img class="private-athlete" style="display: none" src="https://d3nn82uaxijpm6.cloudfront.net/assets/common/img-locked-ac90a57829f0f90818b29de9b15ce2f1aca8f2c4c812e76ec6e35393cccc74af.png" />
 </div>
 </div>
 </div>
-<a id="back-to-top" class="media-sm-show visible-sm-block" href="#">Top ↑</a>
-</footer>
-
-
-<script id='lightbox-template' type='text/template'>
-<div class='lightbox-window modal-content'>
-<div class='close-lightbox'>
-<button class='btn btn-unstyled btn-close'>
-<div class='app-icon icon-close icon-xs icon-dark'></div>
+</div>
+<button class='btn btn-default invite btn-xs' data-facebook_uid='{{ data.facebook_uid }}'>
+{{ data.call_to_action }}
+</button>
+</script>
+<script id="friends-share-tab" type="text/template">
+<div class='form-group'>
+<label for='strava-athletes'>
+To:
+</label>
+<input class='strava-athletes' data-placeholder='Enter Strava athlete names separated by commas' name='strava-athletes' type='hidden'>
+</div>
+<div class='form-group'>
+<label>Message:</label>
+<blockquote class='set-message mb-md'>{{ invite_friends.message }}</blockquote>
+</div>
+<div class='form-actions'>
+<input class='button btn btn-primary' disabled id='invite_on_strava' type='button' value='Invite'>
+<span class='loading-spinner' style='display: none'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div>
+</span>
+<span class='status-message'></span>
+</div>
+</script>
+<script id="twitter-share-tab" type="text/template">
+<div class='content'>
+<div class='share-container'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div>
+</div>
+</div>
+</script>
+<script id="twitter-lightbox-connect-template" type="text/template">
+<div class='share-container'>
+<div class='connect-with-twitter'>
+<h3>Click the button to connect Twitter and Strava.</h3>
+<button class='btn btn-twitter twitter-button twitter-connect twitter-connect-js'>
+Connect with Twitter
 </button>
 </div>
 </div>
 </script>
-<script id='popover-template' type='text/template'>
-<div class='popover'></div>
+<script id="twitter-share-template" type="text/template">
+<form class='twitter-message'>
+<div class='avatar avatar-athlete'>
+<div class='avatar-content'>
+<img class='avatar-img' id='twitter-avatar-img' src='{{ twitter_status.profile_image_url }}'>
+<div id='twitter-username' style='float: right'>{{ twitter_status.screen_name }}</div>
+</div>
+</div>
+<div class='form-group message-container'>
+<textarea class='form-control input-block' id='message'>{{ twitter_message }}</textarea>
+</div>
+<div class='form-actions'>
+<button class='btn btn-primary post-action' id='share-twitter'>
+Tweet
+</button>
+<b class='tweet-chars'>140</b>
+</div>
+</form>
 </script>
-<script>
-  window._asset_host = "https://d3nn82uaxijpm6.cloudfront.net";
- window._measurement_preference = "meters";
- window._date_preference = "%m/%d/%Y";
- window._datepicker_preference_format = "mm/dd/yy";
-
- jQuery(document).ready(function() {
-   Strava.Util.EventLogging.createInstance("https://analytics.strava.com","7215fa60b5f01ecc3967543619f7e3d9", 11694245);
- });
+<script id="twitter-login-free-share-template" type="text/template">
+<div class='share-container'>
+<div class='connect-with-twitter'>
+<a class="btn btn-primary post-actions" id="share-twitter" href="https://twitter.com/intent/tweet?text={{ twitter_message }}&amp;hashtags=strava">Tweet</a>
+</div>
+</div>
 </script>
-<script src="https://d3nn82uaxijpm6.cloudfront.net/assets/strava/i18n/locales/en-US-3599fc782dab39bc0a338dd431bb61a539b61785e30959f67f12dcf2728f724c.js"></script>
-<script src="https://d3nn82uaxijpm6.cloudfront.net/assets/application-b10bd4adc0ff83924a2310de2e0cffb1895fd9f8dda4ddfa2b6e47c19296b579.js"></script>
-
-<script src="https://www.strava.com/cookie-banner"></script>
-<script>
-  jQuery(function() {
-   if (typeof StravaCookieBanner !== 'undefined') {
-     StravaCookieBanner.render();
-   }
- });
+<script id="twitter-share-tab" type="text/template">
+<div>Twitter</div>
 </script>
-
-
-<div id='fb-root'></div>
-<script>
-  // set fbInitialized so we know FB is being initialized async (safegaurd against react loading FB twice)
- if (window.Strava) window.Strava.fbInitialized = true;
- window.fbAsyncInit = function() {
-   FB.init({
-     appId: "284597785309",
-     status: true,
-     cookie: true,
-     xfbml: true,
-     version: "v7.0"
-   });
-   Strava.Facebook.PermissionsManager.getInstance().facebookReady();
-   jQuery('#fb-root').trigger('facebook:init');
- };
- (function(d){
-   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-   if (d.getElementById(id)) {return;}
-   js = d.createElement('script'); js.id = id; js.async = true;
-   js.src = "//connect.facebook.net/en_US/sdk.js";
-   ref.parentNode.insertBefore(js, ref);
- }(document));
+<script id="challenge-share-lightbox-main" type="text/template">
+<div class='row'>
+<div class='spans3 avatar-container'>
+<img src='{{logo_url}}'>
+</div>
+<div class='spans8'>
+<h3>{{name}}</h3>
+<span class='challenge-date'>{{start_date_formatted}} &#8212; {{end_date_formatted}}</span>
+<div class='row'>{-short_description-}</div>
+</div>
+<div class='spans5' id='share-detail-section'></div>
+</div>
 </script>
-
-
-<script>
-  var currentAthlete = new Strava.Models.CurrentAthlete({"id":11694245,"logged_in":true,"display_name":"Nishanth Murugan","first_name":"Nishanth","last_name":"Murugan","premium":false,"has_power_analysis_access":false,"photo_large":"https://dgalywyr863hv.cloudfront.net/pictures/athletes/11694245/6242157/12/large.jpg","photo":"https://dgalywyr863hv.cloudfront.net/pictures/athletes/11694245/6242157/12/large.jpg","badge":null,"measurement_preference":"meters","weight_measurement_unit":"kg","type":1,"member_type":"","display_location":"Coimbatore, Tamil Nadu, India","gender":"M","geo":{"city":"Coimbatore","state":"Tamil Nadu","country":"India","lat_lng":[11.002026,76.973712]},"has_leaderboards_access":false,"has_pace_zone_analysis_access":false,"is_segments_restricted":true,"is_trial_eligible":true});
- HAML.globals = function() {
-   return {
-     currentAthlete: currentAthlete,
-     renderPartial: function(name, context) {
-       if (context == null) {
-         context = this;
-       }
-       return JST[name](context);
-     }
-   }
- }
+<script id="challenge-share-lightbox-detail-future" type="text/template">
+<div>Starts in&hellip;</div>
+<div class='counter'>
+<span class='days'>
+<span class='unit'>{{starts_in_days}}</span>
+<span class='label'>Days</span>
+</span>
+<span class='hours'>
+<span class='unit'>{{starts_in_hours}}</span>
+<span class='label'>Hours</span>
+</span>
+<span class='minutes'>
+<span class='unit'>{{starts_in_minutes}}</span>
+<span class='label'>Minutes</span>
+</span>
+</div>
 </script>
-
-<script>
-  new Strava.Initializer();
-</script>
-<script src="https://d3nn82uaxijpm6.cloudfront.net/assets/strava/activities/edit/manifest-9878df8a62a1d5a7a102836a21a64581c98e306c49c8227b67802cabc8e515ed.js"></script>
-<script>
-  jQuery(document).ready(function() {
-   var dynamicStrings = {
-     indoor: {
-       ride: 'Indoor Cycling',
-       run: 'Treadmill',
-       other: 'Indoor'
-     },
-     gear: {
-       ride: '+ New Bike',
-       run: '+ New Shoes'
-     }
-   };
-
-   var editView = new Strava.Activities.EditView({
-     el: jQuery('.edit-form'),
-     sportType: 'Run',
-     dynamicStrings: dynamicStrings,
-     athleteId: 11694245,
-     usesShoesTypeNames: ["Hike","Run","Walk","VirtualRun"],
-     usesBikeTypeNames: ["Ride","VirtualRide","EBikeRide","Velomobile","Handcycle"],
-     legacyActivityTypeMapping: {"Crossfit":"Crossfit","EBikeRide":"EBikeRide","Canoeing":"Canoeing","IceSkate":"IceSkate","Hike":"Hike","AlpineSki":"AlpineSki","Kitesurf":"Kitesurf","Racquetball":"Workout","GravelRide":"Ride","VirtualRide":"VirtualRide","RollerSki":"RollerSki","Snowboard":"Snowboard","Soccer":"Soccer","VirtualRow":"Rowing","Swim":"Swim","Pickleball":"Workout","Handcycle":"Handcycle","Snowshoe":"Snowshoe","StandUpPaddling":"StandUpPaddling","Ride":"Ride","RockClimbing":"RockClimbing","TableTennis":"Workout","Workout":"Workout","MountainBikeRide":"Ride","VirtualRun":"VirtualRun","Walk":"Walk","StairStepper":"StairStepper","BackcountrySki":"BackcountrySki","Run":"Run","Elliptical":"Elliptical","WeightTraining":"WeightTraining","Velomobile":"Velomobile","ClassicNordicSki":"NordicSki","Tennis":"Workout","Squash":"Workout","SkateNordicSki":"NordicSki","Kayaking":"Kayaking","TrailRun":"Run","EMountainBikeRide":"EBikeRide","Golf":"Golf","Surfing":"Surfing","Skateboard":"Skateboard","Sail":"Sail","HighIntensityIntervalTraining":"Workout","Windsurf":"Windsurf","InlineSkate":"InlineSkate","NordicSki":"NordicSki","Wheelchair":"Wheelchair","Pilates":"Workout","Badminton":"Workout","Rowing":"Rowing","Yoga":"Yoga"}
-   });
-
-   jQuery('button.btn-save-activity').on('click', function(){
-     jQuery('#edit-activity input[type="submit"]').click();
-   });
-
-   // Override the normal error state. Until we have a specific error template
-   // for this UI, simply don't show anything when a user uploads an unsupported
-   // file.  TODO add one!
-   Dropzone.options.photoUploader.error = function(file, message, xhr){
-     var previewElement = jQuery(file.previewElement);
-     previewElement.closest('.dz-file-preview').remove();
-   };
-   Dropzone.options.photoUploader.previewsContainer = '.dropzone';
-   Dropzone.options.photoUploader.previewTemplate = JST['activities/edit/photo_preview']();
-   Dropzone.options.photoUploader.athleteId = 11694245;
- });
-</script>
-<script>
-  jQuery(document).ready(function() {
-   Strava.ExternalAnalytics.trackV2({
-     category: 'edit_activity',
-     page: 'edit_activity',
-     action: 'screen_enter',
-     properties: {
-       activity_id: "16112144168"
-     }
-   });
- });
-
- window.addEventListener('beforeunload', function () {
-   Strava.ExternalAnalytics.trackV2({
-     category: 'edit_activity',
-     page: 'edit_activity',
-     action: 'screen_exit',
-     properties: {
-       activity_id: "16112144168"
-     }
-   });
- });
-</script>
-<script>
-  if ('serviceWorker' in navigator) {
-   window.addEventListener('load', function() {
-     navigator.serviceWorker.register("/service_worker.js?v=dLlWydWlG8").then(function(registration) {
-     }, function(err) {
-       console.log('ServiceWorker registration failed: ', err);
-     });
-   });
- }
-</script>
-<script>
-  jQuery(document).ready(function() {
-   // Scroll Tracking
-   jQuery(document).one('scroll', function(){
-     Strava.ExternalAnalytics.trackV2({
-       category: 'page_scrolled'
-     });
-   });
- });
-</script>
-<script>
-  jQuery(document).ready(function($) {
-     new Strava.GlobalSearch.SearchFieldController(currentAthlete);
- });
-
- jQuery(document).ready(function() {
-   jQuery('#global-search-button').on('click', function() {
-     const $globalSearchField = jQuery('#global-search-field');
-     const searchText = $globalSearchField.val();
-     const searchType = $globalSearchField.data('search-filter');
-
-     Strava.ExternalAnalytics.trackV2({
-       category: 'search',
-       page: 'search',
-       action: 'execute_search',
-       properties: {
-         'search_type': searchType,
-         'search_text': searchText
-       }
-     });
-   });
-
-   jQuery('#global-search-field').on('keypress', function(e) {
-     const searchText = jQuery(this).val();
-     const searchType = jQuery(this).data('search-filter');
-
-     // When user presses enter, track the search
-     if (e.which == 13) {
-       Strava.ExternalAnalytics.trackV2({
-         category: 'search',
-         page: 'search',
-         action: 'execute_search',
-         properties: {
-           'search_type': searchType,
-           'search_text': searchText
-         }
-       });
-     }
-   });
- });
-</script>
-<script>
-  // grabs placeholder spacing to remove when microfrontend is finished loading
- var notifsPlaceholder = document.getElementById('notifications-loading-placeholder');
- document.addEventListener('notificationsReady', function() {
-   notifsPlaceholder.remove();
- });
-</script>
-<script>
-  // Mobile Menu transition handler
- jQuery('.collapsable-nav #container-nav')
-   .on('show.bs.collapse', function(){
-     jQuery('#smartbanner-loading-placeholder').slideUp(100);
-     jQuery('html').addClass('mobile-menu-open');
-   })
-   .on('hidden.bs.collapse', function(){
-     jQuery('#smartbanner-loading-placeholder').slideDown(100);
-     jQuery('html').removeClass('mobile-menu-open');
-   });
-</script>
-<script>
-  // Dismiss function for alert messages
- jQuery('document').ready(function(){
-   var dismissController = new Strava.Util.DismissController("/dashboard/dismiss_ui");
-   jQuery('.message').on('click', '.dismiss', function(){
-     dismissController.dismiss("");
-     jQuery(this).parents('.message').slideUp('fast');
-   });
-
-   // check for internet explorer and show banner
-   var userAgent = window.navigator.userAgent;
-   if (userAgent.includes('Trident') || userAgent.includes('MSIE')) {
-     jQuery('#ie-deprecation-message').removeClass('hidden');
-   }
- });
-</script>
-<script>
-  jQuery(document).ready(function() {
-   new Strava.Util.DropDownMenu('.drop-down-menu')
-   jQuery('.language-pick').each(function(index) {
-     jQuery( this ).click(function() {
-       language = jQuery( this ).attr('language-code');
-       expiration = new Date();
-       expiration.setTime(expiration.getTime() + (1825 * 24 * 60 * 60 * 1000));
-       // Reset any previously set cookie for this page
-       document.cookie = 'ui_language= ; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
-       // Set a global cookie
-       document.cookie = 'ui_language=' + language + '; expires=' + expiration + '; path=/';
-       location.reload(true);
-     });
-   });
- });
-</script>
-<script>
-  jQuery(document).ready(function() {
-   jQuery('#explore-strava, #challenge-list-view, .promo-simple, .promo-fancy, .promo-overlay, .sponsor-link-section, .sponsor').on('click', 'a', function(event) {
-     var link = jQuery(event.target).closest('a');
-     var adzerkClickUri = link.data('adzerk-click-uri');
-     if (adzerkClickUri != null) {
-       jQuery.get(adzerkClickUri); // this is fire-and-forget - we don't need to wait for a successful response from Adzerk
-     }
-   });
- });
+<script id="challenge-share-lightbox-detail-started" type="text/template">
+<div class='achieved avatar-container'>
+<img src='{{achievement_url}}'>
+<span class='achievement-earned'>{{achievement_caption}}</span>
+</div>
 </script>
 
-<script src="https://d3nn82uaxijpm6.cloudfront.net/assets/bootstrap.min-504d59678f10d79a661b6cecdce5b8c1d5bfd98e860614584c0a40399552d61f.js"></script>
 
-</body>
-</html>
+
+<div id="view"><section class="with-border">
+  <div class="no-margins row">
+    <div class="spans4" id="splits-container"><header>
+  <h2 class="centered">
+    <span class="glossary-link run-version" data-glossary-term="definition-moving-time">
+      Splits
+    </span>
+  </h2>
+</header>
+<div class="mile-splits no-gap scrollable-table">
+  <table class="dense hoverable">
+    <thead>
+      <tr>
+        <th class="centered">KM</th>
+        <th>
+          <span class="glossary-link run-version" data-glossary-term="definition-moving-time">
+            Pace
+          </span>
+        </th>
+        <th>Elev</th>
+      </tr>
+    </thead>
+    <tbody id="contents" height="360px"><tr class="full-columns"><td class="centered">1</td>
+<td>
+  6:43 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-8 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">2</td>
+<td>
+  6:29 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-5 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">3</td>
+<td>
+  6:24 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-3 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">4</td>
+<td>
+  6:21 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>8 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">5</td>
+<td>
+  6:19 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>0 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">6</td>
+<td>
+  6:06 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-13 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">7</td>
+<td>
+  6:37 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>18 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">8</td>
+<td>
+  6:20 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-5 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">9</td>
+<td>
+  6:10 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-6 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">10</td>
+<td>
+  6:20 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-2 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">11</td>
+<td>
+  6:31 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>5 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">12</td>
+<td>
+  6:24 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>3 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">13</td>
+<td>
+  6:03 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-10 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">14</td>
+<td>
+  6:18 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>8 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">15</td>
+<td>
+  6:25 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>4 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">16</td>
+<td>
+  6:08 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-10 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">17</td>
+<td>
+  6:15 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>5 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">18</td>
+<td>
+  6:16 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>1 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">19</td>
+<td>
+  6:11 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-6 <abbr class="unit short" title="meters">m</abbr></td></tr><tr class="full-columns"><td class="centered">20</td>
+<td>
+  6:02 <abbr class="unit short" title="minutes per kilometer">/km</abbr>
+</td>
+<td>-3 <abbr class="unit short" title="meters">m</abbr></td></tr></tbody>
+  </table>
+</div></div>
+    <div class="border-left map spans12">
+      <div id="map-canvas" class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag" tabindex="0"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 18; transform: translate3d(0px, 0px, 0px) scale(1);"></div></div><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 22; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" role="presentation" src="https://a.tiles.mapbox.com/styles/v1/strava/cm1rtwclf00x401qv2ky2e5d2/tiles/14/11722/7597@2x?access_token=pk.eyJ1Ijoic3RyYXZhIiwiYSI6ImNtMWp3M2UyZDAydzIyam9zaTh6OTNiZm0ifQ.AOpRu_eeNKWg6r-4GS52Kw" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(-95px, -83px, 0px); opacity: 1;"><img alt="" role="presentation" src="https://a.tiles.mapbox.com/styles/v1/strava/cm1rtwclf00x401qv2ky2e5d2/tiles/14/11723/7597@2x?access_token=pk.eyJ1Ijoic3RyYXZhIiwiYSI6ImNtMWp3M2UyZDAydzIyam9zaTh6OTNiZm0ifQ.AOpRu_eeNKWg6r-4GS52Kw" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(417px, -83px, 0px); opacity: 1;"><img alt="" role="presentation" src="https://a.tiles.mapbox.com/styles/v1/strava/cm1rtwclf00x401qv2ky2e5d2/tiles/14/11722/7598@2x?access_token=pk.eyJ1Ijoic3RyYXZhIiwiYSI6ImNtMWp3M2UyZDAydzIyam9zaTh6OTNiZm0ifQ.AOpRu_eeNKWg6r-4GS52Kw" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(-95px, 429px, 0px); opacity: 1;"><img alt="" role="presentation" src="https://a.tiles.mapbox.com/styles/v1/strava/cm1rtwclf00x401qv2ky2e5d2/tiles/14/11723/7598@2x?access_token=pk.eyJ1Ijoic3RyYXZhIiwiYSI6ImNtMWp3M2UyZDAydzIyam9zaTh6OTNiZm0ifQ.AOpRu_eeNKWg6r-4GS52Kw" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(417px, 429px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-shadow-pane"></div><div class="leaflet-pane leaflet-overlay-pane"><svg pointer-events="none" class="leaflet-zoom-animated" width="941" height="540" viewBox="-78 -45 941 540" style="transform: translate3d(-78px, -45px, 0px);"><g><path class="leaflet-interactive" stroke="#FF0000" stroke-opacity="1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" d="M475 273L482 261L483 256L480 253L455 249L442 249L430 252L414 262L415 276L417 282L416 298L407 301L399 300L394 306L382 313L373 328L359 341L354 343L327 345L321 344L319 342L307 341L301 338L298 327L298 304L301 298L301 292L297 284L296 274L298 261L297 254L301 241L303 239L303 234L306 229L310 226L339 212L347 204L354 188L355 181L363 170L368 153L372 146L373 139L381 121L390 108L399 108L413 114L417 118L421 141L426 146L441 147L447 150L473 156L482 159L486 162L488 166L488 172L487 193L484 207L484 229L482 246L477 251L460 248L448 248L434 251L414 262L414 275L416 285L415 298L409 300L402 299L391 309L385 311L372 330L366 333L357 343L323 345L319 342L314 342L302 338L299 335L297 327L298 307L302 299L298 279L297 251L300 243L299 242L301 240L303 233L310 226L328 218L343 208L348 203L354 177L359 175L361 172L374 136L377 133L384 114L391 107L399 108L415 114L418 121L419 139L426 146L433 148L441 147L449 150L460 151L472 156L482 158L488 163L488 186L483 202L484 217L481 228L482 238L481 247L479 249L480 259L475 273L474 272L479 261L480 255L477 251L475 252L454 248L431 251L414 261L414 277L417 293L415 298L408 300L400 300L395 305L385 311L381 315L375 327L363 336L361 340L358 342L326 345L321 344L319 342L307 341L300 336L297 307L299 294L297 283L297 261L298 247L300 241L303 238L303 233L310 225L321 221L333 213L340 211L346 207L350 200L354 178L359 175L362 171L368 152L371 148L373 136L377 132L381 124L383 115L391 106L395 106L406 110L418 118L419 135L423 142L430 147L441 146L447 150L461 152L464 155L482 157L488 161L488 175L486 185L487 187L481 208L483 217L481 247L476 250L463 251L453 249L430 250L419 259L415 260L414 272L416 296L411 299L402 299L391 308L384 311L374 326L365 329L358 339L354 342L343 344L321 344L300 337L297 330L298 295L295 288L298 263L298 249L299 244L303 239L304 229L314 220L321 219L332 213L339 211L348 203L352 193L355 176L360 174L371 149L370 141L374 133L378 129L386 111L389 108L413 111L417 113L421 120L420 131L422 137L432 144L446 147L474 158L486 161L490 168L490 172L487 180L487 190L482 202L485 209L485 216L482 222L484 224L483 244L481 248L478 249L470 246L445 246L428 252L423 258L413 265L414 279L417 290L416 299L400 299L395 306L385 312L376 326L358 343L326 344L301 337L297 327L295 303L298 287L297 253L303 232L310 226L340 214L343 211L345 208L348 195L351 192L354 179L359 176L367 161L368 153L371 149L372 137L379 127L385 113L392 108L416 116L419 122L420 138L426 147L448 149L478 157L487 161L491 167L487 189L482 201L483 213L485 217L483 222L481 246L474 251L468 249L446 247L427 254L414 262L413 265L415 273L414 276L416 298L410 300L399 299L393 308L386 311L378 318L374 328L355 343L322 344L319 341L306 340L299 335L296 327L294 314L296 288L296 266L294 247L296 244L299 243L301 232L304 229L330 217L333 214L336 214L342 209L346 203L352 182L354 179L358 177L362 170L378 126"></path></g></svg></div><div class="leaflet-pane leaflet-marker-pane"><div class="leaflet-marker-icon map-marker-sprite start-icon leaflet-zoom-animated leaflet-interactive shown" style="margin-left: -12px; margin-top: -12px; width: 24px; height: 24px; transform: translate3d(475px, 273px, 0px); z-index: 273;"><div class="blip"></div></div><div class="leaflet-marker-icon map-marker-sprite end-icon leaflet-zoom-animated leaflet-interactive shown" style="margin-left: -12px; margin-top: -12px; width: 24px; height: 24px; transform: translate3d(378px, 126px, 0px); z-index: 126;"><div class="blip"></div></div><div class="leaflet-marker-icon map-marker-sprite rabbit leaflet-zoom-animated leaflet-interactive" style="margin-left: -12px; margin-top: -12px; width: 24px; height: 24px; transform: translate3d(476px, 250px, 0px); z-index: 250; display: none;"><div class="blip"></div></div></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(6.00215e+06px, 3.88997e+06px, 0px) scale(16384);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="#" title="Zoom In" role="button" aria-label="Zoom In">+</a><a class="leaflet-control-zoom-out" href="#" title="Zoom Out" role="button" aria-label="Zoom Out">-</a></div></div><div class="leaflet-top leaflet-right"><div class="leaflet-control-grid map-tooltip leaflet-control" style="display: none;"><a class="close" href="#" title="close">close</a><div class="map-tooltip-content"></div></div></div><div class="leaflet-bottom leaflet-left"><div class="mapbox-logo leaflet-control"></div></div><div class="leaflet-bottom leaflet-right"><div class="map-legends wax-legends leaflet-control" style="display: none;"></div><div class="leaflet-control-attribution leaflet-control"><a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-bathymetry/" target="_blank">© Natural Earth Data</a> <a href="https://www.mapbox.com/about/maps" target="_blank" title="Mapbox">© Mapbox</a> <a href="https://www.openstreetmap.org/copyright/" target="_blank" title="OpenStreetMap">© OpenStreetMap</a> <a class="mapbox-improve-map" href="https://www.mapbox.com/contribute/#strava/cm1rtwclf00x401qv2ky2e5d2/77.584/12.949/15" target="_blank" title="Improve this map">Improve this map</a></div></div></div><div class="mapbox-container">
+<div id="map-control-container" style="padding: 5px">
+<div class="js-map-control" id="map-control-container" index="1">
+<div class="inline-inputs" id="strava-map-controls">
+<a class="button" href="/maps/create?activityId=16112144168" id="create-route">
+Save Route
+</a>
+
+<a class="button" id="gpx-download">GPX</a>
+
+<div class="drop-down-menu" id="map-type-control">
+<a class="selection" data-map-type-id="standard" id="selected-map">Standard Map</a>
+<ul class="options">
+<li>
+<a class="map-type-selector" data-map-type-id="satellite">Satellite Map</a>
+</li>
+</ul>
+</div>
+
+<a class="button" id="toggle-fullscreen"></a>
+</div>
+</div>
+</div>
+</div></div>
+    </div>
+  </div>
+  <div class="grabber"></div>
+  <div id="elevation-profile">
+    <div class="chart" id="chart-container"><div class="base-chart" id="elevation-chart"><svg width="960" height="280"><defs><clipPath id="clip465"><rect id="clip465" x="152.3978506007377" y="0" height="250" width="0"></rect></clipPath></defs><defs><clipPath id="clip881"><rect id="clip881" x="0" y="-4" height="254" width="800"></rect></clipPath></defs><defs><clipPath id="clip31"><rect id="clip31" x="0" y="-4" height="254" width="800"></rect></clipPath></defs><g class="chartGroup" id="main-container-806" transform="translate(60, 10)"><g id="grid"><line x1="0" x2="800" y1="0" y2="0" class="grid-line hgrid-line"></line><line x1="0" x2="800" y1="52.08333333333334" y2="52.08333333333334" class="grid-line hgrid-line"></line><line x1="0" x2="800" y1="104.16666666666666" y2="104.16666666666666" class="grid-line hgrid-line"></line><line x1="0" x2="800" y1="156.25" y2="156.25" class="grid-line hgrid-line"></line><line x1="0" x2="800" y1="208.33333333333334" y2="208.33333333333334" class="grid-line hgrid-line"></line><line x1="799.2366869817165" x2="799.2366869817165" y1="0" y2="250" class="grid-line vgrid-line"></line><line x1="719.3086222399841" x2="719.3086222399841" y1="0" y2="250" class="grid-line vgrid-line"></line><line x1="639.3805574982517" x2="639.3805574982517" y1="0" y2="250" class="grid-line vgrid-line"></line><line x1="559.4524927565193" x2="559.4524927565193" y1="0" y2="250" class="grid-line vgrid-line"></line><line x1="479.5244280147868" x2="479.5244280147868" y1="0" y2="250" class="grid-line vgrid-line"></line><line x1="399.5963632730543" x2="399.5963632730543" y1="0" y2="250" class="grid-line vgrid-line"></line><line x1="319.66829853132185" x2="319.66829853132185" y1="0" y2="250" class="grid-line vgrid-line"></line><line x1="239.7402337895894" x2="239.7402337895894" y1="0" y2="250" class="grid-line vgrid-line"></line><line x1="159.81216904785697" x2="159.81216904785697" y1="0" y2="250" class="grid-line vgrid-line"></line><line x1="79.8841043061245" x2="79.8841043061245" y1="0" y2="250" class="grid-line vgrid-line"></line><rect x="0" y="0" height="250" width="800" class="event-rect" style="fill: transparent;"></rect></g><g id="pace" clip-path="url(#clip317)"><path fill="none" stroke-width="1.5px" class="simple-line" d="M0.9458154327771674,129.93745885450952C1.1722782828787426,129.93745885450954,1.2655276917440972,129.93745885450954,1.3974089985679559,129.93745885450952C1.5292903053918143,129.93745885450954,1.6998035101741769,129.93745885450954,1.8483364971525629,131.94109865968372C1.9968694841309491,133.94473846485792,2.1234222533053586,137.95201807520633,2.3005961301495326,142.24122221337848C2.4777700069937056,146.5304263515506,2.705564991507643,151.1015550175465,2.901388750124888,154.4668835284334C3.097212508742132,157.83221203932032,3.2610650414626834,159.99174039509825,3.4948546308322515,158.8167974868399C3.7286442202018186,157.64185457858153,4.032370866220402,153.1324404062869,4.36274020048623,151.171563347585C4.6931095347520575,149.21068628888307,5.05012155726513,149.79834634377386,5.3178805741499335,150.44412672549007C5.585639591034738,151.0899071072063,5.764145602291273,151.79380781574795,6.003263729310289,146.16771746358955C6.242381856329305,140.54162711143118,6.542112099110802,128.58554569857273,6.80121224231525,115.79241365388407C7.060312385519699,102.9992816091954,7.278782429147101,89.36909893267654,7.636460518866353,82.35258019932452C7.994138608585606,75.33606146597249,8.49102474439671,74.93320667578735,8.907982815466083,73.91793289706015C9.324940886535455,72.90265911833296,9.661970892863092,71.27496635106375,9.983015286242383,73.30902334972188C10.304059679621675,75.34308034838003,10.60911846005262,81.03888711296551,11.000099910080927,87.16742373620897C11.391081360109236,93.29596035945244,11.867985479734905,99.85722684135386,12.33023612082459,104.5278046006722C12.792486761914278,109.19838235999052,13.24008392446798,111.97827139672575,13.604422686249043,115.30838725463103C13.968761448030108,118.6385031125363,14.249841809038532,122.51884579161162,14.607519898757785,124.78472806231468C14.965197988477039,127.05061033301776,15.399473806907121,127.70203219534858,15.781796383255074,127.70203219534861C16.164118959603027,127.70203219534864,16.494488293868855,127.05061033301786,16.73427248809405,126.14529700027867C16.974056682319247,125.23998366753946,17.123255736503815,124.08077886439185,17.224497951843343,124.80401250797118C17.32574016718287,125.5272461515505,17.379025543677358,128.13291824185677,17.557531554933895,129.89655612507343C17.736037566190433,131.6601940082901,18.039764212209015,132.58179768441715,18.288207280114566,132.81132421665941C18.536650348020117,133.04085074890168,18.72980983781264,132.5783001372591,18.869017883904487,131.1610665771684C19.00822592999634,129.74383301707775,19.09348253238752,127.37191650853893,19.277983148499686,127.28290527750171C19.46248376461185,127.1938940464645,19.746228394445,129.38778809292884,20.00399640323709,131.4403332489223C20.261764412029176,133.49287840491573,20.4935557997802,135.40407467043826,20.743331002098113,135.7952228853013C20.99310620441603,136.18637110016434,21.260865221300833,135.05747126436788,21.45469077829953,134.72496613839695C21.648516335298233,134.39246101242605,21.76840843241083,134.8563505962807,21.964898258234257,134.8200555904735C22.161388084057684,134.78376058466628,22.434475638591934,134.24728098919724,22.63496186765245,134.01533619726993C22.83544809671296,133.78339140534263,22.963333000299734,133.855981416957,23.183135178339498,132.6214213654128C23.40293735637926,131.38686131386856,23.714656808872018,128.8451511991657,24.003063909148437,127.64883934108914C24.291471009424853,126.45252748301257,24.556565757484936,126.60161388156229,24.80634095980285,127.01455840222552C25.056116162120762,127.42750292288875,25.290571818696506,128.10430556566553,25.531688147334066,129.63875603489126C25.772804475971625,131.17320650411702,26.020581476670998,133.56530479979176,26.27635128384454,135.52311181681122C26.532121091018087,137.48091883383069,26.795883704665805,139.00443457219484,26.971059379891436,139.3726268805102C27.146235055117067,139.74081918882558,27.232823791920612,138.9536880670922,27.37669430845573,140.83134354075386C27.52056482499085,142.7089990144155,27.72171712125754,147.25144108347217,28.07140240450262,150.23299836276533C28.421087687747697,153.2145556420585,28.91930595797116,154.63522813158818,29.355579978019783,154.16203157829207C29.791853998068408,153.68883502499597,30.16618376794219,151.32176942887415,30.477903220434946,149.97385707552706C30.789622672927702,148.62594472217998,31.038731808039433,148.29718561160763,31.367102940686717,147.51435215302098C31.695474073333997,146.73151869443433,32.103107203516835,145.49461088783337,32.52672594664802,143.5650478003965C32.9503446897792,141.63548471295965,33.38994904585873,139.0132663446869,33.85686215739168,134.06994597446766C34.323775268924635,129.1266256042484,34.817997135911014,121.86220323208263,35.31621540613448,117.7768886137231C35.81443367635795,113.69157399536357,36.31664834981849,112.78536713081026,36.80554167915543,114.10785229302579C37.29443500849236,115.43033745524133,37.77000699370567,118.98151464422571,38.23159156758918,121.39594577712352C38.693176141472684,123.81037691002132,39.14077330402638,125.08806198683253,39.47247477270457,124.25242425957833C39.80417624138276,123.41678653232412,40.01998201618544,120.46782600100451,40.35701202251307,116.22260866285771C40.69404202884071,111.97739132471091,41.15229626669331,106.43591717973693,41.55193659040197,102.27151752353397C41.95157691411063,98.10711786733103,42.29260332367536,95.3197926998991,42.70556499150764,95.19116597091372C43.11852665933993,95.06253924192835,43.60342358543977,97.59261095138953,44.0396976054884,103.6340510640521C44.47597162553702,109.67549117671469,44.86362273953443,119.22829969257866,45.216638358810414,125.91625093681333C45.56965397808639,132.604202181048,45.88803410264096,136.4272961536534,46.237053318679855,140.59176015652173C46.58607253471875,144.7562241593901,46.96573084224198,149.26205819252138,47.362040829919735,147.9075647727389C47.758350817597496,146.55307135295644,48.17131248542978,139.33825048026017,48.61091684150931,133.18176056666968C49.050521197588836,127.02527065307919,49.516768241915614,121.92711169859444,49.87178206281014,119.60066176513968C50.22679588370467,117.2742118316849,50.470576481166944,117.71947091926009,50.72967662437139,116.68973049592208C50.98877676757584,115.65999007258405,51.263196456522465,113.15525013833282,51.52562693575783,112.22065676395351C51.788057414993176,111.28606338957421,52.038498684517265,111.92161657506684,52.414826656009595,113.26071434580581C52.79115462750192,114.59981211654477,53.293369300962475,116.64245447253009,53.73830219469146,118.06862162444293C54.18323508842043,119.49478877635576,54.57088620241783,120.30448072419611,54.872614646817865,121.53169201132684C55.17434309121791,122.75890329845757,55.39014886602058,124.40363392487868,55.7032004529257,123.5787513108563C56.01625203983082,122.75386869683393,56.42654943883838,119.45937284236808,56.805541679155425,119.98976458229036C57.18453391947247,120.52015632221267,57.53222100109901,124.87543565652311,57.91920604789023,128.36191963866824C58.30619109468145,131.84840362081337,58.732474106637355,134.4660922507932,59.028207946181766,132.5418745824952C59.32394178572618,130.61765691419725,59.48912645285909,124.15153294762152,59.72624637825957,121.96798596457585C59.96336630366004,119.7844389815302,60.272421487328074,121.88346898201462,60.56948746128485,121.60673518344889C60.86655343524163,121.33000138488315,61.15163019948714,118.67750378726723,61.43337662770175,111.87682706713578C61.71512305591635,105.07615034700432,61.993539148100055,94.12729450435731,62.2419822160056,87.95936430204856C62.49042528391115,81.7914340997398,62.70889532753855,80.40442953776929,62.95867052985646,81.13987712493072C63.208445732174376,81.87532471209214,63.4895260931828,84.7332244483855,63.80990441935592,86.88752363896295C64.13028274552903,89.0418228295404,64.48995903686682,90.49252147440195,64.81233556465847,92.07621993327479C65.13471209245012,93.65991839214763,65.41978885669563,95.37661666503175,65.65957305092084,96.36968197959945C65.89935724514604,97.36274729416716,66.09384886935091,97.63217965041846,66.41289506111166,98.86361356753675C66.73194125287242,100.09504748465503,67.17554201218903,102.28848296264027,67.50990774969195,104.13284748720288C67.84427348719485,105.97721201176549,68.06940420288407,107.47250558290544,68.2905385153362,109.54759935486103C68.51167282778832,111.62269312681661,68.72881073700336,114.27758709958783,68.9499450494555,115.07274369703671C69.17107936190762,115.8679002944856,69.39621007759683,114.80331951661216,69.6020248443068,116.02909600550277C69.80783961101676,117.25487249439337,69.99433842874747,120.771006250048,70.24278149665302,123.05718240655817C70.49122456455856,125.34335856306834,70.80161188263895,126.399577120434,71.00676058214273,129.9272396472788C71.21190928164651,133.45490217412362,71.31181936257369,139.45400867044754,71.50964132280947,141.70151760317805C71.70746328304527,143.94902653590856,72.00319712258968,142.44493790504563,72.35954307789657,139.5633632175204C72.71588903320347,136.68178852999517,73.13284710427284,132.4227277858076,73.44256835514705,129.879514629787C73.75228960602126,127.33630147376638,73.95477403670031,126.50893590591268,74.17391014753389,126.3897047461829C74.39304625836748,126.27047358645311,74.62883404935559,126.85937683484724,74.88860025976622,125.2499494767792C75.14836647017685,123.64052211871112,75.43211110001,119.83276415418086,75.67722383188465,115.59737079600615C75.9223365637593,111.36197743783143,76.12881739767543,106.69894868601222,76.44253505178673,105.45738465934272C76.75625270589804,104.2158206326732,77.1772071802045,106.39572133115337,77.62613647717056,106.68700011628434C78.07506577413662,106.9782789014153,78.55196989376228,105.38093577319704,78.91897292436808,104.93987625323268C79.28597595497386,104.49881673326833,79.54307789655978,105.21404082155787,79.76687647783663,105.59354305749578C79.99067505911349,105.9730452934337,80.18117028008128,106.01682567702,80.50021647184202,106.8495156328147C80.81926266360276,107.68220558860942,81.26685982615645,109.30380511661255,81.61188263895826,110.54024788531348C81.95690545176008,111.77669065401439,82.19935391481002,112.62797666341308,82.45912012522065,114.22568749912502C82.71888633563128,115.82339833483695,82.99597029340262,118.16753399686215,83.23442235321546,118.7430703967868C83.4728744130283,119.31860679671146,83.67269457488261,118.12554393453559,83.86918440070603,120.52387669329067C84.06567422652947,122.92220945204578,84.25883371632199,128.91193783173185,84.45066107170214,131.2701748129819C84.6424884270823,133.62841179423197,84.83298364805009,132.35515737704603,85.03213774269824,128.19061267168144C85.23129183734639,124.02606796631683,85.4391048056749,116.97023297277359,85.70553168814733,113.38636891808214C85.97195857061978,109.80250486339071,86.29699936723615,109.69061174755106,86.67932194358411,108.21643010607542C87.06164451993206,106.7422484645998,87.50124887601159,103.90577829748818,87.88024111632865,99.75992963780278C88.2592333566457,95.61408097811739,88.57761348120026,90.15885382585823,88.98058414093984,90.75220017964888C89.3835548006794,91.34554653343953,89.87111599560396,97.98746639327999,90.32670596463183,102.69777090987746C90.78229593365971,107.40807542647494,91.20591467679091,110.18676459982942,91.63819229360244,111.40276789106764C92.07046991041398,112.61877118230588,92.51140640090586,112.27208859142786,92.96233389949046,110.9590727433108C93.41326139807506,109.64605689519374,93.8741799047524,107.36670778983765,94.37639457821295,104.63099682906449C94.87860925167351,101.89528586829131,95.4221200919173,98.70321305210106,95.83574782695575,99.05926305372861C96.24937556199421,99.41531305535618,96.53312019182735,103.31948587480153,96.77556865487728,106.16049079557642C97.01801711792719,109.00149571635131,97.21916941419389,110.77933273845574,97.40433609751224,113.63642397437661C97.58950278083059,116.49351521029752,97.75868385120059,120.42986066003488,97.9978019782196,121.97922684951148C98.23692010523862,123.52859303898808,98.54597528890666,122.69097996820393,98.88833383288376,119.37693202334614C99.23069237686084,116.06288407848837,99.60635428114698,110.27240125955694,100.00799280647419,108.1707896898189C100.40963133180139,106.06917812008086,100.83724647816967,107.6564377995362,101.23688680187833,107.73149662877009C101.63652712558698,107.80655545800397,102.00819262663603,106.36941343701638,102.26795883704666,104.22232818782237C102.52772504745728,102.07524293862835,102.67559196722948,99.21821446122792,102.93868851367102,98.62153101679874C103.20178506011257,98.02484757236958,103.58011123322345,99.68850916091169,103.91181270190164,100.79127587840344C104.24351417057983,101.89404259589519,104.52859093482535,102.43591444233657,104.8403103873181,101.70076095522728C105.15202983981085,100.96560746811801,105.49039198055084,98.95342864745807,105.9040197155893,97.57490304150527C106.31764745062777,96.19637743555248,106.8065407799647,95.45150504430684,107.31008758783761,95.96885874831003C107.81363439571054,96.48621245231321,108.33183468211944,98.26579225156522,108.8260565491058,101.41315175199647C109.3202784160922,104.56051125242772,109.79052186365605,109.07565045403821,110.25210643753955,111.52778185114556C110.71369101142307,113.97991324825291,111.16661671162622,114.36903684085712,111.63885836080861,116.82948090786223C112.11110000999102,119.28992497486736,112.60265760815267,123.82168951627338,113.05824757718054,127.66625814700276C113.51383754620842,131.51082677773215,113.93345988610253,134.6681994977849,114.29446831185268,138.79972200787157C114.65547673760284,142.9312445179582,114.95787124920905,148.0369168180787,115.32087787657775,147.71015373032137C115.68388450394644,147.38339064256402,116.10750324707763,141.62419216692882,116.60438938288874,135.74121045642082C117.10127551869985,129.8582287459128,117.67142904719088,123.85146380053203,118.11902620974459,117.29333382656684C118.56662337229828,110.73520385260164,118.89166416891464,103.62570885005204,119.20804609185066,98.67319384067676C119.52442801478668,93.7206788313015,119.83215106404236,90.92514381510057,120.1445365837413,88.89827661734707C120.45692210344025,86.87140941959355,120.77397009358245,85.61321004028747,121.07103606753923,88.47062297026054C121.368102041496,91.32803590023363,121.64518599926734,98.30106113948587,121.9422519732241,104.07201575644902C122.23931794718088,109.84297037341216,122.55636593732308,114.4118543680862,122.84077663436241,114.22448197683127C123.12518733140175,114.03710958557633,123.3769607353382,109.09348080839241,123.58277550204815,108.40407090523321C123.78859026875813,107.714661002074,123.94844639824157,111.2794699729395,124.10763646051888,112.68609970886676C124.26682652279615,114.09272944479402,124.42535051786726,113.34117994578304,124.6638025776801,112.47057387437876C124.90225463749294,111.59996780297448,125.22063476204751,110.6103051591769,125.52569354247845,105.64252050325405C125.8307523229094,100.67473584733119,126.12248975921673,91.72882917928305,126.36826855829756,88.49460630433371C126.61404735737838,85.26038342938438,126.81386751923272,87.73784434753384,127.14756718952944,90.31386798872776C127.48126685982618,92.88989162992169,127.9488460385653,95.5644779941601,128.27055649915079,99.17756713402109C128.59226695973626,102.79065627388206,128.76810870216804,107.34224818936565,128.97925200652747,111.39987625457711C129.19039531088686,115.45750431978857,129.43684017717388,119.02116853472793,129.77986478835714,120.67459265430553C130.12288939954044,122.32801677388309,130.56249375561995,122.07120079809889,130.9068505012156,122.0340329425998C131.25120724681122,121.99686508710067,131.50031638192294,122.17934535188667,131.787391347787,122.65364581091056C132.07446631365104,123.12794626993445,132.39950711026745,123.89406692319626,132.77650114896593,123.02741950580476C133.15349518766445,122.16077208841327,133.58244246844507,119.66135660036846,133.9048189962367,118.37972453699228C134.2271955240284,117.09809247361612,134.44300129883106,117.03424383490858,134.67479268658207,115.64457074332157C134.9065840743331,114.25489765173455,135.15436107503245,111.53940010726805,135.51337129916408,109.77453058517494C135.8723815232957,108.00966106308186,136.34262497085956,107.19541956336218,136.73094215206316,112.61862229502192C137.11925933326677,118.04182502668166,137.42565024811006,129.70247198972086,137.76934092649952,139.32950476931387C138.11303160488896,148.95653754890685,138.49402204682454,156.54995614505364,138.77443634062678,160.40654550234188C139.05485063442902,164.2631348596301,139.2346887800979,164.38289497805977,139.5310886868485,161.59986706920802C139.8274885935991,158.81683916035627,140.2404502614314,153.13102322422304,140.6947080960469,141.44975788838025C141.14896593066243,129.76849255253745,141.64451993206117,112.09177781698502,142.06880474239853,97.53305997049995C142.4930895527359,82.9743421240149,142.84610517201187,71.53362116659719,143.13850867552537,66.206890203424C143.43091217903887,60.88015924025082,143.6627035667899,61.66741827132215,144.0117227828288,59.03637403442662C144.3607419988677,56.405329797531095,144.82698904319446,50.35598229266871,145.18599926732608,51.60548022168257C145.54500949145768,52.854978150696425,145.79678289539413,61.403321513586526,146.09384886935092,67.74413193227745C146.3909148433077,74.08494235096839,146.73327338728478,78.21821982546014,147.08295867052988,80.20070566778719C147.43264395377497,82.18319151011426,147.78965597628803,82.01488572027662,148.1286841842342,81.08599944133145C148.46771239218037,80.15711316238628,148.78875678555966,78.46764639433357,149.06850501215573,80.82429313062076C149.3482532387518,83.18093986690795,149.58670529856465,89.58370010753504,149.8910980117894,95.66103858056034C150.19549072501417,101.73837705358564,150.56582409165085,107.49029375900915,150.83424917574183,110.60657047768478C151.10267425983284,113.72284719636042,151.26919106137814,114.2034839282882,151.4923235754488,114.4027071027973C151.71545608951948,114.6019302773064,151.99520431611552,114.51973989439682,152.39551070703035,113.26286264150367C152.7958170979452,112.00598538861053,153.31668165317882,109.5744212657338,153.73697006027908,108.06664571923271C154.15725846737936,106.55887017273162,154.47697072634628,105.97488320260616,154.80001332134412,106.14232767585813C155.12305591634197,106.30977214911009,155.4494288473707,107.22864806573946,155.76914110633766,107.6263945118852C156.0888533653046,108.02414095803094,156.4019049522097,107.90075793369303,156.67366037233157,109.45876486354301C156.94541579245347,111.01677179339299,157.17587504579217,114.25616867743086,157.49958370799618,116.34339817248818C157.8232923702002,118.43062766754548,158.24025044126955,119.36568977362222,158.57861258200955,121.45874690600995C158.91697472274953,123.55180403839768,159.17674093316015,126.8028561970964,159.42251973224097,127.58606421714657C159.66829853132182,128.36927223719675,159.90008991907285,126.68463611859838,160.11056715622607,123.65094493470679C160.3210443933793,120.61725375081522,160.51020747993473,116.23450750163045,160.6773903486862,113.45408169927869C160.84457321743764,110.67365589692695,160.98977586838515,109.49555054140822,161.31215239617677,109.91009353096152C161.63452892396845,110.32463652051482,162.1340793286043,112.3318278551401,162.62030838911647,113.54867532760913C163.1065374496287,114.76552280007814,163.57944516601728,115.1920264103909,163.93912145735507,116.11546859526791C164.29879774869286,117.0389107801449,164.54524261497988,118.45929153958616,164.93089552735873,122.50302859962807C165.31654843973757,126.54676565966996,165.84140939820827,133.2138590203125,166.37426316315316,133.3191919136226C166.90711692809805,133.4245248069327,167.44796349951713,126.96809723291035,167.87358044426685,120.7835581999053C168.29919738901657,114.59901916690026,168.60958470709699,108.68636867491253,168.85336530455925,104.02316832050911C169.09714590202154,99.3599679661057,169.2743197788657,95.9462177492866,169.4934558896993,94.66431034333152C169.71259200053288,93.38240293737641,169.97369034535586,94.23233834228529,170.31338462050823,95.66500579057782C170.6530788956606,97.09767323887036,171.07136910114235,99.11307273054652,171.47567189529428,102.73751923003269C171.87997468944621,106.36196572951887,172.27029007226832,111.59545923681506,172.6979052186366,114.02797422513332C173.12552036500486,116.46048921345158,173.59043527491926,116.09202568279193,173.90082259299965,113.85297649011622C174.21120991108003,111.6139272974405,174.36706963732644,107.50429244274872,174.60618776434544,100.29003867461027C174.84530589136446,93.07578490647182,175.1676824191561,82.75691222488672,175.58397442301933,76.38997153630615C176.0002664268825,70.02303084772558,176.51047390681723,67.60802215214954,176.95474073334003,68.61723652155412C177.3990075598628,69.62645089095868,177.7773337329737,74.05988832534385,178.09704599194063,80.48649540225033C178.41675825090755,86.9131024791568,178.67785659573053,95.33287919858462,178.9755886368935,103.92630963126231C179.27332067805642,112.51974006393999,179.60768641555933,121.28682420986756,180.04928897325743,127.19099718383504C180.49089153095548,133.0951701578025,181.03973090884872,136.13643195980987,181.40140540180508,134.30551916191567C181.7630798947614,132.47460636402147,181.93758950278084,125.77151896622567,182.20068604922238,121.45614900388043C182.4637825956639,117.1407790415352,182.81546608052753,115.21312651464052,183.2157724714424,112.16138618995573C183.61607886235723,109.10964586527095,184.0650081593233,104.93381774279607,184.45865387817634,103.78932096538068C184.85229959702937,102.64482418796531,185.19066173776937,104.53165875560944,185.62160722016856,106.28261652951214C186.0525527025677,108.03357430341484,186.57608152662607,109.64865528357609,187.05165351183936,111.02625983973675C187.52722549705265,112.4038643958974,187.95484064342094,113.54399252805746,188.38378792420158,112.39027478801202C188.8127352049822,111.23655704796658,189.2430146201752,107.78899343571565,189.64931561594565,106.16621473996041C190.05561661171615,104.54343604420515,190.4379391880641,104.74544226494558,190.79228694175242,107.91296410212829C191.14663469544078,111.08048593931096,191.47300762646952,117.21352339293591,191.8659872781164,120.3860318090713C192.25896692976323,123.55854022520668,192.71855330202817,123.77051960385252,192.98564625170678,122.56855142493387C193.25273920138542,121.36658324601525,193.3273387284777,118.75066750953215,193.41459353248746,115.52744376381611C193.50184833649718,112.30422001810007,193.60175841742435,108.47368826315108,193.92213674359743,101.56899996121645C194.24251506977058,94.66431165928181,194.78336164118963,84.68546681036153,195.23695340859896,78.11175276037355C195.6905451760083,71.53803871038556,196.0568821394079,68.36945545932988,196.53112199020885,67.76194088798724C197.0053618410098,67.15442631664457,197.58750457921207,69.10798042501494,198.1163619409199,71.89575082629221C198.64521930262765,74.68352122756949,199.12079128784097,78.30550792175363,199.48046757917876,79.17369611717216C199.84014387051656,80.04188431259067,200.08392446797887,78.15627400924355,200.37632797149237,78.19001888973999C200.66873147500587,78.22376377023643,201.00975788457058,80.17686383457644,201.27285443101212,81.41277843772262C201.53595097745364,82.64869304086882,201.721117660772,83.16742218282118,202.03949778532655,84.47568091981276C202.35787790988113,85.78393965680431,202.8094714756719,87.88172798883507,203.1544942884737,90.40803076252868C203.4995171012755,92.93433353622228,203.73796916108836,95.88915075157874,204.0463582775502,97.89855135379995C204.35474739401207,99.90795195602115,204.73307356712291,100.97193594510708,205.12472108435742,101.0150455961654C205.51636860159192,101.05815524722371,205.92133746295002,100.08039056025439,206.30699037532887,97.94377577781836C206.69264328770774,95.80716099538236,207.05898025110736,92.51169611747966,207.45728844040366,92.66882048040122C207.85559662969996,92.8259448433228,208.28587604489294,96.43565844706863,208.65754154594202,97.67818459080267C209.02920704699108,98.92071073453673,209.34225863389622,97.796049418259,209.6779565058115,96.38899631564226C210.01365437772677,94.98194321302549,210.3719985346522,93.29249832406971,210.5944649815167,92.04997218033566C210.81693142838117,90.80744603660162,210.90352016518472,90.01183863808929,211.11666167116266,91.90762744703306C211.32980317714063,93.80341625597684,211.669497452293,98.39060127237671,211.9832151064043,100.37597476948433C212.29693276051557,102.36134826659196,212.5846737935858,101.74491024440732,212.8457721384088,103.23901343305572C213.10687048323177,104.73311662170408,213.3413261398075,108.33776102118549,213.66170446598062,109.87380193856814C213.98208279215373,111.40984285595079,214.3883837879242,110.87728029123468,214.8013454557565,111.41579417951354C215.21430712358875,111.95430806779238,215.63392946348287,113.5638984090662,215.93499184067673,112.0490337103498C216.2360542178706,110.53416901163342,216.4185566323642,105.89484927292683,216.66633363306357,102.67895718132323C216.91411063376293,99.46306508971962,217.22716222066805,97.670600645219,217.5462084124288,97.77199918131245C217.86525460418954,97.87339771740591,218.19029540080592,99.86865923409341,218.4833649715256,101.88783608045895C218.7764345422453,103.90701292682446,219.03753288706832,105.950105102868,219.2992972990975,106.95909819212918C219.56106171112668,107.96809128139036,219.82349219036203,107.94298528386919,220.14187231491658,107.7985036419695C220.46025243947116,107.6540220000698,220.83458220934494,107.39016471379158,221.17893895494058,106.63629443074308C221.5232957005362,105.88242414769455,221.8376794218537,104.63854086787575,222.23798581276853,102.30009814604315C222.63829220368336,99.96165542421058,223.12452126419558,96.52865326036421,223.6067539214707,97.73298578826865C224.0889865787458,98.93731831617309,224.56722283278384,104.77898553582834,225.0407966163786,107.80699973036455C225.51437039997336,110.83501392490075,225.98328171312488,111.04937509431791,226.4168914643488,106.01881490394317C226.85050121557268,100.98825471356844,227.24880940486898,90.71277316340179,227.60781962900057,84.701389724834C227.9668298531322,78.6900062862662,228.28654211209914,76.94272095929725,228.70816265361177,78.90943506199152C229.12978319512442,80.87614916468578,229.65331201918275,86.55686269704324,230.15552669264332,90.30962454449578C230.65774136610386,94.0623863919483,231.13864188896662,95.88719655449586,231.52829120458256,97.69084771275202C231.9179405201985,99.49449887100818,232.21633862856766,101.2769910249729,232.5273920138542,101.97821309950544C232.8384453991408,102.67943517403798,233.16215406134478,102.29938716913833,233.55313551137309,100.17265719002569C233.9441169614014,98.04592721091306,234.402371199254,94.17251525758746,234.8746128484364,92.06691111116673C235.3468544976188,89.961306964746,235.83308355813102,89.62351062523015,236.35061777733375,85.68164657620738C236.86815199653648,81.73978252718464,237.41699137442973,74.19385076865498,237.9465148033437,70.85348508651715C238.47603823225768,67.51311940437931,238.9862457121924,68.3783197986333,239.38988243913815,71.98385692172039C239.7935191660839,75.58939404480748,240.09058514004067,81.93526789672768,240.4868951277184,85.66185677043212C240.88320511539615,89.38844564413657,241.37875911679487,90.49574953962525,241.78839044859626,91.36009813859576C242.19802178039765,92.22444673756628,242.52173044260167,92.84584004001863,242.97465614280483,93.3132306712667C243.42758184300797,93.78062130251477,244.00972458121026,94.09400926255857,244.43867186199088,94.65693354593392C244.8676191427715,95.21985782930926,245.14337096613048,96.03231843601614,245.50304725746827,98.52895181590759C245.86272354880606,101.02558519579904,246.3063243081227,105.20639134887503,246.76657674759383,108.42138680392982C247.226829187065,111.63638225898464,247.70373330669065,113.88556701601823,248.1813034935225,115.50743674791751C248.65887368035436,117.12930647981678,249.1371099343924,118.1238611865817,249.4967862257302,120.189160102409C249.856462517068,122.25445901823632,250.09757884570553,125.39050214312599,250.47390681719787,123.28720156022344C250.8502347886902,121.18390097732089,251.3617744030373,113.84125668662614,251.83801245545675,110.16443916666944C252.31425050787627,106.48762164671274,252.75518699836815,106.47663089749412,253.0988776767576,110.364571302548C253.44256835514705,114.25251170760191,253.68901322143404,122.03938326692835,254.00672727878245,124.67835772596808C254.3244413361308,127.31733218500783,254.71342458454058,124.80840954376087,254.98318180304395,122.72269928779632C255.2529390215473,120.63698903183177,255.40347021014423,118.97449116114963,255.54334432344226,120.87637690968533C255.68321843674028,122.77826265822105,255.81243547473943,128.24453202597465,256.1441369434176,126.65542896245591C256.4758384120958,125.06632589893718,257.01002431145304,116.42185040414614,257.4263163153162,109.35245518343348C257.8426083191794,102.28305996272081,258.1410064275485,96.78874501608651,258.43807240150534,93.47211989251828C258.7351383754621,90.15549476895004,259.0308722150065,89.01655946844787,259.3352649282313,94.19445872631795C259.6396576414561,99.37235798418803,259.9527092283612,110.86709180043033,260.28507676424556,113.23444473704305C260.61744430012993,115.60179767365575,260.9691277849935,108.84176973063886,261.3294701435375,109.45619288641018C261.68981250208145,110.0706160421815,262.05881373430583,118.05949029674103,262.36254038032445,129.80446642265426C262.666267026343,141.54944254856747,262.9047190861558,157.0505205458344,263.20311719452496,169.45684893475627C263.50151530289406,181.86317732367814,263.8598594598195,191.17475610425493,264.0543510840244,201.24506000155645C264.2488427082293,211.31536389885792,264.2794817997136,222.1443929128841,264.3540813268059,220.96374898459413C264.4286808538982,219.78310505630418,264.54724081659845,206.59278818569808,264.65114730076266,200.50197976930826C264.7550537849269,194.41117135291847,264.84430679055515,195.41987139074493,264.9861791054717,198.09086452585592C265.1280514203883,200.76185766096688,265.3225430445932,205.09514389336238,265.5196989376228,197.5810271355479C265.71685483065244,190.06691037773345,265.9166749925068,170.7053906297091,266.156459186732,156.1615744220524C266.3962433809572,141.6177582143958,266.6759916075532,131.89164554710686,266.9564059013555,125.15798259322418C267.23682019515775,118.42431963934149,267.5179005561662,114.68310639886504,267.8496020248444,111.46774230092794C268.1813034935226,108.25237820299084,268.5636260698705,105.5628632475931,268.9106470842909,103.99912236199035C269.2576680987112,102.43538147638759,269.56938755120393,101.99741466057979,269.8924301462017,100.15421649388647C270.2154727411996,98.31101832719314,270.5498384787025,95.06258880961428,270.93349318946287,92.84272310357339C271.3171479002232,90.62285739753248,271.7500915842409,89.43155550302956,272.0744663136511,90.44323872078132C272.39884104306134,91.45492193853312,272.61464681786396,94.66959026853958,272.80247777000704,99.57937358656332C272.9903087221501,104.48915690458706,273.1501648516336,111.09405521062807,273.49252339561065,114.12110509402476C273.8348819395877,117.14815497742146,274.3597428980584,116.59735643817382,274.7094281813035,117.63616020210729C275.05911346454855,118.67496396604076,275.23362307256804,121.30337003315535,275.5559996003597,123.11477290088845C275.87837612815133,124.92617576862155,276.34861957571525,125.92057543697317,276.6769907083625,128.69916753861565C277.0053618410098,131.4777596402581,277.19186065874055,136.04054417519149,277.3383954441004,135.72138165763735C277.48493022946025,135.40221914008322,277.5915009824492,130.2011095700416,277.690078928964,123.96764622253478C277.78865687547875,117.73418287502793,277.87924201551937,110.46836575005588,277.97115928997243,108.44870774547827C278.0630765644254,106.42904974090068,278.1563259732908,109.65555085671755,278.30286075865064,111.05558206293026C278.4493955440105,112.45561326914297,278.6492157058648,112.02917456575153,279.0135544676458,114.39092342966158C279.3778932294269,116.75267229357164,279.9067505911347,121.90260872478318,280.29639990675065,126.00394646969626C280.6860492223666,130.10528421460933,280.9364904918907,133.15802327322393,281.1549605355181,139.2385399925689C281.3734305791455,145.31905671191384,281.5599293968762,154.42735109198918,281.7191194591535,164.0319913940072C281.87830952143077,173.6366316960253,282.0101908282546,183.73761791998606,282.2566356945416,183.24601829206492C282.5030805608286,182.75441866414377,282.8640889865788,171.6702331843407,283.25307223498857,162.9791605921668C283.6420554833983,154.28808799999285,284.0590135544677,147.9901282954481,284.376727611816,139.48890678331065C284.69444166916446,130.98768527117323,284.9129117127918,120.28320195144309,285.20797948513007,107.75993558550014C285.5030472574683,95.2366692195572,285.8747127585174,80.89461980740144,286.2357211842675,71.28950869345793C286.59672961001763,61.68439757951443,286.94708096046895,56.81622476378319,287.388683518167,54.32168490668565C287.83028607586505,51.82714504958811,288.36313984080994,51.70623815112427,288.79142105438444,51.51081769708304C289.2197022679589,51.315397243041815,289.54341093016296,51.04546323342319,289.8617910547175,52.89265195995643C290.18017117927207,54.73984068648967,290.49322276617715,58.70415214917476,290.8535651247212,64.90333950814576C291.21390748326513,71.10252686711678,291.62154061344796,79.53659012237372,292.00919172744534,84.20500372410359C292.3968428414428,88.87341732583344,292.7645119392547,89.77618127403622,293.0915509374896,90.11099176457542C293.4185899357245,90.4458022551146,293.7049988343824,90.21265928799022,294.01738435408134,91.00637644622105C294.32976987378026,91.80009360445192,294.66813201452027,93.62067088803799,295.0611116661671,93.27035552921798C295.454091317814,92.92004017039795,295.9016884803677,90.39883216917184,296.369933726313,90.72239516743191C296.83817897225833,91.04595816569199,297.32707230159525,94.21429216343826,297.73537149898425,97.19146157329936C298.1436706963733,100.16863098316045,298.4713757618144,102.95463580513638,298.845039464482,105.72199546843382C299.21870316714956,108.48935513173126,299.63832550704365,111.23806963635022,300.0046624704433,111.48523931420598C300.3709994338429,111.73240899206174,300.68405102074803,109.47803384315431,301.066373597096,110.72422517090914C301.4486961734439,111.97041649866398,301.9002897392347,116.71717430308108,302.2699570386652,119.62326245011654C302.63962433809576,122.52935059715199,302.927365371166,123.59476908680581,303.2850434608853,123.45616498314818C303.6427215506045,123.31756087949054,304.0703366969728,121.97493418252148,304.5312552036501,124.81359768492875C304.9921737103274,127.65226118733605,305.4863955773138,134.6722148891197,305.8687181536617,137.6352473983501C306.25104073000966,140.59827990758046,306.5214640157192,139.50439122425757,306.8378459386552,135.08461125083033C307.15422786159127,130.66483127740312,307.5165684217538,122.91916001387156,307.9341925600294,117.31480401985235C308.3518166983049,111.71044802583314,308.8247244146935,108.24740730132628,309.3409264994838,104.97034921558807C309.85712858427416,101.69329112984988,310.4166250374663,98.60221568288036,310.89086488826723,98.7836938735572C311.3651047390682,98.96517206423405,311.754087987478,102.41920389255729,312.21167615812436,104.09424931273645C312.6692643287708,105.76929473291563,313.1954574216539,105.66535374495072,313.68634895260936,108.14733186826349C314.17724048356484,110.62930999157629,314.6328304525927,115.69720722616677,315.0910846904453,119.39641798083211C315.5493389282979,123.09562873549748,316.01025743497524,125.42615301023773,316.4312119092817,122.83342029484565C316.85216638358816,120.24068757945358,317.23315682552374,112.72469787392922,317.64545242614986,105.06726097120932C318.0577480267759,97.40982406848944,318.50134878609254,89.61093996857406,318.87368035434775,82.81074533966891C319.24601192260303,76.01055071076377,319.5470742997969,70.20904555286887,319.91141306157795,68.95885177283304C320.2757518233591,67.70865799279721,320.7033669697273,71.00977559062044,321.07303426915786,75.64553060354933C321.44270156858835,80.28128561647823,321.75442102108116,86.2516780445128,322.1081027075633,93.07859143658193C322.4617843940455,99.90550482865106,322.85742831451705,107.58893918475478,323.31901288840055,111.3449541782402C323.78059746228405,115.10096917172561,324.3081226895795,114.92956480259275,324.6391580910515,111.28049857752912C324.9701934925235,107.63143235246548,325.1047390681721,100.5047042714711,325.36317314417033,101.942339027929C325.6216072201686,103.37997378438686,326.00392979651656,113.38197137829701,326.4402038165652,119.21121768949797C326.87647783661384,125.04046400069893,327.3667033003631,126.69695902919074,327.8442734871949,127.94587619975239C328.3218436740268,129.19479337031407,328.78675858394115,130.03613268294558,329.18773104206224,131.7733943671284C329.5887035001832,133.51065605131123,329.9257335065109,136.14384010704535,330.2780830585807,130.85484536699386C330.63043261065053,125.56585062694238,330.9981017084625,112.35467709110529,331.290505211976,104.09454493723868C331.5829087154895,95.83441278337207,331.8000466247045,92.52532201147594,332.18370133546483,91.70241336564487C332.5673560462251,90.87950471981381,333.1175275585307,92.54277820004782,333.63839211376427,92.37365165030455C334.15925666899795,92.20452510056128,334.6508142671596,90.20299852084074,334.9778532653946,91.57839640694306C335.30489226362954,92.95379429304538,335.4674126619377,97.70611664497056,335.7611482998635,100.3641799933191C336.0548839377894,103.02224334166763,336.47983481533294,103.58604768643951,336.84550571152636,103.39695166670415C337.2111766077198,103.2078556469688,337.51756752256307,102.2658592627262,337.93119525760153,98.29389813074798C338.34482299264,94.32193699876976,338.8656875478736,87.32001111905592,339.32460785293244,83.32952603613404C339.7835281579912,79.33904095321219,340.1805042128752,78.3599966670823,340.6740600126554,78.31447496801759C341.1676158124356,78.26895326895288,341.75775135711206,79.15695415695339,342.31325140706707,79.11113950190315C342.8687514570221,79.06532484685293,343.3896160122557,78.08569464875198,343.7432976987379,80.68977333978738C344.09697938522004,83.29385203082279,344.2834782029508,89.48163961099453,344.50128217937197,93.92789431004914C344.7190861557932,98.37414900910377,344.9681952909049,101.07887082704127,345.30389316282015,102.21037279466385C345.6395910347354,103.34187476228644,346.06187764345424,102.90015687959408,346.38425417124586,103.65579896974538C346.70663069903753,104.41144105989667,346.92909714590206,106.36444312289163,347.2687914210544,106.9760440297608C347.6084856962068,107.58764493662996,348.065407799647,106.85784468737334,348.55363506177775,103.76252963544394C349.04186232390856,100.66721458351456,349.56139474472985,95.2063847289124,349.95903686682004,92.33569880897751C350.3566789889101,89.4650128890426,350.6324308122691,89.18447090377498,351.01275518699845,87.46395291553692C351.3930795617279,85.74343492729888,351.87797648782777,82.58294093609041,352.29560062610335,81.13308247583909C352.7132247643789,79.68322401558778,353.0635761148301,79.94400108629362,353.4432344223533,82.28479881922607C353.8228927298765,84.62559655215851,354.23185799447174,89.04641494731756,354.59486462184043,93.39641796894138C354.9578712492091,97.7464209905652,355.2749192393513,102.02560863865378,355.58930296066876,103.80049020225036C355.90368668198624,105.57537176584695,356.21540613447905,104.84594724495153,356.590401971559,104.73739492602274C356.96539780863895,104.62884260709396,357.40367003030616,105.14116249013182,357.7806640690047,104.15745632183675C358.1576581077031,103.17375015354168,358.473373963433,100.6940179339137,358.745795450761,96.56491182091932C359.0182169380891,92.43580570792494,359.2473440570154,86.65732570156419,359.4937889233024,84.69665070899785C359.7402337895894,82.73597571643153,360.0039964032371,84.59310573765961,360.38698504679127,85.9033336328525C360.7699736903454,87.21356152804537,361.272188363806,87.97688729720304,361.65118060412306,88.68042363183723C362.0301728444401,89.38395996647144,362.2859426516136,90.02770686658218,362.64428680853905,94.61920445656736C363.00263096546445,99.21070204655254,363.46354947214184,107.74995032641216,363.93512505411803,111.23445793375706C364.4067006360943,114.71896554110194,364.8889332933694,113.14873247593209,365.2665933992741,114.71690379233252C365.64425350517877,116.28507510873293,365.917341059713,120.99165080670359,366.2770173510508,124.47358749189547C366.63669364238865,127.95552417708737,367.08295867052993,130.2128218495005,367.38668531654855,127.97265042558068C367.69041196256717,125.73247900166083,367.851600226463,118.99483848140807,368.16065541013097,112.63534132595393C368.46971059379905,106.27584417049981,368.92663269723926,100.29449037984435,369.3136177440304,96.31328461464568C369.7006027908216,92.33207884944703,370.01765078096383,90.35102110970519,370.437273120858,86.96997780112724C370.85689546075207,83.58893449254928,371.37909215039804,78.80790561513524,371.91927265461095,79.4499234655659C372.4594531588238,80.09194131599656,373.0176174776036,86.15700589427196,373.3732973657043,91.09372586857663C373.728977253805,96.03044584288128,373.88217271122664,99.83882121321518,374.1825690212143,99.64003297268113C374.48296533120197,99.44124473214706,374.9305624937557,95.23529288074502,375.38282212675267,93.09191032861497C375.83508175974964,90.94852777648492,376.29200386318985,90.86771452362686,376.63502847437314,92.32520707467526C376.97805308555644,93.78269962572367,377.2071802044827,96.77849798067855,377.56485829420194,97.48046832720556C377.9225363839212,98.18243867373256,378.4087654444334,96.59058101183169,378.91297831951255,98.00195893718072C379.4171911945916,99.41333686252973,379.9393878842376,103.82795037512865,380.3643387617811,104.15170478793964C380.7892896393247,104.4754592007506,381.1169947047657,100.70835451377364,381.53328670862896,101.72443039744662C381.9495787124921,102.7405062811196,382.45445765477746,108.5397627354425,382.85942651613556,110.34578358253512C383.26439537749366,112.15180442962776,383.5694541579246,109.96458966949012,383.96576414560235,109.30883709671731C384.3620741332801,108.6530845239445,384.84963532820467,109.52879413853654,385.35051786725285,109.31017167835756C385.851400406301,109.09154921817856,386.3656042894728,107.77859468322853,386.8897991807373,109.7169760204555C387.41399407200186,111.65535735768248,387.94817997135914,116.84507456708643,388.4357411662838,117.87990282503529C388.92330236120836,118.91473108298413,389.36423885170024,115.79467038947789,389.8244912911714,114.26921375548474C390.2847437306425,112.74375712149158,390.7643121190929,112.81290454701153,391.14330435940997,112.87952223807159C391.522296599727,112.94613992913165,391.8007126919107,113.01022788573184,392.1876977387019,113.4038215572923C392.5746827854931,113.79741522885274,393.0702367868918,114.52051461537346,393.4658807073634,115.22679419006218C393.861524627835,115.9330737647509,394.1572584673794,116.62253352760762,394.574882605655,116.91154057514832C394.99250674393056,117.20054762268902,395.53202118093725,117.0891019549137,395.9556399240684,117.4907741967915C396.37925866719957,117.8924464386693,396.6869817164553,118.8072365902002,396.9294301795052,121.88698546283288C397.17187864255516,124.96673433546556,397.3490525193994,130.21144192920002,397.601491990542,132.21951758959983C397.8539314616846,134.22759324999961,398.1816365271257,132.9990369770648,398.5273254071336,129.69145458451254C398.87301428714164,126.38387219196026,399.2366869817165,120.99726367979056,399.54840643420926,118.3398949800409C399.860125886702,115.68252628029121,400.11989209711265,115.75439739296155,400.45825423785266,112.61300316862236C400.79661637859266,109.47160894428318,401.213574449662,103.11694938293446,401.46068538315524,100.64803682815842C401.7077963166484,98.1791242733824,401.7850601125654,99.59595872517905,402.0201818363474,104.90349435616557C402.2553035601293,110.21102998715207,402.6482832117762,119.40926679732846,402.9719918739802,125.19540355681676C403.2957005361842,130.9815403163051,403.5501382089453,133.3555770251053,403.81723115862394,130.17925313330664C404.08432410830255,127.00292924150799,404.3640723348986,118.27624474911045,404.5539014886602,115.59456026589845C404.74373064242184,112.91287578268646,404.84364072334904,116.27619130866,405.11739434508945,117.84805432633405C405.3911479668299,119.41991734400811,405.8387451293836,119.20032785338266,406.23305691544283,116.83622146670541C406.627368701502,114.47211508002815,406.96839511106674,109.96349179729908,407.33006960402315,107.67506283383317C407.69174409697945,105.38663387036726,408.0740666733274,105.31839922616452,408.31385086755256,111.24116634296148C408.5536350617778,117.16393345975844,408.6508808738802,129.0777023375551,408.8939954041364,135.3339063060368C409.1371099343924,141.59011027451845,409.5260931828022,142.18874933368514,409.84647150897524,140.8248801948606C410.1668498351484,139.46101105603606,410.41862323908487,136.13463371922035,410.76031571585577,132.3704208322672C411.10200819262667,128.60620794531405,411.533619742232,124.40415950822351,411.8779764878276,124.67379308001563C412.2223332334233,124.94342665180773,412.4794351750092,129.68474223248248,412.7778332833783,136.227915867661C413.07623139174746,142.77108950283952,413.41592566689985,151.1161211925218,413.7096613048258,156.1001314335073C414.0033969427516,161.08414167449274,414.2511739434509,162.70713046678136,414.46564758384125,165.14329283183955C414.6801212242316,167.57945519689775,414.8612915043129,170.82879113472546,415.0078262896727,174.36845240552628C415.15436107503257,177.90811367632708,415.266260365671,181.73810028010095,415.50338029107144,182.46707623464337C415.7405002164719,183.19605218918576,416.1028407766344,180.8240174944967,416.45918673194126,175.6505961897037C416.8155326872482,170.47717488491065,417.16588403769947,162.50236697001367,417.47227495254276,155.31983796446883C417.77866586738605,148.137308958924,418.0410963466214,141.74705886273134,418.33483198454724,133.5381467500011C418.6285676224731,125.32923463727084,418.9536084190895,115.30166050800301,419.2593332667266,107.2479711734199C419.56505811436375,99.19428183883677,419.85146701302165,93.11447729893837,420.16585073433913,90.80537568640099C420.4802344556566,88.49627407386359,420.8225929996338,89.95787538868721,421.22489759216717,87.25587000108334C421.62720218470054,84.55386461347943,422.0894528257902,77.68825252344803,422.4551237219837,77.62889780891115C422.82079461817705,77.56954309437427,423.0898857694742,84.31644575533191,423.5021813701003,87.70150650411388C423.9144769707264,91.08656725289583,424.4699770206815,91.10978608950211,424.8935957638127,89.32541849631099C425.31721450694386,87.54105090311985,425.60895194325116,83.94909688013132,425.8620574816,83.61630974709892C426.1151630199488,83.2835226140665,426.3296366603391,86.20990237099019,426.7066306990376,89.54911049371714C427.0836247377361,92.88831861644405,427.62313917474285,96.64035510497422,428.0187830952144,98.91442179428074C428.414427015686,101.18848848358725,428.66620041962244,101.98458537367013,428.8193958770441,104.76310211866807C428.97259133446573,107.54161886366603,429.02720884537257,112.30255546357905,429.21370766310326,113.56322804070663C429.40020648083396,114.82390061783424,429.71858660538857,112.5843091721764,430.0709361574584,109.18562517859174C430.42328570952816,105.78694118500707,430.80960468911326,101.22916464349557,431.26186432211017,100.1129111196683C431.7141239551072,98.99665759584104,432.23232424151604,101.32192708969801,432.68191960568834,100.0857554826678C433.1315149698605,98.8495838756376,433.51250541179616,94.05197116772024,433.8315516035568,93.04091658418241C434.1505977953176,92.02986200064458,434.4076997369035,94.80536554148628,434.71675492057153,95.93940561121093C435.02581010423955,97.07344568093556,435.38681852998974,96.56602227954313,435.7531554933894,96.83158673428798C436.119492456789,97.0971511890328,436.491157957838,98.1357034999149,436.76890798281556,102.43483150312642C437.04665800779304,106.73395950633792,437.230492556699,114.29366320187886,437.3990075598628,121.34840019891236C437.5675225630266,128.40313719594585,437.72071802044826,134.9529074944719,437.91520964465315,139.2454213295939C438.10970126885803,143.53793516471592,438.34548905984616,145.57319253643388,438.5666233722983,147.14890752523286C438.78775768475043,148.72462251403184,438.9942385186666,149.84079511991183,439.1674159922737,150.9060744831367C439.3405934658807,151.97135384636158,439.48046757917876,152.9857399669313,439.66030572484766,152.68432024852407C439.8401438705166,152.3829005301168,440.0599460485564,150.7656749727326,440.45292570020325,149.26518618754423C440.8459053518501,147.7646974023559,441.4120624771041,146.3809453893634,441.8896326639359,148.84240485793038C442.36720285076774,151.30386432649735,442.7561860991775,157.61053527662378,443.1658174309789,163.69533538156008C443.5754487627803,169.78013548649636,444.0057281779732,175.64306474624254,444.3953774935892,182.36498175527908C444.7850268092051,189.0868987643156,445.13404602524406,196.66780352264252,445.34185899357254,193.9816817637249C445.5496719619011,191.2955600048073,445.61627868251924,178.34241172864517,445.8207613148168,163.9100037699656C446.0252439471144,149.47759581128605,446.3676024910915,133.56592817008902,446.78322842774844,118.75725539769661C447.19885436440546,103.9485826253042,447.6877476937424,90.24290472171639,448.12535384820336,79.40608501148233C448.56296000266434,68.56926530124827,448.9492789822494,60.60130378436795,449.3042928031439,60.41774648378353C449.65930662403844,60.234189183199106,449.98301528624245,67.83503609891058,450.301395410797,76.5268734837992C450.6197755353516,85.21871086868784,450.93282712225675,95.00153872275362,451.25453758284226,101.08595912376057C451.57624804342777,107.17037952476754,451.9066173776936,109.55639247271567,452.2942684916909,107.06228153782179C452.68191960568834,104.56817060292792,453.1268524994173,97.19393578519205,453.600426283012,92.47058512031052C454.07400006660674,87.74723445542898,454.5762147400673,85.6747679434018,455.05711526293004,85.65178547866525C455.5380157857928,85.62880301392869,455.99760215805776,87.65530459648275,456.43520831251874,91.87314312243771C456.8728144669797,96.09098164839267,457.28844040363674,102.5001571177485,457.78199620341695,105.09488351823599C458.27555200319716,107.68960991872348,458.84703766610056,106.46988725034262,459.3326006594066,108.7966523720316C459.81816365271266,111.12341749372055,460.2178039764213,116.99667040547936,460.6520797948514,120.0624128314812C461.08635561328146,123.12815525748306,461.555266926433,123.38638719772794,462.0474905918008,122.09510619706265C462.5397142571686,120.80382519639736,463.0552502747528,117.96303125482186,463.4429013887502,115.39215332689598C463.8305525027476,112.8212753989701,464.09031871315824,110.52031348469382,464.4486628700837,110.5885112386758C464.80700702700915,110.6567089926578,465.26392913044936,113.09406641489807,465.6276018250242,116.29032980768339C465.9912745195991,119.48659320046872,466.2616978053086,123.44176256379912,466.56142804809014,126.43709215103343C466.8611582908716,129.43242173826775,467.19019549072505,131.46791154940598,467.5212308921971,134.14135378808277C467.8522662936691,136.81479602675955,468.1852998967596,140.12619069297486,468.5050121557266,140.82222847692384C468.8247244146935,141.51826626087282,469.1311153295368,139.59894716255548,469.37955839744234,135.56767228775672C469.62800146534795,131.536397412958,469.81849668631577,125.39316676167786,470.065607619809,120.5536140654028C470.31271855330215,115.71406136912772,470.6164451993207,112.1781866278577,470.9188397109269,107.6317357788202C471.2212342225331,103.08528492978272,471.52229659972693,97.52825797297774,471.89462816798215,93.64078271145651C472.26695973623737,89.75330744993528,472.71056049555403,87.53538388369779,473.1788057414994,89.15943178469072C473.6470509874447,90.78347968568369,474.1399407200188,96.24949905390706,474.53092217004706,102.86325566766368C474.92190362007534,109.47701228142029,475.2109767875579,117.23850614071014,475.4893928797417,117.18520818803452C475.7678089719253,117.1319102353589,476.03556798881016,109.2638204707178,476.3106537449629,99.30082587920042C476.5857395011157,89.33783128768304,476.8681519965365,77.27993186928938,477.1718786425551,69.83442493088165C477.47560528857366,62.38891799247392,477.80064608519007,59.555803534052096,478.0564158923636,53.25357110452896C478.31218569953717,46.951338675005815,478.4986845172679,37.17998827438136,478.7204848969262,28.984596023521025C478.9422852765845,20.7892037726607,479.1993872181704,14.169769671564495,479.46048556299337,14.764681415217359C479.72158390781635,15.359593158870222,479.9866786558764,23.168850747272156,480.2650947480601,29.030265713077117C480.5435108402438,34.89168067888208,480.83524827655117,38.805253022090085,481.25220634762053,44.02570455184552C481.6691644186899,49.24615608160096,482.2113431245213,55.77348679790384,482.7475272254971,64.09976783675938C483.2837113264729,72.42604887561491,483.81390082259304,82.5512802370231,484.16691644186903,88.89987591690604C484.519932061145,95.24847159678897,484.6957738035768,97.82043159514667,485.0407966163786,101.02331967954967C485.3858194291804,104.22620776395266,485.90002331235223,108.06002393440093,486.26236387251475,105.34930290133259C486.6247044326773,102.63858186826424,486.83518166983055,93.38332363167927,487.09228361141646,88.75569451338679C487.3493855530024,84.12806539509431,487.65311219902094,84.12806539509431,488.0241116328638,84.24040493911951C488.3951110667067,84.35274448314472,488.8333832883739,84.57742357119513,489.1790721683819,87.08249509978943C489.5247610483899,89.58756662838371,489.7778665867387,94.3730305975219,490.17617477603494,99.932169205409C490.57448296533124,105.4913078132961,491.117993805575,111.82412105993214,491.4903253738303,114.86006761029495C491.8626569420855,117.89601416065776,492.0638092383522,117.63509401474735,492.3955107070304,119.59851477273759C492.7272121757086,121.56193553072781,493.18946281679825,125.74969719261867,493.5837746028575,124.12349164473623C493.9780863889167,122.4972860968538,494.3044593199455,115.05711333919807,494.6954407699738,110.76420566549645C495.0864222200021,106.47129799179484,495.54201218902995,105.32565540204733,495.90035634595534,105.98719593333733C496.2587005028808,106.64873646462733,496.5197988477038,109.11746011695485,496.7475938322177,109.16525969603754C496.9753888167317,109.21305927512024,497.1698804409366,106.83993478095815,497.520897858594,106.84127960533182C497.87191527625146,106.8426244297055,498.3794584873615,109.21843857261493,498.85836080860565,108.48153219995132C499.33726312984993,107.74462582728773,499.78752456122834,103.8949989390511,500.24777700069944,100.71803474187496C500.7080294401706,97.54107054469881,501.17827288773447,95.03676903858317,501.45402471109344,95.10607552585708C501.72977653445247,95.175382013131,501.81103673360656,97.81829649379448,501.97089286309,93.49860407658755C502.13074899257344,89.17891165938062,502.3692010523863,77.89661234430326,502.6362940020649,72.51671354552997C502.9033869517435,67.13681474675667,503.1991207912879,67.65931646428743,503.6360608785427,66.15273093132312C504.0730009657975,64.64614539835883,504.6511473007627,61.110472614899464,505.1167282778833,59.686923397232434C505.5823092550039,58.2633741795654,505.9353248742799,58.9519485276907,506.37492923035944,65.22461785001022C506.814533586439,71.49728717232973,507.3407266793221,83.35405146884348,507.77300429613365,95.58035278673161C508.20528191294517,107.80665410461974,508.54364405368517,120.40249244388225,508.83071901954924,126.32378820501593C509.1177939854133,132.24508396614962,509.35358177640137,131.49183714915446,509.6053551803378,130.38640652923743C509.8571285842743,129.28097590932038,510.124887601159,127.82336148648147,510.41662503746636,125.69979624438024C510.70836247377366,123.576231002279,511.0240783295035,120.78671494091542,511.43570786292344,112.96283158778769C511.8473373963434,105.13894823465998,512.3548806074534,92.28069758976812,512.7611816032239,85.80489298221065C513.1674825989944,79.32908837465317,513.4725413794254,79.2357298044301,513.8109035201653,80.36630121111466C514.1492656609053,81.49687261779924,514.5209311619543,83.85137400139146,514.8979252006528,85.63092895693384C515.2749192393512,87.41048391247622,515.6572418156993,88.61509243996873,515.9822826123157,89.79595566574692C516.307323408932,90.97681889152511,516.5750824258168,92.13393681558895,516.9554068005463,91.34999100532488C517.3357311752757,90.56604519506078,517.8286209078497,87.84103565046877,518.2162720218471,89.14727189756331C518.6039231358445,90.45350814465787,518.8863356312652,95.79099018343902,519.1600892530057,98.3558224922715C519.4338428747461,100.92065480110396,519.6989376228062,100.71283737998777,520.0785959303295,104.25172961239701C520.4582542378528,107.79062184480625,520.9524761048391,115.07622373074092,521.4653478535986,119.44352332064419C521.978219602358,123.81082291054744,522.5097412328905,125.25982020441931,522.9719918739802,124.95403469816307C523.4342425150699,124.64824919190684,523.8272221667166,122.5876808855225,524.1715789123123,123.36685867562338C524.5159356579079,124.14603646572426,524.8116694974524,127.76496035231037,525.167349385553,128.90993024364226C525.5230292736538,130.05490013497416,525.9386552103108,128.72591603105184,526.3742631631533,128.7861424626925C526.8098711159956,128.84636889433318,527.2654610850235,130.29580586153685,527.6044892929697,127.27863533503108C527.9435175009158,124.26146480852532,528.1659839477803,116.77768678831012,528.5156692310254,111.91580838674281C528.8653545142705,107.05392998517549,529.3422586338962,104.81395120225605,529.7192526725947,102.36693564906741C530.0962467112932,99.91992009587877,530.3733306690646,97.26586777242093,530.625104073001,94.62598801545667C530.8768774769375,91.98610825849241,531.1033403270391,89.36040106802172,531.4543577446965,89.2418454166825C531.8053751623539,89.12328976534324,532.2809471475672,91.51188565313547,532.7751690145536,95.23550886037938C533.26939088154,98.9591320676233,533.7822626302994,104.01778259431892,534.2458454058016,107.36549969432585C534.7094281813036,110.71321679433275,535.1237219835482,112.35000046765096,535.4081326805875,115.84624634011439C535.6925433776269,119.34249221257781,535.8470709694609,124.69820028418647,536.1394744729745,130.00549184909863C536.431877976488,135.31278341401077,536.862157391681,140.5716584722264,537.1578912312253,139.84293546927077C537.4536250707697,139.11421246631514,537.6148133346655,132.39789140218826,537.8192959669632,122.54858479337382C538.0237785992607,112.6992781845594,538.27155559996,99.71698603105742,538.5866053884838,94.19213556345845C538.9016551770073,88.66728509585947,539.2839777533553,90.5998763141635,539.6676324641156,90.5998763141624C540.0512871748759,90.59987631416132,540.4362740200486,88.6672850958551,540.7513238085724,86.74385307763636C541.066373597096,84.82042105941761,541.3114863289707,82.90614824128633,541.4873280714025,81.07351863772112C541.6631698138343,79.24088903415591,541.7697405668233,77.48990264515677,541.9882106104508,83.40735651454023C542.2066806540781,89.32481038392369,542.5370499883439,102.91070451168973,542.8714157258469,108.77511924309951C543.2057814633498,114.63953397450932,543.5441436040899,112.78246930956287,543.7905884703769,111.76394595819369C544.0370333366639,110.7454226068245,544.1915609284978,110.56544056903259,544.4999500449596,111.51611717588186C544.8083391614214,112.46679378273114,545.270589802511,114.54812903422162,545.6469177740034,116.76322307441643C546.0232457454957,118.97831711461123,546.3136510473907,121.32716994351037,546.6426882472442,118.61344040650954C546.9717254470977,115.89971086950872,547.3393945449096,108.12339896660794,547.6184767042995,107.63824591466536C547.8975588636895,107.1530928627228,548.0880540846572,113.95909866173845,548.3731308489027,121.64873837296736C548.6582076131483,129.33837808419625,549.0378659206715,137.9116517076384,549.432843773937,140.7986679798377C549.8278216272024,143.68568425203696,550.2381190262099,140.88644317299335,550.5651580244448,141.9741563647787C550.8921970226797,143.06186955656406,551.1359776201421,148.03653701917835,551.3990741665835,140.37552650287674C551.662170713025,132.7145159865751,551.9445832084459,112.41782749135751,552.2030172844442,101.0150560919704C552.4614513604424,89.61228469258327,552.6959070170182,87.1034303890266,552.9783195124389,85.00237802264388C553.2607320078597,82.90132565626116,553.5911013421255,81.2080752270524,554.0273753621741,78.90995313677833C554.4636493822228,76.61183104650425,555.0058280880542,73.70883729516488,555.4294468311854,73.60268279604666C555.8530655743166,73.49652829692846,556.1581243547474,76.1872130500314,556.5564325440437,71.64292666163263C556.95474073334,67.09864027323388,557.4462983315018,55.31938274333341,557.8212941685817,48.00402529960879C558.1962900056617,40.68866785588417,558.4547240816601,37.837210498335395,558.8037432976989,40.42996600186177C559.1527625137378,43.02272150538816,559.5923668698173,51.059689869989704,560.0765977287109,57.482055766516694C560.5608285876046,63.90442166304368,561.0896859493124,68.71218509149611,561.474006727279,81.19387860767246C561.8583275052454,93.67557212384881,562.0981116994706,113.83119572774909,562.3532154394379,125.20045560149595C562.6083191794053,136.5697154752428,562.8787424651148,139.15261161883623,563.2091117993807,138.16942346482367C563.5394811336465,137.18623531081107,563.9297965164686,132.6369628591925,564.3427581843009,130.50422417049663C564.7557198521332,128.37148548180076,565.1913278049757,128.6552805560276,565.4577546874481,125.37211620792141C565.7241815699206,122.08895185981524,565.8214273820229,115.23882808937603,565.9826156459187,111.13165985976497C566.1438039098146,107.02449163015389,566.3689346255037,105.66027894137095,566.626702634296,106.91779769873196C566.884470643088,108.17531645609299,567.1748759449829,112.05456665959795,567.4426349618677,113.81260210813412C567.7103939787526,115.57063755667028,567.9555067106272,115.20745825023764,568.1719785526361,113.6349241723762C568.3884503946449,112.06239009451474,568.5762813467879,109.28050124522449,568.8820061944251,108.03087988585915C569.1877310420623,106.78125852649383,569.6113497851934,107.06390465705344,569.8731141972225,106.7781970205339C570.1348786092517,106.49248938401436,570.2347886901789,105.63842798041567,570.3813234755387,106.13067174308341C570.5278582608986,106.62291550575115,570.7210177506911,108.46146443468533,570.9434841975557,108.70703821290627C571.1659506444201,108.95261199112721,571.4177240483566,107.60521061863493,571.6714956539116,109.53710946901099C571.9252672594666,111.46900831938703,572.1810370666401,116.68020739263142,572.3575448762781,119.63019823626516C572.5340526859161,122.58018907989889,572.6312984980185,123.26897169392197,572.9163752622641,126.3288023039854C573.2014520265096,129.38863291404883,573.6743597428982,134.81951152015262,574.1299497119261,135.0513478557334C574.585539680954,135.2831841913142,575.0238119026211,130.315978256372,575.409464815,128.5959730159285C575.7951177273787,126.875967775485,576.1281513304693,128.40316322954016,576.4052352882406,127.56182648925194C576.682319246012,126.7204897489637,576.9034535584642,123.51062081433206,577.1445698871016,120.49752124247333C577.3856862157393,117.48442167061458,577.6467845605623,114.66809146152875,577.9538415426117,111.1497741839598C578.2608985246611,107.63145690639088,578.6139141439371,103.41115256033885,578.9509441502647,97.52881747824426C579.2879741565923,91.64648239614968,579.6090185499718,84.10211657801256,579.9333932793819,82.92049201692727C580.2577680087921,81.73886745584198,580.5854730742333,86.91998415180855,580.9997668764779,90.74199167822387C581.4140606787225,94.56399920463917,581.9149432177708,97.02689756150323,582.2526392913046,102.72728760095103C582.5903353648384,108.4276776403988,582.7648449728579,117.3655593624303,583.0499217371034,122.31990197637283C583.334998501349,127.27424459031536,583.7306424218204,128.24504809616894,584.1229560062611,126.17120516090233C584.5152695907018,124.09736222563572,584.9042528391117,118.97887284924894,585.2712558697174,113.49840005079098C585.6382589003232,108.01792725233301,585.9832817131249,102.17547103180385,586.3382955340195,97.31601156526023C586.6933093549139,92.45655209871659,587.0583141839013,88.58008938615848,587.4879275318881,85.45287518039075C587.9175408798749,82.325660974623,588.4117627468613,79.94769527564563,588.7887567855598,85.38242304512296C589.1657508242582,90.81715081460028,589.4255170346689,104.0645720525323,589.7452292936358,113.39676140737451C590.0649415526027,122.72895076221673,590.4445998601259,128.14590823396912,590.8462383854531,128.76188625923933C591.2478769107803,129.3778642845095,591.6714956539115,125.1928628632975,592.1617211176608,120.71611163946075C592.6519465814101,116.239360415624,593.2087787657775,111.47085938916254,593.6803543477538,110.04766109534796C594.15192992973,108.62446280153337,594.5382489093151,110.54656724036568,594.9725247277452,115.02331846420242C595.4068005461752,119.50006968803916,595.8890332034503,126.53146769688036,596.2460452259634,124.11145614108995C596.6030572484765,121.69144458529952,596.8348486362275,109.8200234648775,597.2138408765445,105.12469521933711C597.5928331168616,100.42936697379673,598.1190262097447,102.91013160313798,598.5160022646286,102.08733304966555C598.9129783195126,101.26453449619311,599.1807373363973,97.13817275990696,599.43317680754,92.63021995066293C599.6856162786826,88.1222671414189,599.9227362040831,83.23272325921698,600.1332134412363,81.00953304683546C600.3436906783895,78.78634283445393,600.5275252272955,79.22950629189282,600.8372464781697,81.67017554204956C601.146967729044,84.11084479220631,601.5825756818864,88.54901983508093,601.89762547041,91.20098716316974C602.2126752589337,93.85295449125854,602.4071668831386,94.71871410456157,602.7082292603325,97.56076001383418C603.0092916375263,100.40280592310681,603.4169247677091,105.22113812834905,603.8458720484898,108.59602350635177C604.2748193292704,111.97090888435447,604.7250807606488,113.90234743511766,605.1713457887902,114.47564615832096C605.6176108169316,115.04894488152425,606.0598794418357,114.26410377716763,606.4388716821528,114.07115398569854C606.8178639224699,113.87820419422944,607.1335797781998,114.27714571564786,607.5192326905786,117.1411545820867C607.9048856029575,120.00516344852552,608.3604755719854,125.33423965998477,608.8140673393947,126.70848746401424C609.267659106804,128.08273526804368,609.7192526725948,125.50215466464336,610.1595230958806,121.29514869327015C610.5997935191663,117.08814272189693,611.0287407999468,111.25471138255082,611.2785160022647,103.78717932031184C611.5282912045827,96.31964725807285,611.5988943284378,87.21801447294098,611.754087987478,81.8696742413762C611.9092816465181,76.52133400981143,612.1490658407433,74.92628633181373,612.4028374462985,74.22224826090155C612.6566090518534,73.51821018998939,612.9243680687382,73.70518172616272,613.2380857228495,75.05764078908652C613.5518033769608,76.41009985201032,613.9114796682986,78.92804644168459,614.2971325806775,83.99536527339325C614.6827854930564,89.06268410510191,615.0944150264763,96.67937517884495,615.4634162587006,100.97565278932629C615.832417490925,105.27193039980763,616.1587904219537,106.24779454702725,616.5804109634663,105.5971821038476C617.002031504979,104.94656966066793,617.5188996569755,102.66948062708899,617.8859026875812,102.75825979992577C618.252905718187,102.84703897276253,618.4700436274021,105.30168635201503,618.763779265328,106.19306119094924C619.0575149032538,107.08443602988345,619.4278482698905,106.41253832849938,619.7781996203419,108.2285291229431C620.1285509707931,110.04451991738682,620.4589203050589,114.34839920765833,620.7513238085724,114.73582560045759C621.0437273120858,115.12325199325686,621.2981649848471,111.59422548858387,621.588570286742,108.9784827380156C621.878975588637,106.36273998744734,622.2053485196657,104.6602809909838,622.4577879908084,103.6696585313799C622.710227461951,102.67903607177598,622.8887334732075,102.40025014903172,623.2544043694008,96.67846548048279C623.6200752655943,90.95668081193385,624.1729110467247,79.79189739758024,624.7210843574118,72.31305333262901C625.2692576680988,64.83420926767778,625.8127685083426,61.04130455212889,626.2537049988346,60.03456641484124C626.6946414893264,59.027828277553574,627.0330036300663,60.80725671852713,627.4306457521566,61.9045044700467C627.8282878742466,63.001752221566285,628.2852099776868,63.41681928363189,628.5842741532622,65.7101680246171C628.8833383288375,68.00351676560231,629.0245445765479,72.17514718550714,629.2057148566291,74.75632227406994C629.3868851367105,77.33749736263272,629.6080194491626,78.32821711985346,629.9430512538717,78.35995865530542C630.2780830585807,78.39170019075738,630.7270123555468,77.46446350444054,631.1233223432246,77.7198647295497C631.5196323309023,77.97526595465882,631.8633230092917,79.41330509119393,632.2989309621341,82.65484401286726C632.7345389149766,85.89638293454057,633.262064142272,90.9414216413521,633.62174043361,97.36214810958377C633.9814167249476,103.78287457781545,634.1732440803278,111.5792888074673,634.3397608818732,115.397377731939C634.5062776834184,119.21546665641071,634.6474839311288,119.05523027570229,634.9445499050855,117.01642262665861C635.2416158790423,114.97761497761493,635.6945415792454,111.06023606023601,636.1860991774072,108.57955176137007C636.6776567755687,106.09886746250413,637.2078462716889,105.0548777821512,637.6101508642223,101.05842562678416C638.0124554567558,97.06197347141712,638.2868751457023,90.113058841036,638.579944716422,86.8300506673487C638.8730142871416,83.54704249366142,639.1847337396343,83.92994077666796,639.5557331734772,88.61320611884781C639.92673260732,93.29647146102766,640.3570120225131,102.2801038623808,640.7206847170879,106.33501600019889C641.0843574116628,110.389928138017,641.3814233856197,109.51612001230006,641.7377693409265,110.25942432703371C642.0941152962334,111.00272864176736,642.5097412328904,113.36314539695161,642.8441069703933,116.49872602882145C643.1784727078963,119.6343066606913,643.4315782462452,123.54505116924673,643.7932527392015,119.05645221060132C644.1549272321578,114.5678532519559,644.6251706797216,101.67991082610962,645.0847570519867,92.83457868262681C645.5443434242516,83.989246539144,645.9932727212176,79.18652467802467,646.3789256335965,76.3836004374734C646.7645785459754,73.58067619692213,647.0869550737671,72.77754957693891,647.4186565424452,69.53039816877171C647.7503580111234,66.2832467606045,648.0913844206881,60.5920705642533,648.4683784593867,61.44734414653503C648.8453724980851,62.30261772881675,649.2583341659174,69.7043410897314,649.7139241349453,77.48076666920926C650.1695141039731,85.2571922486871,650.6677323741966,93.40832004672816,651.1792719885436,99.41008422787223C651.6908116028908,105.41184840901632,652.2156725613614,109.26424897326342,652.684583874513,109.72431648933167C653.1534951876645,110.1843840053999,653.5664568554969,107.25211847328929,654.0187164884939,106.3982097635228C654.4709761214908,105.54430105375629,654.9625337196524,106.7687491663339,655.4447663769274,107.47804401440933C655.9269990342025,108.18733886248478,656.3999067505911,108.38148044605803,656.8654877277116,109.56965378511384C657.3310687048322,110.75782712416965,657.7893229426849,112.94003221870801,658.2549039198055,112.35865499451592C658.7204848969261,111.77727777032383,659.1933926133147,108.4323182274013,659.58837046658,106.090163363589C659.9833483198455,103.74800849977673,660.3003963099877,102.4086583150747,660.5754820661406,99.29863083905303C660.8505678222933,96.18860336303138,661.0836913444568,91.30789859569009,661.474006727279,90.12547336294304C661.864322110101,88.94304813019599,662.4118293535819,91.45890243204317,662.8454391048058,92.759020133536C663.2790488560297,94.0591378350288,663.5987611149966,94.14351893616725,664.0057281779733,95.00747524162887C664.4126952409499,95.87143154709048,664.9069171079364,97.51496305687527,665.2492756519134,99.2497449637738C665.5916341958905,100.98452687067228,665.7821294168583,102.8105591746845,666.093182802145,105.12986272062982C666.4042361874315,107.44916626657513,666.8358477370368,110.26174105445358,667.2528058081061,111.36626518529472C667.6697638791755,112.47078931613588,668.0720684717089,111.86726278993973,668.396443201119,111.34060981275664C668.7208179305293,110.81395683557353,668.9672627968163,110.36417740740347,669.3242748193293,109.74206401354897C669.6812868418424,109.11995061969448,670.1488660205814,108.32550326015554,670.5025477070636,108.04686424490458C670.8562293935457,107.7682252296536,671.096013587771,108.00539455869058,671.3764278815732,107.15995840807045C671.6568421753756,106.31452225745029,671.9778865687549,104.38648062717301,672.3055916341959,103.81011440868792C672.6332966996371,103.23374819020282,672.9676624371399,104.0090573835099,673.2640623438905,108.74431672683384C673.5604622506411,113.47957607015778,673.8188963266393,122.17478556349859,674.1066373597096,127.04186102263732C674.3943783927799,131.90893648177604,674.7114263829221,132.9478779067127,674.9558730475906,133.03352610372224C675.200319712259,133.11917430073174,675.3721650514537,132.2515292698141,675.5606620708031,132.1200410369416C675.7491590901523,131.98855280406906,675.954307789656,132.59322136924166,676.1481333466547,131.22683350175808C676.3419589036534,129.8604456342745,676.5244613181471,126.52300133413473,676.7136244047025,120.48022798286418C676.902787491258,114.43745463159362,677.0986112498753,105.68935222919225,677.2911046724616,101.43362983206353C677.4835980950479,97.17790743493481,677.6727611816033,97.41456504307871,677.9025543677358,97.92593841645669C678.1323475538682,98.43731178983467,678.4027708395777,99.22340092844672,678.6572085123389,100.67839349718338C678.9116461851,102.13338606592002,679.1500982449129,104.25728206478125,679.3592433476538,104.77565145036905C679.5683884503945,105.29402083595683,679.7482265960634,104.20686360827118,680.0532853764944,103.37967086368431C680.3583441569253,102.55247811909744,680.7886235721185,101.98524985760936,681.1023412262298,105.40058038981115C681.4160588803411,108.81591092201292,681.6132147733707,116.21380024790456,681.8583275052454,124.28214882578514C682.10344023712,132.3504974036657,682.3965098078397,141.08930523353524,682.7155559996004,145.5935859034872C683.0346021913613,150.09786657343915,683.379625004163,150.36762008347355,683.6567089619343,149.31645241840002C683.9337929197056,148.26528475332645,684.1429380224465,145.89319591314498,684.4086988377128,142.54136506508024C684.6744596529791,139.18953421701548,684.9968361807707,134.8579613610675,685.3265394478303,124.07151293040418C685.65624271489,113.28506449974088,685.9932727212176,96.04374049436225,686.2137409664635,84.5777995161549C686.4342092117095,73.11185853794755,686.5381156958737,67.42130058691149,686.877809971026,64.93357918368758C687.2175042461784,62.4458577804637,687.7929863123188,63.16097292505199,688.1866320311719,62.706884349093116C688.5802777500251,62.25279577313424,688.7920871215906,60.62950347662819,688.9785859393214,64.43927111127924C689.165084757052,68.24903874593029,689.3262730209478,77.49186631173845,689.5893695673893,82.11328009464435C689.8524661138309,86.73469387755026,690.2174709428182,86.7346938775539,690.5551670163521,87.09623305104641C690.8928630898859,87.45777222453891,691.2032504079663,88.1808505715203,691.4456988710162,86.97508903479347C691.6881473340661,85.76932749806664,691.8626569420854,82.63472607763164,692.210344023712,82.27318690413914C692.5580311053385,81.91164773064662,693.0788956605721,84.32317080409662,693.5997602158059,85.17224604214034C694.1206247710394,86.02132128018405,694.6414893262731,85.30794868282149,695.0964132280948,85.88805058084489C695.5513371299164,86.46815247886829,695.9403203783262,88.34172887227763,696.3765943983749,90.66679511553006C696.8128684184235,92.99186135878249,697.296433210111,95.76841745187798,697.6514470310055,96.03489312293605C698.0064608519001,96.30136879399413,698.2329237020016,94.05776404301477,698.5160022646285,92.92305089849772C698.7990808272555,91.78833775398067,699.1387751024079,91.76251621592593,699.536417224498,91.98599754288722C699.934059346588,92.20947886984851,700.389649315616,92.68226306182582,700.7859593032937,94.25009713717213C701.1822692909715,95.81793121251843,701.5192992972991,98.48081517123373,701.8163652712559,100.34161611912776C702.1134312452126,102.20241706702181,702.3705331867985,103.26113500409461,702.6522796150132,104.25823638702104C702.9340260432277,105.25533776994749,703.240416958071,106.19082259872755,703.5155027142239,107.46124801197695C703.7905884703766,108.73167342522635,704.034369067839,110.33703942294508,704.3121190928166,111.1964460061386C704.589869117794,112.05585258933212,704.9015885702868,112.16929975800043,705.1413727645121,112.79949254657745C705.3811569587372,113.42968533515447,705.5490058946948,114.5766237436402,705.7248476371266,113.59302893313583C705.9006893795583,112.60943412263144,706.0845239284644,109.49530609313696,706.3762613647718,114.0311594548233C706.6679988010791,118.56701281650963,707.0676391247878,130.7528475693768,707.42132081127,132.63169464691939C707.7750024977521,134.51054172446203,708.0827255470078,126.0824011266801,708.3451560262431,120.04301380008864C708.6075865054785,114.0036264734972,708.8247244146935,110.35299241809622,709.1510973457222,109.34440497367373C709.477470276751,108.33581752925122,709.9130782295935,109.9692766958072,710.2714223865189,111.77556646514714C710.6297665434444,113.58185623448705,710.9108469044528,115.56097660661092,711.2592000532856,114.56074694704031C711.6075532021182,113.56051728746971,712.0231791387752,109.58093759620462,712.4301462017518,105.2369826828616C712.8371132647285,100.89302776951857,713.2354214540247,96.18469763409763,713.592433476538,94.55314069436726C713.949445499051,92.92158375463688,714.2651613547808,94.3668000105971,714.574882605655,92.6664824007397C714.8846038565292,90.96616479088229,715.1883305025478,86.12031331520727,715.556665667566,88.0222537198222C715.9250008325841,89.92419412443712,716.3579445166018,98.573926409342,716.8261897625472,103.9846392258764C717.2944350084924,109.39535204241082,717.7979818163653,111.56704539057478,718.1656509141773,115.86282407205883C718.5333200119892,120.15860275354288,718.7651113997402,126.57846676834703,718.9422852765845,126.00534587249578C719.1194591534286,125.43222497664453,719.242015519366,117.86611917013786,719.4578212941688,109.95110433265295C719.6736270689713,102.03608949516803,719.9826822526393,93.77216562670486,720.3803243747295,87.61070317506811C720.7779664968195,81.44924072343133,721.2641955573317,77.39023968862097,721.7410996769574,78.2700162740412C722.2180037965832,79.14979285946143,722.6855829753222,84.96834706511223,723.0239451160622,93.34842221844318C723.3623072568023,101.7284973717741,723.5714523595432,112.67009347278514,723.8292203683352,119.4432542278031C724.0869883771273,126.21641498282106,724.3933792919706,128.82114039184592,724.6411562926701,128.74357835462558C724.8889332933694,128.66601631740522,725.0780963799248,125.90616683393965,725.321210910181,122.07795551679774C725.564325440437,118.24974419965581,725.8613914143938,113.35317104883754,726.2583674692778,109.35782745889136C726.6553435241617,105.36248386894518,727.1522296599728,102.26836983987108,727.6424551237221,101.18356156175375C728.1326805874714,100.0987532836364,728.6162453791588,101.02325075647582,729.0698371465681,103.4818419345589C729.5234289139775,105.94043311264201,729.9470476571087,109.93311799596879,730.3793252739202,112.45240863499826C730.8116028907317,114.97169927402774,731.2525393812236,116.01759566875991,731.6848169980352,115.67192206428535C732.1170946148468,115.32624845981081,732.5407133579779,113.58900485612956,732.85776134812,112.12641327222188C733.1748093382622,110.6638216883142,733.3852865754154,109.47588212418009,733.7309754554235,105.96507212723446C734.0766643354315,102.45426213028884,734.5575648582942,96.62058170053169,735.0091584240851,93.3899127602743C735.4607519898758,90.15924382001691,735.8830385985946,89.53158636925929,736.3486195757151,90.18743496469394C736.8142005528358,90.84328356012857,737.3230758983582,92.78263820175547,737.789322942685,98.68273221123462C738.2555699870118,104.58282622071377,738.6791887301429,114.44365959804514,739.124787691078,119.84047779160832C739.5703866520132,125.2372959851715,740.0379658307523,126.17009899496645,740.5008825390482,126.12036615654935C740.963799247344,126.07063331813224,741.4220534851967,125.03836463150304,741.8809737902554,123.77300973216951C742.3398940953142,122.50765483283598,742.7994804675792,121.00921372079809,743.2663935791122,115.81544093377995C743.7333066906451,110.6216681467618,744.207546541446,101.73256368476342,744.6511473007627,94.30488895586235C745.0947480600793,86.8772142269613,745.5077097279116,80.91096923115757,745.8054417690745,74.9598264360029C746.1031738102374,69.00868364084823,746.2856762247311,63.072643046342634,746.6167116262031,59.75820833405438C746.9477470276752,56.44377362176613,747.4273154161255,55.75094479169521,747.7943184467313,54.671939836621746C748.161321477337,53.59293488154827,748.4157591500982,52.12775380147224,748.7887567855597,55.1041789189793C749.1617544210211,58.08060403648636,749.6533120191827,65.49863535157652,750.0789289639324,70.22444406064396C750.5045459086822,74.95025276971141,750.86422220002,76.98383887275614,751.2905052119759,81.25522335247463C751.7167882239318,85.52660783219312,752.2096779565057,92.0357906885854,752.5000832584008,99.35314886949138C752.7904885602958,106.67050705039735,752.8784094315117,114.79604055581703,753.1015419455824,117.23980282662264C753.3246744596531,119.68356509742824,753.6830186165785,116.44555613361977,754.0793286042563,114.0455202657634C754.4756385919341,111.64548439790703,754.9099144103641,110.08342162600275,755.244280147867,109.10658889563638C755.57864588537,108.12975616527,755.8131015419457,107.73815347644152,756.1674492956341,105.9188469141791C756.5217970493223,104.09954035191669,756.9960369001233,100.85252991622033,757.362373863523,98.48208171269746C757.7287108269225,96.1116335091746,757.9871449029207,94.61774753782521,758.2395843740634,92.99176934934559C758.492023845206,91.36579116086598,758.7384687114929,89.60772075525612,758.9509441502648,87.8148285353655C759.1634195890365,86.02193631547492,759.341925600293,84.19422228130357,759.5850401305491,84.89503643280459C759.8281546608052,85.5958505843056,760.135877710061,88.82519292147896,760.4695773803577,89.91476303337575C760.8032770506545,91.00433314527253,761.1629533419923,89.95413103189273,761.5386152462784,90.65236928590681C761.9142771505645,91.35060753992093,762.3059246677991,93.79728616132891,762.6576081526628,93.57848537235614C763.0092916375263,93.35968458338336,763.3210110900189,90.47540438402982,763.5960968461717,86.53250077852051C763.8711826023246,82.58959717301121,764.1096346621373,77.58807016134618,764.5019482465781,76.27298783924888C764.8942618310188,74.9579055171516,765.4404369400872,77.32926788462206,765.9459819495787,79.20502205762662C766.4515269590703,81.08077623063119,766.9164418689847,82.46092220916987,767.3407266793221,88.44838016864703C767.7650114896594,94.4358381281242,768.1486662004197,105.03060806853986,768.4417357711394,112.2325208965886C768.734805341859,119.43443372463732,768.937289772538,123.24348944031911,769.2996303327004,123.75344257691282C769.661970892863,124.26339571350653,770.184167582509,121.47424627101216,770.6390914843307,117.42893578897177C771.0940153861524,113.38362530693138,771.4816665001498,108.08215378534496,771.7973823558796,104.30989908076589C772.1130982116096,100.53764437618683,772.3568788090719,98.29460648861513,772.7758350817597,94.82565205260579C773.1947913544477,91.35669761659643,773.7889233023612,86.66182663214943,774.292470110234,86.66182663215132C774.796016918107,86.6618266321532,775.2089785859392,91.35669761660395,775.7138575282245,92.47737132057777C776.2187364705098,93.59804502455158,776.8155326872482,91.14452144804844,777.3164152262964,90.17181089215218C777.8172977653446,89.19910033625592,778.2222666267028,89.70720280096654,778.7191527625139,89.94792929735452C779.216038898325,90.1886557937425,779.8048423085891,90.16200632180782,780.3217104605856,89.80883123208386C780.8385786125821,89.45565614235989,781.283511506311,88.77595543484662,781.7664102307923,88.2091782727936C782.2493089552736,87.64240111074056,782.7701735105072,87.18854749414778,783.3290038964932,87.06170780167596C783.8878342824792,86.93486810920417,784.4846304992175,87.13504234085335,785.0800945815433,87.56557008750559C785.6755586638692,87.99609783415784,786.2696906117828,88.65697909581317,786.8604922236653,89.22962942939701C787.4512938355481,89.80227976298082,788.0387651113997,90.28669916849316,788.6282345888701,90.22782357920745C789.2177040663403,90.16894798992176,789.8091717454292,89.56677740583805,790.3293702334565,88.89403995643006C790.849568721484,88.22130250702207,791.2984980184501,87.4779981922898,791.7094614846637,86.90193734837104C792.1204249508775,86.32587650445225,792.4934225863389,85.91705913134697,792.961001765078,85.87080477233444C793.4285809438171,85.82455041332187,793.990741665834,86.14085906840205,794.5708862024178,86.44278382560205C795.1510307390015,86.74470858280205,795.7491590901521,87.03224944212188,796.3439571052719,87.54551837497729C796.9387551203915,88.05878730783269,797.5302227994804,88.79778431422368,798.0297732041163,89.16728281741916"></path></g><g id="area595" clip-path="url(#clip31)" transform="translate(0,0)"><path id="line" class="area-chart-curr" d="M0,203.54166666666663L1.0790288740133882,203.75000000000003L1.3587771006094518,203.9583333333333L1.8703167149565394,203.54166666666663L2.2499750224797688,203.75000000000003L2.9333599760215807,204.37500000000006L3.4249175741832354,204.79166666666669L4.336097512238986,205.20833333333334L5.407133579778202,206.04166666666663L5.942651613547809,206.45833333333337L6.841842341892298,206.66666666666663L7.497252472774503,207.0833333333333L8.987910880207815,207.91666666666669L9.999000899190731,208.33333333333334L10.914177240483566,209.375L12.344889599360577,210.41666666666669L13.687681087021684,211.04166666666669L14.530922170046958,211.24999999999994L15.833749625337202,210.00000000000003L16.82485762813468,210.41666666666669L17.272454790688386,210.2083333333333L17.432310920171847,210.00000000000003L18.3434908582276,210.2083333333333L18.92296932760516,210.83333333333331L19.178739134778702,210.83333333333331L20.029973024278153,210.41666666666669L20.725347187531227,209.375L21.528624238185635,209.375L21.88830052952343,208.74999999999997L22.707563193126187,208.33333333333334L23.091217903886506,208.12499999999994L24.026376261364774,207.0833333333333L24.82166050554502,208.33333333333334L25.525027475272253,209.16666666666663L26.26835847737037,209.58333333333337L27.059646318313526,210.2083333333333L27.319412528724158,210.00000000000003L27.922869417524232,210.83333333333331L29.41752422819463,211.24999999999994L30.540513537815972,211.6666666666667L31.287840943151167,211.87499999999997L32.51074033369967,211.6666666666667L33.82955340193826,212.08333333333337L35.3122190028974,211.87499999999997L36.81886302327905,211.6666666666667L38.245578978918985,211.6666666666667L39.58837046658009,211.6666666666667L40.23578779098811,211.45833333333331L41.61055050454591,211.45833333333331L42.633629733240085,211.87499999999997L44.08832051153962,211.24999999999994L45.251273853531835,211.87499999999997L46.20641422719552,211.45833333333331L47.34538914976521,212.08333333333337L48.584274153262065,211.45833333333331L49.98301528624239,211.87499999999997L50.714357078629234,211.24999999999994L51.53761614546909,210.83333333333331L52.28893995404137,210.83333333333331L53.79558397442303,210.00000000000003L54.95853731641523,210.00000000000003L55.60595464082326,209.58333333333337L56.83684683784595,209.375L57.87990808272555,209.375L59.15875711859327,209.375L59.65431111999201,208.95833333333337L60.58147667099612,208.74999999999997L61.436706963732654,209.16666666666663L62.27195524028375,208.74999999999997L62.927365371165955,208.5416666666667L63.77060645419124,208.95833333333337L64.84963532820461,209.16666666666663L65.70486562094115,208.74999999999997L66.2883404935558,209.58333333333337L67.61914277150565,209.375L68.29453491857329,210.2083333333333L68.9459486462184,210.41666666666669L69.62134079328605,210.2083333333333L70.18083724647818,211.04166666666669L71.11199920071935,211.45833333333331L71.41172944350086,211.6666666666667L72.2989309621341,211.6666666666667L73.54980517534221,212.70833333333337L74.15725846737936,213.54166666666666L74.8646218403437,214.16666666666669L75.71585572984316,214.7916666666667L76.33529823159158,214.7916666666667L77.59816165451096,214.99999999999997L79.02887401338795,215.625L79.8001798381457,217.08333333333331L80.37166550104907,217.08333333333331L81.71445698871015,216.66666666666666L82.44180237785994,216.66666666666666L83.27305425117397,218.12499999999997L83.87251473673695,218.33333333333337L84.45199320611451,218.54166666666663L85.0234788690179,218.54166666666663L85.6469177740034,218.54166666666663L86.62204016385255,219.16666666666666L87.94085323209111,219.5833333333333L88.89599360575484,219.79166666666666L90.35867719052852,220.00000000000006L91.6295334199221,220.62499999999994L92.95234289139775,220.41666666666669L94.33509841142973,220.83333333333334L95.96563093216108,221.66666666666663L96.8168648216605,221.875L97.4203217104606,221.875L97.9278649215706,221.66666666666663L98.8550304725747,222.7083333333333L99.98201618543312,223.54166666666669L101.26486162453794,223.33333333333331L102.37985812768508,223.33333333333331L102.8234588870017,223.74999999999994L103.95843740633433,223.54166666666669L104.81366769907086,223.12500000000006L105.82875412129084,223.33333333333331L107.29543410930165,223.74999999999994L108.85003496852835,223.12500000000006L110.26076531121991,222.7083333333333L111.61954241182937,221.66666666666663L113.09421520631433,222.50000000000003L114.35308222599663,222.08333333333337L115.26026576081527,220.41666666666669L116.53112199020883,220.83333333333334L118.24158257568192,220.62499999999994L119.21670496553102,220.62499999999994L120.13987411329805,220.20833333333331L121.09101808372466,220.00000000000006L121.9222699570387,219.79166666666666L122.8734139274653,219.79166666666666L123.62873413927467,219.37500000000003L124.10830252772504,218.33333333333337L124.58387451293838,218.33333333333337L125.53901488660209,218.33333333333337L126.41422719552406,217.29166666666669L127.01368768108705,216.66666666666666L128.41642521730446,216.4583333333333L128.94395044459986,215.625L129.6832850434609,214.58333333333334L131.0020981116995,214.16666666666669L131.74942551703467,213.3333333333333L132.72454790688383,212.91666666666663L134.0113897492257,211.87499999999997L134.65880707363374,211.87499999999997L135.40213807573184,210.62500000000006L136.81286841842345,210.2083333333333L137.73204116295338,209.375L138.87501248876012,208.5416666666667L139.4145269257668,208.5416666666667L140.65341192926368,208.95833333333337L142.14007393345992,209.16666666666663L143.19912079128787,210.62500000000006L143.89449495454093,210.83333333333331L145.29323608752125,211.87499999999997L146.0485562993306,212.91666666666663L147.0756319312619,213.3333333333333L148.1466679988011,213.95833333333331L149.10980117893897,213.95833333333331L149.82515735837748,213.75000000000006L150.93615745828757,212.91666666666663L151.4357078629234,212.5L152.2749525427116,213.12500000000003L153.83754620841245,212.70833333333337L154.79668298531323,212.29166666666663L155.77580177839948,211.87499999999997L156.7149565391148,211.04166666666669L157.40633429913083,210.62500000000006L158.6572085123389,210.83333333333331L159.4365071435708,211.45833333333331L160.13188130682389,211.6666666666667L160.6993705664902,212.70833333333337L161.13497851933263,213.3333333333333L162.6336297332401,213.54166666666666L164.05235288240587,213.75000000000006L164.79168748126688,214.37499999999994L166.366270356679,214.37499999999994L167.98881007093618,214.99999999999997L168.91997202517737,214.16666666666669L169.4514936557099,213.3333333333333L170.23478869017887,214.37499999999994L171.48965930662408,214.37499999999994L172.66060545509046,214.37499999999994L174.05535018483366,214.16666666666669L174.5229293635728,213.75000000000006L175.49005894694778,214.58333333333334L177.02068138675196,214.16666666666669L178.15565990608457,214.37499999999994L178.93895494055351,213.3333333333333L179.94205215306226,213.95833333333331L181.58857028674197,214.16666666666669L182.11209911080027,213.95833333333331L183.16714956539116,214.16666666666669L184.51393745628937,213.54166666666666L185.52902387850938,213.54166666666666L187.0996103506844,212.91666666666663L188.38245578978922,212.29166666666663L189.6732940353682,211.87499999999997L190.82026176441204,211.45833333333331L191.79938055749827,212.08333333333337L193.17813967429313,211.45833333333331L193.40193825557003,211.24999999999994L193.70166849835152,211.6666666666667L195.3242082126087,211.45833333333331L196.4232191028075,210.83333333333331L198.1696473174144,211.24999999999994L199.59636327305427,211.6666666666667L200.32770506544117,211.24999999999994L201.35078429413528,212.29166666666663L201.90628434409038,212.29166666666663L203.2610650414627,213.12500000000003L203.97642122090122,213.54166666666666L205.1113997402338,214.37499999999994L206.32630632430815,214.16666666666669L207.42531721450695,215.625L208.71615546008596,216.25000000000003L209.65531022080134,217.08333333333331L210.73034269157765,217.08333333333331L210.9901089019883,217.29166666666669L212.00919172744537,217.9166666666667L212.87241482665604,218.33333333333337L213.57578179638327,219.16666666666666L214.7946847836947,219.16666666666666L216.053551803377,220.00000000000006L216.60105904685784,220.41666666666669L217.54021380757317,220.83333333333334L218.51533619742233,220.62499999999994L219.29863123189133,220.83333333333334L220.08592266959738,221.24999999999997L221.20891197921875,221.24999999999997L222.15206314317118,221.66666666666663L223.6107503247078,221.875L225.04545908682186,222.50000000000003L226.4521930262764,223.33333333333331L227.64711759416528,223.54166666666669L228.6062543710661,223.54166666666669L230.1768408432411,224.1666666666667L231.61954241182937,224.37499999999997L232.5147367369368,225.62500000000003L233.48586272354882,225.41666666666663L234.86062543710662,226.04166666666666L236.31931261864324,225.62500000000003L237.96583075232297,225.62500000000003L239.49645319212715,225.8333333333333L240.38765111399744,225.8333333333333L241.87431311819364,225L242.8454391048057,225.20833333333337L244.59186731941256,225.41666666666663L245.41912278948948,224.58333333333337L246.74992506743934,225.20833333333337L248.18063742631634,224.58333333333337L249.61534618843046,223.95833333333334L250.33869517434312,222.91666666666666L251.8733140173844,222.91666666666666L253.19612348886005,222.29166666666663L253.93545808772106,220.41666666666669L255.10240783295038,219.5833333333333L255.55400139874115,219.16666666666666L255.94165251273859,219.16666666666666L257.5442102108103,218.33333333333337L258.4394045359177,218.12499999999997L259.326606054551,217.29166666666669L260.26576081526633,217.08333333333331L261.32081126985713,216.66666666666666L262.4278149665302,216.4583333333333L263.14317114596867,215.83333333333337L264.218203616745,214.99999999999997L264.310120891198,214.58333333333334L264.66580077929865,214.7916666666667L264.93355979618343,214.58333333333334L265.51703466879815,214.37499999999994L266.11649515436113,213.75000000000006L266.9557398341493,213.12500000000003L267.7989809171746,212.5L268.9459486462185,211.45833333333331L269.8811070036967,211.24999999999994L270.88420421620543,210.2083333333333L272.18303526825866,209.375L272.83045259266663,208.5416666666667L273.310020981117,207.91666666666669L274.8846038565291,207.0833333333333L275.4081326805875,206.66666666666663L276.8188630232791,205.83333333333337L277.37835947647125,206.25L277.6980717354382,206.25L277.96982715556004,206.66666666666663L278.24957538215614,206.87500000000003L278.8490358677191,206.87500000000003L280.4356079528425,207.50000000000006L281.1869317614148,208.5416666666667L281.7464282146069,208.74999999999997L282.1420721350785,208.74999999999997L283.225097412329,209.16666666666663L284.47597162553706,209.79166666666663L285.1313817564193,210.2083333333333L286.2463782595664,210.41666666666669L287.2974323109202,211.24999999999994L288.8959936057549,212.29166666666663L289.867119592367,213.54166666666666L290.8062743530823,212.70833333333337L292.0291737436308,213.3333333333333L293.1321810370667,213.54166666666666L293.99140773304026,212.5L295.00649415526027,212.91666666666663L296.3492856429214,212.5L297.81596563093217,212.70833333333337L298.7990808272555,212.08333333333337L300.0579478469378,211.04166666666669L300.9971026076531,210.41666666666669L302.3518833050255,211.6666666666667L303.2151064042362,212.29166666666663L304.49795184334107,210.62500000000006L305.98061744430015,210.62500000000006L306.79188730142874,211.6666666666667L307.8789089819163,211.45833333333331L309.2976321310821,211.87499999999997L310.97612149065844,211.45833333333331L312.14307123588776,211.04166666666669L313.721650514537,211.45833333333331L315.0884204216206,211.45833333333331L316.4711759416526,211.04166666666669L317.6141472674594,211.24999999999994L318.94494954540914,212.08333333333337L319.8481366769908,212.5L321.1309821160956,211.87499999999997L322.0661404735739,212.29166666666663L323.2530722349886,212.08333333333337L324.83564791687496,212.29166666666663L325.23928464382067,211.04166666666669L326.38625237286453,211.45833333333331L327.8569287641124,210.83333333333331L329.2516734938556,210.41666666666669L330.26276351283855,209.79166666666663L331.3657708062745,209.58333333333337L332.0171845339196,208.74999999999997L333.66769907083625,208.95833333333337L335.14237186532137,208.95833333333337L335.6299330602459,208.95833333333337L336.9047856928765,208.33333333333334L337.8239584374064,208.74999999999997L339.38655210310725,208.74999999999997L340.57748026775914,208.33333333333334L342.3478869017885,208.95833333333337L343.91048056748934,209.375L344.46997702068154,209.375L345.2173044260166,209.79166666666663L346.48416425217306,209.58333333333337L347.1515635927666,212.5L348.52232990308727,212.70833333333337L350.08092716555115,213.54166666666666L350.90818263562807,213.54166666666666L352.3628734139276,214.7916666666667L353.41392746528135,215.83333333333337L354.6408232590669,215.83333333333337L355.5919672294935,216.25000000000003L356.5271255869718,217.29166666666669L357.84194225197336,217.70833333333334L358.7890898191628,218.12499999999997L359.4764711759417,218.75L360.2677590168849,218.54166666666663L361.77440303726655,218.75L362.5417124587871,221.24999999999997L363.92446797881917,221.45833333333337L365.3711659506445,221.875L366.1904286142473,222.29166666666663L367.52922369867133,222.7083333333333L368.01278849035884,222.7083333333333L369.38355480067946,222.7083333333333L370.33469877110605,223.33333333333331L371.90128884004406,223.12500000000006L373.57578179638335,223.54166666666669L374.0353681686483,224.37499999999997L375.37815965630944,224.58333333333337L376.7489259666301,225.41666666666663L377.43630732340904,225.62500000000003L378.8949945049456,225.8333333333333L380.4615845738836,225.20833333333337L381.44469977020685,225.8333333333333L382.95933659706276,225.62500000000003L383.87451293835556,223.74999999999994L385.33719652312925,224.79166666666663L386.87980817264463,224.1666666666667L388.4823658707164,223.95833333333334L389.8051753421922,223.12500000000006L391.24388050754334,223.54166666666669L392.0791287840944,222.50000000000003L393.5657907882906,222.08333333333337L394.4529923069239,221.66666666666663L396.07153561794394,221.66666666666663L396.994704765711,221.24999999999997L397.52622639624354,220.41666666666669L398.5093415925668,220.62499999999994L399.6003596762914,220.20833333333331L400.37965830752336,220.41666666666669L401.63053252073144,219.5833333333333L401.8623239084825,219.16666666666666L403.04126286342307,218.95833333333337L403.80457588170657,218.12499999999997L404.64382056149464,217.49999999999994L404.94355080427624,217.08333333333331L406.28634229193733,216.4583333333333L407.30942152063153,215.83333333333337L408.4563892496754,215.41666666666663L408.7481266859827,214.7916666666667L409.915076431212,214.16666666666669L410.6703966430214,213.3333333333333L411.9652312918374,212.70833333333337L412.7365371165952,211.87499999999997L413.75561994205225,211.45833333333331L414.4989509441503,210.41666666666669L415.04246178439416,210.00000000000003L415.37815965630944,209.79166666666663L416.46518133679695,210.00000000000003L417.51623538815073,209.16666666666663L418.30352682585675,210.41666666666669L419.2786492157059,211.04166666666669L420.13787591167954,211.45833333333331L421.1649515436109,211.45833333333331L422.5517034668799,212.5L423.3589769207714,213.95833333333331L425.02547707063655,214.16666666666669L425.9006893795585,214.37499999999994L426.5441103007294,215.20833333333337L428.16265361174953,214.37499999999994L428.9179738235589,213.95833333333331L429.08182635627946,213.95833333333331L430.0369667299432,214.16666666666669L431.1959236686983,214.16666666666669L432.750524527925,212.91666666666663L433.89349585373174,212.70833333333337L434.6648016784894,211.6666666666667L435.7478269557399,211.04166666666669L436.86282345888714,211.87499999999997L437.41432710560497,212.70833333333337L437.87391347786996,213.3333333333333L438.58127685083434,213.54166666666666L439.2007193525828,214.58333333333334L439.6203416924768,214.58333333333334L440.2797482265962,215.41666666666663L441.978219602358,215.41666666666663L443.14516934758734,216.04166666666663L444.4360075931662,215.83333333333337L445.483065241283,215.41666666666663L445.68288540313733,215.83333333333337L446.70996103506855,215.83333333333337L448.17664102307936,214.99999999999997L449.3355979618345,215.20833333333337L450.30672394844646,214.7916666666667L451.2458787091619,213.54166666666666L452.23698671195945,214.37499999999994L453.57178539314623,214.16666666666669L455.0784294135279,213.75000000000006L456.4571885303227,213.3333333333333L457.7040663402938,213.75000000000006L459.418523329004,213.54166666666666L460.61744430013,213.3333333333333L462.0241782395845,213.12500000000003L463.570786292337,212.70833333333337L464.35008492356894,212.5L465.7208512338896,211.45833333333331L466.53212109101815,211.45833333333331L467.5192326905786,211.6666666666667L468.5183334998502,211.45833333333331L469.4375062443802,211.24999999999994L470.0089919072836,211.24999999999994L470.92017184533927,211.04166666666669L471.8233589769208,210.83333333333331L473.1541612548707,210.83333333333331L474.6328304525928,210.62500000000006L475.50004995504054,210.41666666666669L476.30332700569494,211.24999999999994L477.1505644919573,211.24999999999994L478.1256868818065,211.04166666666669L478.68518333499867,211.6666666666667L479.4564891597563,211.6666666666667L480.2517734039365,212.08333333333337L481.1269857128585,212.91666666666663L482.7535218303527,212.70833333333337L484.3440903187133,213.54166666666666L484.8716155460086,214.37499999999994L486.41422719552406,214.58333333333334L487.0456589069838,216.25000000000003L487.9568388450396,216.4583333333333L489.2716555100411,216.66666666666666L490.0309721250875,217.49999999999994L491.66150464581887,218.12499999999997L492.2649615346189,218.75L493.651713457888,218.54166666666663L494.63083225097427,217.9166666666667L495.9976021580578,217.49999999999994L496.7808971925268,218.33333333333337L497.3643720651415,218.33333333333337L498.8870016984715,218.33333333333337L500.23778599260675,218.95833333333337L501.6485163352984,220.20833333333331L501.89229693276064,220.00000000000006L502.60765311219916,219.79166666666666L503.4948546308324,219.37500000000003L505.2292936357279,220.41666666666669L506.2883404935559,220.00000000000006L507.86691977220516,220.41666666666669L508.8820061944252,220.83333333333334L509.5893695673895,220.62499999999994L510.39264661804384,221.875L511.33979418523336,222.50000000000003L512.8624238185635,222.29166666666663L513.7776001598563,222.50000000000003L514.8925966630034,222.91666666666666L516.0395643920473,222.50000000000003L516.8428414427017,222.29166666666663L518.3215106404238,222.08333333333337L519.1687481266861,221.66666666666663L519.9640323708663,221.875L521.4466979718255,222.50000000000003L523.0412628634231,221.875L524.2202018183635,221.45833333333337L525.1074033369969,220.62499999999994L526.3542811469679,220.83333333333334L527.7210510540514,219.79166666666666L528.3884503946449,219.37500000000003L529.8191627535219,219.5833333333333L530.650414626836,218.95833333333337L531.3298031771407,218.54166666666663L532.7565191327806,218.95833333333337L534.2951343790589,218.12499999999997L535.5380157857928,217.70833333333334L536.001598561295,217.08333333333331L537.292436806874,216.25000000000003L537.7760015985614,215.83333333333337L538.5193326006595,216.87500000000006L539.6663003297033,216.25000000000003L540.8212608652213,216.04166666666663L541.5565990608454,214.7916666666667L541.8763113198123,214.37499999999994L542.8674193226099,213.75000000000006L543.8825057448298,212.70833333333337L544.3460885203318,212.29166666666663L545.7328404436008,212.08333333333337L546.6040563492858,211.04166666666669L547.7070636427217,210.41666666666669L548.2785493056251,209.375L549.4175242281948,208.74999999999997L550.6484164252175,208.74999999999997L551.3797582176043,209.16666666666663L552.2269957038667,210.00000000000003L552.9303626735939,210.41666666666669L553.9214706763914,210.62500000000006L555.5480067938856,211.24999999999994L556.4631831351784,212.70833333333337L557.9378559296634,213.12500000000003L558.7131581576583,213.3333333333333L560.0319712258968,213.12500000000003L561.6185433110203,213.12500000000003L562.3378958936958,212.70833333333337L563.1491657508244,212.91666666666663L564.3201118992907,212.70833333333337L565.6269357578182,212.08333333333337L565.9186731941253,211.6666666666667L566.5940653411931,211.04166666666669L567.4652812468779,210.00000000000003L568.2006194425019,209.79166666666663L568.7641122989311,209.58333333333337L570.0349685283246,210.62500000000006L570.3346987711061,211.04166666666669L570.9141772404837,212.29166666666663L571.6694974522932,212.70833333333337L572.4368068738136,212.5L572.728544310121,212.70833333333337L574.1472674592868,213.3333333333333L575.4620841242883,213.75000000000006L576.4611849335599,213.3333333333333L577.1245878709163,214.37499999999994L577.9078829053852,213.75000000000006L578.9669297632131,211.45833333333331L579.9300629433511,211.6666666666667L580.9131781396744,211.6666666666667L582.415825756819,211.6666666666667L582.9393545808774,210.83333333333331L584.126286342292,211.6666666666667L585.2932360875214,211.6666666666667L586.3283045259268,211.45833333333331L587.4233190128886,211.45833333333331L588.9059846138476,211.45833333333331L589.6852832450795,211.6666666666667L590.8242581676492,211.6666666666667L592.0951143970427,211.87499999999997L593.7656109501451,211.45833333333331L594.9245678889001,210.83333333333331L596.3712658607254,210.62500000000006L597.0666400239786,210.62500000000006L598.6452193026278,209.58333333333337L599.4484963532822,208.95833333333337L600.1598561294836,209.58333333333337L600.7113597762016,209.375L602.0181836347289,208.95833333333337L602.6016585073435,209.58333333333337L603.824557897892,209.16666666666663L605.1753421920273,208.74999999999997L606.50214806674,208.12499999999994L607.4492956339296,208.95833333333337L608.8160655410132,208.95833333333337L610.1708462383856,209.16666666666663L611.4576880807275,209.79166666666663L611.6694974522931,209.79166666666663L612.3888500349686,210.41666666666669L613.192127085623,210.00000000000003L614.2711559596365,211.04166666666669L615.5060445598963,211.04166666666669L616.4851633529825,211.6666666666667L618.035767808972,212.29166666666663L618.6871815366172,213.54166666666666L619.7981816365273,213.75000000000006L620.7892896393247,214.7916666666667L621.5526026576083,214.7916666666667L622.5317214506945,214.99999999999997L623.067239484464,216.25000000000003L624.725746827855,216.66666666666666L626.3562793485864,216.87500000000006L627.3713657708064,217.49999999999994L628.7421320811271,218.54166666666663L629.1657508242583,218.33333333333337L629.8291537616147,218.95833333333337L631.1759416525128,219.16666666666666L632.2070136876812,218.95833333333337L633.7895893695676,219.5833333333333L634.365071435708,219.79166666666666L634.7886901788393,220.00000000000006L636.1474672794486,219.5833333333333L637.7380357678092,218.95833333333337L638.561294834649,218.75L639.4964531921271,219.79166666666666L640.7872914377061,219.5833333333333L641.6784893595765,220.20833333333331L642.9253671695475,220.41666666666669L643.684683784594,221.45833333333337L645.0954141272855,221.66666666666663L646.4422020181837,221.875L647.4093316015587,221.0416666666667L648.4324108302528,221.0416666666667L649.6712958337497,221.45833333333337L651.16595064442,221.66666666666663L652.7405335198322,221.0416666666667L653.9794185233292,221.875L655.454091317814,221.24999999999997L656.8728144669797,221.0416666666667L658.2475771805375,221.0416666666667L659.6663003297033,220.00000000000006L660.6174443001299,218.95833333333337L661.3168148666202,218.54166666666663L662.9593365970627,218.95833333333337L663.9184733739636,219.16666666666666L665.4011389749227,220.41666666666669L665.9726246378261,220.00000000000006L667.2674592866422,220.00000000000006L668.4743730642423,219.16666666666666L669.2137076631033,219.16666666666666L670.6164451993205,218.54166666666663L671.3357977819962,218.12499999999997L672.2989309621342,219.5833333333333L673.3020281746428,219.37500000000003L674.0773304026377,218.54166666666663L675.0284743730643,218.33333333333337L675.5440103906485,217.49999999999994L676.1594564891599,216.25000000000003L676.7069637326407,216.25000000000003L677.2944350084925,216.4583333333333L677.8619242681588,216.04166666666663L678.6731941252873,215.20833333333337L679.3885503047256,214.58333333333334L679.9280647417323,212.5L681.2189029873115,211.6666666666667L681.8103706664003,210.83333333333331L682.6895793785594,209.375L683.7246478169649,209.58333333333337L684.3520831251874,209.58333333333337L685.3192127085624,210.00000000000003L686.3303027275454,210.83333333333331L686.6420221800379,211.45833333333331L688.3684683784594,211.87499999999997L689.0038964931563,212.29166666666663L689.4874612848437,212.5L690.5824757718055,212.91666666666663L691.5136377260467,213.12500000000003L692.0371665501049,213.54166666666666L693.5997602158058,214.37499999999994L695.1623538815068,213.54166666666666L696.329303626736,213.54166666666666L697.7799980017985,213.54166666666666L698.4593865521032,212.91666666666663L699.4784693775601,212.5L700.8452392846439,212.08333333333337L701.8563293036268,210.83333333333331L702.6276351283844,210.41666666666669L703.5468078729144,211.45833333333331L704.2781496653014,211.6666666666667L705.2133080227796,212.91666666666663L705.7168548306524,213.12500000000003L706.2683584773704,213.95833333333331L707.4672794484965,213.75000000000006L708.3904485962635,214.58333333333334L709.0418623239085,215.20833333333337L710.3486861824359,214.58333333333334L711.1919272654612,214.99999999999997L712.4388050754321,214.7916666666667L713.6337296433211,214.58333333333334L714.5808772105107,214.7916666666667L715.4920571485663,214.99999999999997L716.7908882006196,214.58333333333334L718.3015286242382,214.37499999999994L718.9969027874913,213.75000000000006L719.3645718853033,213.95833333333331L720.2917374363074,213.95833333333331L721.750424617844,213.95833333333331L723.1531621540614,214.16666666666669L723.780597462284,213.3333333333333L724.699770206814,214.37499999999994L725.2672594664803,213.95833333333331L726.1584573883506,214.16666666666669L727.6491157957839,213.95833333333331L729.0998101708464,213.3333333333333L730.3706664002398,212.70833333333337L731.6934758717157,212.5L732.964332101109,211.6666666666667L733.5957638125687,211.87499999999997L735.038465381157,211.45833333333331L736.3053252073134,211.24999999999994L737.8319512438806,211.24999999999994L739.1028074732741,210.83333333333331L740.5055450094915,211.04166666666669L741.8803077230493,211.04166666666669L743.2590668398442,211.04166666666669L744.6817863922471,211.24999999999994L745.9206713957439,211.87499999999997L746.4681786392248,212.29166666666663L747.9068838045758,212.29166666666663L748.6701968228596,212.91666666666663L750.1448696173444,214.99999999999997L751.2238984913578,216.25000000000003L752.7025676890798,216.66666666666666L752.9663303027278,217.29166666666669L754.0413627735039,218.33333333333337L755.3441902287942,218.12499999999997L756.0475571985214,219.5833333333333L757.4702767509243,220.00000000000006L758.245578978919,220.41666666666669L758.98491357778,220.62499999999994L759.5204316115496,220.83333333333334L760.4436007593167,220.62499999999994L761.5226296333301,221.66666666666663L762.6975721850337,221.45833333333337L763.6327305425117,221.875L764.3480867219503,222.91666666666666L765.9866120491558,222.91666666666666L767.3813567788992,223.74999999999994L768.53232091118,223.74999999999994L769.1397742032171,224.1666666666667L770.706364272155,224.37499999999997L771.8693176141473,223.74999999999994L772.6006594065343,224.79166666666663L774.3830552502749,223.95833333333334L775.6219402537715,226.04166666666666L777.4123289039866,226.66666666666669L778.6272354880609,227.49999999999997L780.3936457188531,227.2916666666667L781.7284444000401,226.25000000000006L783.2910380657408,227.2916666666667L785.0814267159558,226.04166666666666L786.8638225596964,226.87499999999994L788.6262363872515,226.04166666666666L790.4006394245181,226.25000000000006L791.7474273154162,225L792.8664202218004,225.20833333333337L794.552902387851,223.95833333333334L796.3472874413029,224.1666666666667L798.1216904785692,222.91666666666666L799.3445898691178,224.1666666666667"></path><path id="area" class="area-chart-curr-fill" d="M0,203.54166666666663L1.0790288740133882,203.75000000000003L1.3587771006094518,203.9583333333333L1.8703167149565394,203.54166666666663L2.2499750224797688,203.75000000000003L2.9333599760215807,204.37500000000006L3.4249175741832354,204.79166666666669L4.336097512238986,205.20833333333334L5.407133579778202,206.04166666666663L5.942651613547809,206.45833333333337L6.841842341892298,206.66666666666663L7.497252472774503,207.0833333333333L8.987910880207815,207.91666666666669L9.999000899190731,208.33333333333334L10.914177240483566,209.375L12.344889599360577,210.41666666666669L13.687681087021684,211.04166666666669L14.530922170046958,211.24999999999994L15.833749625337202,210.00000000000003L16.82485762813468,210.41666666666669L17.272454790688386,210.2083333333333L17.432310920171847,210.00000000000003L18.3434908582276,210.2083333333333L18.92296932760516,210.83333333333331L19.178739134778702,210.83333333333331L20.029973024278153,210.41666666666669L20.725347187531227,209.375L21.528624238185635,209.375L21.88830052952343,208.74999999999997L22.707563193126187,208.33333333333334L23.091217903886506,208.12499999999994L24.026376261364774,207.0833333333333L24.82166050554502,208.33333333333334L25.525027475272253,209.16666666666663L26.26835847737037,209.58333333333337L27.059646318313526,210.2083333333333L27.319412528724158,210.00000000000003L27.922869417524232,210.83333333333331L29.41752422819463,211.24999999999994L30.540513537815972,211.6666666666667L31.287840943151167,211.87499999999997L32.51074033369967,211.6666666666667L33.82955340193826,212.08333333333337L35.3122190028974,211.87499999999997L36.81886302327905,211.6666666666667L38.245578978918985,211.6666666666667L39.58837046658009,211.6666666666667L40.23578779098811,211.45833333333331L41.61055050454591,211.45833333333331L42.633629733240085,211.87499999999997L44.08832051153962,211.24999999999994L45.251273853531835,211.87499999999997L46.20641422719552,211.45833333333331L47.34538914976521,212.08333333333337L48.584274153262065,211.45833333333331L49.98301528624239,211.87499999999997L50.714357078629234,211.24999999999994L51.53761614546909,210.83333333333331L52.28893995404137,210.83333333333331L53.79558397442303,210.00000000000003L54.95853731641523,210.00000000000003L55.60595464082326,209.58333333333337L56.83684683784595,209.375L57.87990808272555,209.375L59.15875711859327,209.375L59.65431111999201,208.95833333333337L60.58147667099612,208.74999999999997L61.436706963732654,209.16666666666663L62.27195524028375,208.74999999999997L62.927365371165955,208.5416666666667L63.77060645419124,208.95833333333337L64.84963532820461,209.16666666666663L65.70486562094115,208.74999999999997L66.2883404935558,209.58333333333337L67.61914277150565,209.375L68.29453491857329,210.2083333333333L68.9459486462184,210.41666666666669L69.62134079328605,210.2083333333333L70.18083724647818,211.04166666666669L71.11199920071935,211.45833333333331L71.41172944350086,211.6666666666667L72.2989309621341,211.6666666666667L73.54980517534221,212.70833333333337L74.15725846737936,213.54166666666666L74.8646218403437,214.16666666666669L75.71585572984316,214.7916666666667L76.33529823159158,214.7916666666667L77.59816165451096,214.99999999999997L79.02887401338795,215.625L79.8001798381457,217.08333333333331L80.37166550104907,217.08333333333331L81.71445698871015,216.66666666666666L82.44180237785994,216.66666666666666L83.27305425117397,218.12499999999997L83.87251473673695,218.33333333333337L84.45199320611451,218.54166666666663L85.0234788690179,218.54166666666663L85.6469177740034,218.54166666666663L86.62204016385255,219.16666666666666L87.94085323209111,219.5833333333333L88.89599360575484,219.79166666666666L90.35867719052852,220.00000000000006L91.6295334199221,220.62499999999994L92.95234289139775,220.41666666666669L94.33509841142973,220.83333333333334L95.96563093216108,221.66666666666663L96.8168648216605,221.875L97.4203217104606,221.875L97.9278649215706,221.66666666666663L98.8550304725747,222.7083333333333L99.98201618543312,223.54166666666669L101.26486162453794,223.33333333333331L102.37985812768508,223.33333333333331L102.8234588870017,223.74999999999994L103.95843740633433,223.54166666666669L104.81366769907086,223.12500000000006L105.82875412129084,223.33333333333331L107.29543410930165,223.74999999999994L108.85003496852835,223.12500000000006L110.26076531121991,222.7083333333333L111.61954241182937,221.66666666666663L113.09421520631433,222.50000000000003L114.35308222599663,222.08333333333337L115.26026576081527,220.41666666666669L116.53112199020883,220.83333333333334L118.24158257568192,220.62499999999994L119.21670496553102,220.62499999999994L120.13987411329805,220.20833333333331L121.09101808372466,220.00000000000006L121.9222699570387,219.79166666666666L122.8734139274653,219.79166666666666L123.62873413927467,219.37500000000003L124.10830252772504,218.33333333333337L124.58387451293838,218.33333333333337L125.53901488660209,218.33333333333337L126.41422719552406,217.29166666666669L127.01368768108705,216.66666666666666L128.41642521730446,216.4583333333333L128.94395044459986,215.625L129.6832850434609,214.58333333333334L131.0020981116995,214.16666666666669L131.74942551703467,213.3333333333333L132.72454790688383,212.91666666666663L134.0113897492257,211.87499999999997L134.65880707363374,211.87499999999997L135.40213807573184,210.62500000000006L136.81286841842345,210.2083333333333L137.73204116295338,209.375L138.87501248876012,208.5416666666667L139.4145269257668,208.5416666666667L140.65341192926368,208.95833333333337L142.14007393345992,209.16666666666663L143.19912079128787,210.62500000000006L143.89449495454093,210.83333333333331L145.29323608752125,211.87499999999997L146.0485562993306,212.91666666666663L147.0756319312619,213.3333333333333L148.1466679988011,213.95833333333331L149.10980117893897,213.95833333333331L149.82515735837748,213.75000000000006L150.93615745828757,212.91666666666663L151.4357078629234,212.5L152.2749525427116,213.12500000000003L153.83754620841245,212.70833333333337L154.79668298531323,212.29166666666663L155.77580177839948,211.87499999999997L156.7149565391148,211.04166666666669L157.40633429913083,210.62500000000006L158.6572085123389,210.83333333333331L159.4365071435708,211.45833333333331L160.13188130682389,211.6666666666667L160.6993705664902,212.70833333333337L161.13497851933263,213.3333333333333L162.6336297332401,213.54166666666666L164.05235288240587,213.75000000000006L164.79168748126688,214.37499999999994L166.366270356679,214.37499999999994L167.98881007093618,214.99999999999997L168.91997202517737,214.16666666666669L169.4514936557099,213.3333333333333L170.23478869017887,214.37499999999994L171.48965930662408,214.37499999999994L172.66060545509046,214.37499999999994L174.05535018483366,214.16666666666669L174.5229293635728,213.75000000000006L175.49005894694778,214.58333333333334L177.02068138675196,214.16666666666669L178.15565990608457,214.37499999999994L178.93895494055351,213.3333333333333L179.94205215306226,213.95833333333331L181.58857028674197,214.16666666666669L182.11209911080027,213.95833333333331L183.16714956539116,214.16666666666669L184.51393745628937,213.54166666666666L185.52902387850938,213.54166666666666L187.0996103506844,212.91666666666663L188.38245578978922,212.29166666666663L189.6732940353682,211.87499999999997L190.82026176441204,211.45833333333331L191.79938055749827,212.08333333333337L193.17813967429313,211.45833333333331L193.40193825557003,211.24999999999994L193.70166849835152,211.6666666666667L195.3242082126087,211.45833333333331L196.4232191028075,210.83333333333331L198.1696473174144,211.24999999999994L199.59636327305427,211.6666666666667L200.32770506544117,211.24999999999994L201.35078429413528,212.29166666666663L201.90628434409038,212.29166666666663L203.2610650414627,213.12500000000003L203.97642122090122,213.54166666666666L205.1113997402338,214.37499999999994L206.32630632430815,214.16666666666669L207.42531721450695,215.625L208.71615546008596,216.25000000000003L209.65531022080134,217.08333333333331L210.73034269157765,217.08333333333331L210.9901089019883,217.29166666666669L212.00919172744537,217.9166666666667L212.87241482665604,218.33333333333337L213.57578179638327,219.16666666666666L214.7946847836947,219.16666666666666L216.053551803377,220.00000000000006L216.60105904685784,220.41666666666669L217.54021380757317,220.83333333333334L218.51533619742233,220.62499999999994L219.29863123189133,220.83333333333334L220.08592266959738,221.24999999999997L221.20891197921875,221.24999999999997L222.15206314317118,221.66666666666663L223.6107503247078,221.875L225.04545908682186,222.50000000000003L226.4521930262764,223.33333333333331L227.64711759416528,223.54166666666669L228.6062543710661,223.54166666666669L230.1768408432411,224.1666666666667L231.61954241182937,224.37499999999997L232.5147367369368,225.62500000000003L233.48586272354882,225.41666666666663L234.86062543710662,226.04166666666666L236.31931261864324,225.62500000000003L237.96583075232297,225.62500000000003L239.49645319212715,225.8333333333333L240.38765111399744,225.8333333333333L241.87431311819364,225L242.8454391048057,225.20833333333337L244.59186731941256,225.41666666666663L245.41912278948948,224.58333333333337L246.74992506743934,225.20833333333337L248.18063742631634,224.58333333333337L249.61534618843046,223.95833333333334L250.33869517434312,222.91666666666666L251.8733140173844,222.91666666666666L253.19612348886005,222.29166666666663L253.93545808772106,220.41666666666669L255.10240783295038,219.5833333333333L255.55400139874115,219.16666666666666L255.94165251273859,219.16666666666666L257.5442102108103,218.33333333333337L258.4394045359177,218.12499999999997L259.326606054551,217.29166666666669L260.26576081526633,217.08333333333331L261.32081126985713,216.66666666666666L262.4278149665302,216.4583333333333L263.14317114596867,215.83333333333337L264.218203616745,214.99999999999997L264.310120891198,214.58333333333334L264.66580077929865,214.7916666666667L264.93355979618343,214.58333333333334L265.51703466879815,214.37499999999994L266.11649515436113,213.75000000000006L266.9557398341493,213.12500000000003L267.7989809171746,212.5L268.9459486462185,211.45833333333331L269.8811070036967,211.24999999999994L270.88420421620543,210.2083333333333L272.18303526825866,209.375L272.83045259266663,208.5416666666667L273.310020981117,207.91666666666669L274.8846038565291,207.0833333333333L275.4081326805875,206.66666666666663L276.8188630232791,205.83333333333337L277.37835947647125,206.25L277.6980717354382,206.25L277.96982715556004,206.66666666666663L278.24957538215614,206.87500000000003L278.8490358677191,206.87500000000003L280.4356079528425,207.50000000000006L281.1869317614148,208.5416666666667L281.7464282146069,208.74999999999997L282.1420721350785,208.74999999999997L283.225097412329,209.16666666666663L284.47597162553706,209.79166666666663L285.1313817564193,210.2083333333333L286.2463782595664,210.41666666666669L287.2974323109202,211.24999999999994L288.8959936057549,212.29166666666663L289.867119592367,213.54166666666666L290.8062743530823,212.70833333333337L292.0291737436308,213.3333333333333L293.1321810370667,213.54166666666666L293.99140773304026,212.5L295.00649415526027,212.91666666666663L296.3492856429214,212.5L297.81596563093217,212.70833333333337L298.7990808272555,212.08333333333337L300.0579478469378,211.04166666666669L300.9971026076531,210.41666666666669L302.3518833050255,211.6666666666667L303.2151064042362,212.29166666666663L304.49795184334107,210.62500000000006L305.98061744430015,210.62500000000006L306.79188730142874,211.6666666666667L307.8789089819163,211.45833333333331L309.2976321310821,211.87499999999997L310.97612149065844,211.45833333333331L312.14307123588776,211.04166666666669L313.721650514537,211.45833333333331L315.0884204216206,211.45833333333331L316.4711759416526,211.04166666666669L317.6141472674594,211.24999999999994L318.94494954540914,212.08333333333337L319.8481366769908,212.5L321.1309821160956,211.87499999999997L322.0661404735739,212.29166666666663L323.2530722349886,212.08333333333337L324.83564791687496,212.29166666666663L325.23928464382067,211.04166666666669L326.38625237286453,211.45833333333331L327.8569287641124,210.83333333333331L329.2516734938556,210.41666666666669L330.26276351283855,209.79166666666663L331.3657708062745,209.58333333333337L332.0171845339196,208.74999999999997L333.66769907083625,208.95833333333337L335.14237186532137,208.95833333333337L335.6299330602459,208.95833333333337L336.9047856928765,208.33333333333334L337.8239584374064,208.74999999999997L339.38655210310725,208.74999999999997L340.57748026775914,208.33333333333334L342.3478869017885,208.95833333333337L343.91048056748934,209.375L344.46997702068154,209.375L345.2173044260166,209.79166666666663L346.48416425217306,209.58333333333337L347.1515635927666,212.5L348.52232990308727,212.70833333333337L350.08092716555115,213.54166666666666L350.90818263562807,213.54166666666666L352.3628734139276,214.7916666666667L353.41392746528135,215.83333333333337L354.6408232590669,215.83333333333337L355.5919672294935,216.25000000000003L356.5271255869718,217.29166666666669L357.84194225197336,217.70833333333334L358.7890898191628,218.12499999999997L359.4764711759417,218.75L360.2677590168849,218.54166666666663L361.77440303726655,218.75L362.5417124587871,221.24999999999997L363.92446797881917,221.45833333333337L365.3711659506445,221.875L366.1904286142473,222.29166666666663L367.52922369867133,222.7083333333333L368.01278849035884,222.7083333333333L369.38355480067946,222.7083333333333L370.33469877110605,223.33333333333331L371.90128884004406,223.12500000000006L373.57578179638335,223.54166666666669L374.0353681686483,224.37499999999997L375.37815965630944,224.58333333333337L376.7489259666301,225.41666666666663L377.43630732340904,225.62500000000003L378.8949945049456,225.8333333333333L380.4615845738836,225.20833333333337L381.44469977020685,225.8333333333333L382.95933659706276,225.62500000000003L383.87451293835556,223.74999999999994L385.33719652312925,224.79166666666663L386.87980817264463,224.1666666666667L388.4823658707164,223.95833333333334L389.8051753421922,223.12500000000006L391.24388050754334,223.54166666666669L392.0791287840944,222.50000000000003L393.5657907882906,222.08333333333337L394.4529923069239,221.66666666666663L396.07153561794394,221.66666666666663L396.994704765711,221.24999999999997L397.52622639624354,220.41666666666669L398.5093415925668,220.62499999999994L399.6003596762914,220.20833333333331L400.37965830752336,220.41666666666669L401.63053252073144,219.5833333333333L401.8623239084825,219.16666666666666L403.04126286342307,218.95833333333337L403.80457588170657,218.12499999999997L404.64382056149464,217.49999999999994L404.94355080427624,217.08333333333331L406.28634229193733,216.4583333333333L407.30942152063153,215.83333333333337L408.4563892496754,215.41666666666663L408.7481266859827,214.7916666666667L409.915076431212,214.16666666666669L410.6703966430214,213.3333333333333L411.9652312918374,212.70833333333337L412.7365371165952,211.87499999999997L413.75561994205225,211.45833333333331L414.4989509441503,210.41666666666669L415.04246178439416,210.00000000000003L415.37815965630944,209.79166666666663L416.46518133679695,210.00000000000003L417.51623538815073,209.16666666666663L418.30352682585675,210.41666666666669L419.2786492157059,211.04166666666669L420.13787591167954,211.45833333333331L421.1649515436109,211.45833333333331L422.5517034668799,212.5L423.3589769207714,213.95833333333331L425.02547707063655,214.16666666666669L425.9006893795585,214.37499999999994L426.5441103007294,215.20833333333337L428.16265361174953,214.37499999999994L428.9179738235589,213.95833333333331L429.08182635627946,213.95833333333331L430.0369667299432,214.16666666666669L431.1959236686983,214.16666666666669L432.750524527925,212.91666666666663L433.89349585373174,212.70833333333337L434.6648016784894,211.6666666666667L435.7478269557399,211.04166666666669L436.86282345888714,211.87499999999997L437.41432710560497,212.70833333333337L437.87391347786996,213.3333333333333L438.58127685083434,213.54166666666666L439.2007193525828,214.58333333333334L439.6203416924768,214.58333333333334L440.2797482265962,215.41666666666663L441.978219602358,215.41666666666663L443.14516934758734,216.04166666666663L444.4360075931662,215.83333333333337L445.483065241283,215.41666666666663L445.68288540313733,215.83333333333337L446.70996103506855,215.83333333333337L448.17664102307936,214.99999999999997L449.3355979618345,215.20833333333337L450.30672394844646,214.7916666666667L451.2458787091619,213.54166666666666L452.23698671195945,214.37499999999994L453.57178539314623,214.16666666666669L455.0784294135279,213.75000000000006L456.4571885303227,213.3333333333333L457.7040663402938,213.75000000000006L459.418523329004,213.54166666666666L460.61744430013,213.3333333333333L462.0241782395845,213.12500000000003L463.570786292337,212.70833333333337L464.35008492356894,212.5L465.7208512338896,211.45833333333331L466.53212109101815,211.45833333333331L467.5192326905786,211.6666666666667L468.5183334998502,211.45833333333331L469.4375062443802,211.24999999999994L470.0089919072836,211.24999999999994L470.92017184533927,211.04166666666669L471.8233589769208,210.83333333333331L473.1541612548707,210.83333333333331L474.6328304525928,210.62500000000006L475.50004995504054,210.41666666666669L476.30332700569494,211.24999999999994L477.1505644919573,211.24999999999994L478.1256868818065,211.04166666666669L478.68518333499867,211.6666666666667L479.4564891597563,211.6666666666667L480.2517734039365,212.08333333333337L481.1269857128585,212.91666666666663L482.7535218303527,212.70833333333337L484.3440903187133,213.54166666666666L484.8716155460086,214.37499999999994L486.41422719552406,214.58333333333334L487.0456589069838,216.25000000000003L487.9568388450396,216.4583333333333L489.2716555100411,216.66666666666666L490.0309721250875,217.49999999999994L491.66150464581887,218.12499999999997L492.2649615346189,218.75L493.651713457888,218.54166666666663L494.63083225097427,217.9166666666667L495.9976021580578,217.49999999999994L496.7808971925268,218.33333333333337L497.3643720651415,218.33333333333337L498.8870016984715,218.33333333333337L500.23778599260675,218.95833333333337L501.6485163352984,220.20833333333331L501.89229693276064,220.00000000000006L502.60765311219916,219.79166666666666L503.4948546308324,219.37500000000003L505.2292936357279,220.41666666666669L506.2883404935559,220.00000000000006L507.86691977220516,220.41666666666669L508.8820061944252,220.83333333333334L509.5893695673895,220.62499999999994L510.39264661804384,221.875L511.33979418523336,222.50000000000003L512.8624238185635,222.29166666666663L513.7776001598563,222.50000000000003L514.8925966630034,222.91666666666666L516.0395643920473,222.50000000000003L516.8428414427017,222.29166666666663L518.3215106404238,222.08333333333337L519.1687481266861,221.66666666666663L519.9640323708663,221.875L521.4466979718255,222.50000000000003L523.0412628634231,221.875L524.2202018183635,221.45833333333337L525.1074033369969,220.62499999999994L526.3542811469679,220.83333333333334L527.7210510540514,219.79166666666666L528.3884503946449,219.37500000000003L529.8191627535219,219.5833333333333L530.650414626836,218.95833333333337L531.3298031771407,218.54166666666663L532.7565191327806,218.95833333333337L534.2951343790589,218.12499999999997L535.5380157857928,217.70833333333334L536.001598561295,217.08333333333331L537.292436806874,216.25000000000003L537.7760015985614,215.83333333333337L538.5193326006595,216.87500000000006L539.6663003297033,216.25000000000003L540.8212608652213,216.04166666666663L541.5565990608454,214.7916666666667L541.8763113198123,214.37499999999994L542.8674193226099,213.75000000000006L543.8825057448298,212.70833333333337L544.3460885203318,212.29166666666663L545.7328404436008,212.08333333333337L546.6040563492858,211.04166666666669L547.7070636427217,210.41666666666669L548.2785493056251,209.375L549.4175242281948,208.74999999999997L550.6484164252175,208.74999999999997L551.3797582176043,209.16666666666663L552.2269957038667,210.00000000000003L552.9303626735939,210.41666666666669L553.9214706763914,210.62500000000006L555.5480067938856,211.24999999999994L556.4631831351784,212.70833333333337L557.9378559296634,213.12500000000003L558.7131581576583,213.3333333333333L560.0319712258968,213.12500000000003L561.6185433110203,213.12500000000003L562.3378958936958,212.70833333333337L563.1491657508244,212.91666666666663L564.3201118992907,212.70833333333337L565.6269357578182,212.08333333333337L565.9186731941253,211.6666666666667L566.5940653411931,211.04166666666669L567.4652812468779,210.00000000000003L568.2006194425019,209.79166666666663L568.7641122989311,209.58333333333337L570.0349685283246,210.62500000000006L570.3346987711061,211.04166666666669L570.9141772404837,212.29166666666663L571.6694974522932,212.70833333333337L572.4368068738136,212.5L572.728544310121,212.70833333333337L574.1472674592868,213.3333333333333L575.4620841242883,213.75000000000006L576.4611849335599,213.3333333333333L577.1245878709163,214.37499999999994L577.9078829053852,213.75000000000006L578.9669297632131,211.45833333333331L579.9300629433511,211.6666666666667L580.9131781396744,211.6666666666667L582.415825756819,211.6666666666667L582.9393545808774,210.83333333333331L584.126286342292,211.6666666666667L585.2932360875214,211.6666666666667L586.3283045259268,211.45833333333331L587.4233190128886,211.45833333333331L588.9059846138476,211.45833333333331L589.6852832450795,211.6666666666667L590.8242581676492,211.6666666666667L592.0951143970427,211.87499999999997L593.7656109501451,211.45833333333331L594.9245678889001,210.83333333333331L596.3712658607254,210.62500000000006L597.0666400239786,210.62500000000006L598.6452193026278,209.58333333333337L599.4484963532822,208.95833333333337L600.1598561294836,209.58333333333337L600.7113597762016,209.375L602.0181836347289,208.95833333333337L602.6016585073435,209.58333333333337L603.824557897892,209.16666666666663L605.1753421920273,208.74999999999997L606.50214806674,208.12499999999994L607.4492956339296,208.95833333333337L608.8160655410132,208.95833333333337L610.1708462383856,209.16666666666663L611.4576880807275,209.79166666666663L611.6694974522931,209.79166666666663L612.3888500349686,210.41666666666669L613.192127085623,210.00000000000003L614.2711559596365,211.04166666666669L615.5060445598963,211.04166666666669L616.4851633529825,211.6666666666667L618.035767808972,212.29166666666663L618.6871815366172,213.54166666666666L619.7981816365273,213.75000000000006L620.7892896393247,214.7916666666667L621.5526026576083,214.7916666666667L622.5317214506945,214.99999999999997L623.067239484464,216.25000000000003L624.725746827855,216.66666666666666L626.3562793485864,216.87500000000006L627.3713657708064,217.49999999999994L628.7421320811271,218.54166666666663L629.1657508242583,218.33333333333337L629.8291537616147,218.95833333333337L631.1759416525128,219.16666666666666L632.2070136876812,218.95833333333337L633.7895893695676,219.5833333333333L634.365071435708,219.79166666666666L634.7886901788393,220.00000000000006L636.1474672794486,219.5833333333333L637.7380357678092,218.95833333333337L638.561294834649,218.75L639.4964531921271,219.79166666666666L640.7872914377061,219.5833333333333L641.6784893595765,220.20833333333331L642.9253671695475,220.41666666666669L643.684683784594,221.45833333333337L645.0954141272855,221.66666666666663L646.4422020181837,221.875L647.4093316015587,221.0416666666667L648.4324108302528,221.0416666666667L649.6712958337497,221.45833333333337L651.16595064442,221.66666666666663L652.7405335198322,221.0416666666667L653.9794185233292,221.875L655.454091317814,221.24999999999997L656.8728144669797,221.0416666666667L658.2475771805375,221.0416666666667L659.6663003297033,220.00000000000006L660.6174443001299,218.95833333333337L661.3168148666202,218.54166666666663L662.9593365970627,218.95833333333337L663.9184733739636,219.16666666666666L665.4011389749227,220.41666666666669L665.9726246378261,220.00000000000006L667.2674592866422,220.00000000000006L668.4743730642423,219.16666666666666L669.2137076631033,219.16666666666666L670.6164451993205,218.54166666666663L671.3357977819962,218.12499999999997L672.2989309621342,219.5833333333333L673.3020281746428,219.37500000000003L674.0773304026377,218.54166666666663L675.0284743730643,218.33333333333337L675.5440103906485,217.49999999999994L676.1594564891599,216.25000000000003L676.7069637326407,216.25000000000003L677.2944350084925,216.4583333333333L677.8619242681588,216.04166666666663L678.6731941252873,215.20833333333337L679.3885503047256,214.58333333333334L679.9280647417323,212.5L681.2189029873115,211.6666666666667L681.8103706664003,210.83333333333331L682.6895793785594,209.375L683.7246478169649,209.58333333333337L684.3520831251874,209.58333333333337L685.3192127085624,210.00000000000003L686.3303027275454,210.83333333333331L686.6420221800379,211.45833333333331L688.3684683784594,211.87499999999997L689.0038964931563,212.29166666666663L689.4874612848437,212.5L690.5824757718055,212.91666666666663L691.5136377260467,213.12500000000003L692.0371665501049,213.54166666666666L693.5997602158058,214.37499999999994L695.1623538815068,213.54166666666666L696.329303626736,213.54166666666666L697.7799980017985,213.54166666666666L698.4593865521032,212.91666666666663L699.4784693775601,212.5L700.8452392846439,212.08333333333337L701.8563293036268,210.83333333333331L702.6276351283844,210.41666666666669L703.5468078729144,211.45833333333331L704.2781496653014,211.6666666666667L705.2133080227796,212.91666666666663L705.7168548306524,213.12500000000003L706.2683584773704,213.95833333333331L707.4672794484965,213.75000000000006L708.3904485962635,214.58333333333334L709.0418623239085,215.20833333333337L710.3486861824359,214.58333333333334L711.1919272654612,214.99999999999997L712.4388050754321,214.7916666666667L713.6337296433211,214.58333333333334L714.5808772105107,214.7916666666667L715.4920571485663,214.99999999999997L716.7908882006196,214.58333333333334L718.3015286242382,214.37499999999994L718.9969027874913,213.75000000000006L719.3645718853033,213.95833333333331L720.2917374363074,213.95833333333331L721.750424617844,213.95833333333331L723.1531621540614,214.16666666666669L723.780597462284,213.3333333333333L724.699770206814,214.37499999999994L725.2672594664803,213.95833333333331L726.1584573883506,214.16666666666669L727.6491157957839,213.95833333333331L729.0998101708464,213.3333333333333L730.3706664002398,212.70833333333337L731.6934758717157,212.5L732.964332101109,211.6666666666667L733.5957638125687,211.87499999999997L735.038465381157,211.45833333333331L736.3053252073134,211.24999999999994L737.8319512438806,211.24999999999994L739.1028074732741,210.83333333333331L740.5055450094915,211.04166666666669L741.8803077230493,211.04166666666669L743.2590668398442,211.04166666666669L744.6817863922471,211.24999999999994L745.9206713957439,211.87499999999997L746.4681786392248,212.29166666666663L747.9068838045758,212.29166666666663L748.6701968228596,212.91666666666663L750.1448696173444,214.99999999999997L751.2238984913578,216.25000000000003L752.7025676890798,216.66666666666666L752.9663303027278,217.29166666666669L754.0413627735039,218.33333333333337L755.3441902287942,218.12499999999997L756.0475571985214,219.5833333333333L757.4702767509243,220.00000000000006L758.245578978919,220.41666666666669L758.98491357778,220.62499999999994L759.5204316115496,220.83333333333334L760.4436007593167,220.62499999999994L761.5226296333301,221.66666666666663L762.6975721850337,221.45833333333337L763.6327305425117,221.875L764.3480867219503,222.91666666666666L765.9866120491558,222.91666666666666L767.3813567788992,223.74999999999994L768.53232091118,223.74999999999994L769.1397742032171,224.1666666666667L770.706364272155,224.37499999999997L771.8693176141473,223.74999999999994L772.6006594065343,224.79166666666663L774.3830552502749,223.95833333333334L775.6219402537715,226.04166666666666L777.4123289039866,226.66666666666669L778.6272354880609,227.49999999999997L780.3936457188531,227.2916666666667L781.7284444000401,226.25000000000006L783.2910380657408,227.2916666666667L785.0814267159558,226.04166666666666L786.8638225596964,226.87499999999994L788.6262363872515,226.04166666666666L790.4006394245181,226.25000000000006L791.7474273154162,225L792.8664202218004,225.20833333333337L794.552902387851,223.95833333333334L796.3472874413029,224.1666666666667L798.1216904785692,222.91666666666666L799.3445898691178,224.1666666666667L799.3445898691178,250L798.1216904785692,250L796.3472874413029,250L794.552902387851,250L792.8664202218004,250L791.7474273154162,250L790.4006394245181,250L788.6262363872515,250L786.8638225596964,250L785.0814267159558,250L783.2910380657408,250L781.7284444000401,250L780.3936457188531,250L778.6272354880609,250L777.4123289039866,250L775.6219402537715,250L774.3830552502749,250L772.6006594065343,250L771.8693176141473,250L770.706364272155,250L769.1397742032171,250L768.53232091118,250L767.3813567788992,250L765.9866120491558,250L764.3480867219503,250L763.6327305425117,250L762.6975721850337,250L761.5226296333301,250L760.4436007593167,250L759.5204316115496,250L758.98491357778,250L758.245578978919,250L757.4702767509243,250L756.0475571985214,250L755.3441902287942,250L754.0413627735039,250L752.9663303027278,250L752.7025676890798,250L751.2238984913578,250L750.1448696173444,250L748.6701968228596,250L747.9068838045758,250L746.4681786392248,250L745.9206713957439,250L744.6817863922471,250L743.2590668398442,250L741.8803077230493,250L740.5055450094915,250L739.1028074732741,250L737.8319512438806,250L736.3053252073134,250L735.038465381157,250L733.5957638125687,250L732.964332101109,250L731.6934758717157,250L730.3706664002398,250L729.0998101708464,250L727.6491157957839,250L726.1584573883506,250L725.2672594664803,250L724.699770206814,250L723.780597462284,250L723.1531621540614,250L721.750424617844,250L720.2917374363074,250L719.3645718853033,250L718.9969027874913,250L718.3015286242382,250L716.7908882006196,250L715.4920571485663,250L714.5808772105107,250L713.6337296433211,250L712.4388050754321,250L711.1919272654612,250L710.3486861824359,250L709.0418623239085,250L708.3904485962635,250L707.4672794484965,250L706.2683584773704,250L705.7168548306524,250L705.2133080227796,250L704.2781496653014,250L703.5468078729144,250L702.6276351283844,250L701.8563293036268,250L700.8452392846439,250L699.4784693775601,250L698.4593865521032,250L697.7799980017985,250L696.329303626736,250L695.1623538815068,250L693.5997602158058,250L692.0371665501049,250L691.5136377260467,250L690.5824757718055,250L689.4874612848437,250L689.0038964931563,250L688.3684683784594,250L686.6420221800379,250L686.3303027275454,250L685.3192127085624,250L684.3520831251874,250L683.7246478169649,250L682.6895793785594,250L681.8103706664003,250L681.2189029873115,250L679.9280647417323,250L679.3885503047256,250L678.6731941252873,250L677.8619242681588,250L677.2944350084925,250L676.7069637326407,250L676.1594564891599,250L675.5440103906485,250L675.0284743730643,250L674.0773304026377,250L673.3020281746428,250L672.2989309621342,250L671.3357977819962,250L670.6164451993205,250L669.2137076631033,250L668.4743730642423,250L667.2674592866422,250L665.9726246378261,250L665.4011389749227,250L663.9184733739636,250L662.9593365970627,250L661.3168148666202,250L660.6174443001299,250L659.6663003297033,250L658.2475771805375,250L656.8728144669797,250L655.454091317814,250L653.9794185233292,250L652.7405335198322,250L651.16595064442,250L649.6712958337497,250L648.4324108302528,250L647.4093316015587,250L646.4422020181837,250L645.0954141272855,250L643.684683784594,250L642.9253671695475,250L641.6784893595765,250L640.7872914377061,250L639.4964531921271,250L638.561294834649,250L637.7380357678092,250L636.1474672794486,250L634.7886901788393,250L634.365071435708,250L633.7895893695676,250L632.2070136876812,250L631.1759416525128,250L629.8291537616147,250L629.1657508242583,250L628.7421320811271,250L627.3713657708064,250L626.3562793485864,250L624.725746827855,250L623.067239484464,250L622.5317214506945,250L621.5526026576083,250L620.7892896393247,250L619.7981816365273,250L618.6871815366172,250L618.035767808972,250L616.4851633529825,250L615.5060445598963,250L614.2711559596365,250L613.192127085623,250L612.3888500349686,250L611.6694974522931,250L611.4576880807275,250L610.1708462383856,250L608.8160655410132,250L607.4492956339296,250L606.50214806674,250L605.1753421920273,250L603.824557897892,250L602.6016585073435,250L602.0181836347289,250L600.7113597762016,250L600.1598561294836,250L599.4484963532822,250L598.6452193026278,250L597.0666400239786,250L596.3712658607254,250L594.9245678889001,250L593.7656109501451,250L592.0951143970427,250L590.8242581676492,250L589.6852832450795,250L588.9059846138476,250L587.4233190128886,250L586.3283045259268,250L585.2932360875214,250L584.126286342292,250L582.9393545808774,250L582.415825756819,250L580.9131781396744,250L579.9300629433511,250L578.9669297632131,250L577.9078829053852,250L577.1245878709163,250L576.4611849335599,250L575.4620841242883,250L574.1472674592868,250L572.728544310121,250L572.4368068738136,250L571.6694974522932,250L570.9141772404837,250L570.3346987711061,250L570.0349685283246,250L568.7641122989311,250L568.2006194425019,250L567.4652812468779,250L566.5940653411931,250L565.9186731941253,250L565.6269357578182,250L564.3201118992907,250L563.1491657508244,250L562.3378958936958,250L561.6185433110203,250L560.0319712258968,250L558.7131581576583,250L557.9378559296634,250L556.4631831351784,250L555.5480067938856,250L553.9214706763914,250L552.9303626735939,250L552.2269957038667,250L551.3797582176043,250L550.6484164252175,250L549.4175242281948,250L548.2785493056251,250L547.7070636427217,250L546.6040563492858,250L545.7328404436008,250L544.3460885203318,250L543.8825057448298,250L542.8674193226099,250L541.8763113198123,250L541.5565990608454,250L540.8212608652213,250L539.6663003297033,250L538.5193326006595,250L537.7760015985614,250L537.292436806874,250L536.001598561295,250L535.5380157857928,250L534.2951343790589,250L532.7565191327806,250L531.3298031771407,250L530.650414626836,250L529.8191627535219,250L528.3884503946449,250L527.7210510540514,250L526.3542811469679,250L525.1074033369969,250L524.2202018183635,250L523.0412628634231,250L521.4466979718255,250L519.9640323708663,250L519.1687481266861,250L518.3215106404238,250L516.8428414427017,250L516.0395643920473,250L514.8925966630034,250L513.7776001598563,250L512.8624238185635,250L511.33979418523336,250L510.39264661804384,250L509.5893695673895,250L508.8820061944252,250L507.86691977220516,250L506.2883404935559,250L505.2292936357279,250L503.4948546308324,250L502.60765311219916,250L501.89229693276064,250L501.6485163352984,250L500.23778599260675,250L498.8870016984715,250L497.3643720651415,250L496.7808971925268,250L495.9976021580578,250L494.63083225097427,250L493.651713457888,250L492.2649615346189,250L491.66150464581887,250L490.0309721250875,250L489.2716555100411,250L487.9568388450396,250L487.0456589069838,250L486.41422719552406,250L484.8716155460086,250L484.3440903187133,250L482.7535218303527,250L481.1269857128585,250L480.2517734039365,250L479.4564891597563,250L478.68518333499867,250L478.1256868818065,250L477.1505644919573,250L476.30332700569494,250L475.50004995504054,250L474.6328304525928,250L473.1541612548707,250L471.8233589769208,250L470.92017184533927,250L470.0089919072836,250L469.4375062443802,250L468.5183334998502,250L467.5192326905786,250L466.53212109101815,250L465.7208512338896,250L464.35008492356894,250L463.570786292337,250L462.0241782395845,250L460.61744430013,250L459.418523329004,250L457.7040663402938,250L456.4571885303227,250L455.0784294135279,250L453.57178539314623,250L452.23698671195945,250L451.2458787091619,250L450.30672394844646,250L449.3355979618345,250L448.17664102307936,250L446.70996103506855,250L445.68288540313733,250L445.483065241283,250L444.4360075931662,250L443.14516934758734,250L441.978219602358,250L440.2797482265962,250L439.6203416924768,250L439.2007193525828,250L438.58127685083434,250L437.87391347786996,250L437.41432710560497,250L436.86282345888714,250L435.7478269557399,250L434.6648016784894,250L433.89349585373174,250L432.750524527925,250L431.1959236686983,250L430.0369667299432,250L429.08182635627946,250L428.9179738235589,250L428.16265361174953,250L426.5441103007294,250L425.9006893795585,250L425.02547707063655,250L423.3589769207714,250L422.5517034668799,250L421.1649515436109,250L420.13787591167954,250L419.2786492157059,250L418.30352682585675,250L417.51623538815073,250L416.46518133679695,250L415.37815965630944,250L415.04246178439416,250L414.4989509441503,250L413.75561994205225,250L412.7365371165952,250L411.9652312918374,250L410.6703966430214,250L409.915076431212,250L408.7481266859827,250L408.4563892496754,250L407.30942152063153,250L406.28634229193733,250L404.94355080427624,250L404.64382056149464,250L403.80457588170657,250L403.04126286342307,250L401.8623239084825,250L401.63053252073144,250L400.37965830752336,250L399.6003596762914,250L398.5093415925668,250L397.52622639624354,250L396.994704765711,250L396.07153561794394,250L394.4529923069239,250L393.5657907882906,250L392.0791287840944,250L391.24388050754334,250L389.8051753421922,250L388.4823658707164,250L386.87980817264463,250L385.33719652312925,250L383.87451293835556,250L382.95933659706276,250L381.44469977020685,250L380.4615845738836,250L378.8949945049456,250L377.43630732340904,250L376.7489259666301,250L375.37815965630944,250L374.0353681686483,250L373.57578179638335,250L371.90128884004406,250L370.33469877110605,250L369.38355480067946,250L368.01278849035884,250L367.52922369867133,250L366.1904286142473,250L365.3711659506445,250L363.92446797881917,250L362.5417124587871,250L361.77440303726655,250L360.2677590168849,250L359.4764711759417,250L358.7890898191628,250L357.84194225197336,250L356.5271255869718,250L355.5919672294935,250L354.6408232590669,250L353.41392746528135,250L352.3628734139276,250L350.90818263562807,250L350.08092716555115,250L348.52232990308727,250L347.1515635927666,250L346.48416425217306,250L345.2173044260166,250L344.46997702068154,250L343.91048056748934,250L342.3478869017885,250L340.57748026775914,250L339.38655210310725,250L337.8239584374064,250L336.9047856928765,250L335.6299330602459,250L335.14237186532137,250L333.66769907083625,250L332.0171845339196,250L331.3657708062745,250L330.26276351283855,250L329.2516734938556,250L327.8569287641124,250L326.38625237286453,250L325.23928464382067,250L324.83564791687496,250L323.2530722349886,250L322.0661404735739,250L321.1309821160956,250L319.8481366769908,250L318.94494954540914,250L317.6141472674594,250L316.4711759416526,250L315.0884204216206,250L313.721650514537,250L312.14307123588776,250L310.97612149065844,250L309.2976321310821,250L307.8789089819163,250L306.79188730142874,250L305.98061744430015,250L304.49795184334107,250L303.2151064042362,250L302.3518833050255,250L300.9971026076531,250L300.0579478469378,250L298.7990808272555,250L297.81596563093217,250L296.3492856429214,250L295.00649415526027,250L293.99140773304026,250L293.1321810370667,250L292.0291737436308,250L290.8062743530823,250L289.867119592367,250L288.8959936057549,250L287.2974323109202,250L286.2463782595664,250L285.1313817564193,250L284.47597162553706,250L283.225097412329,250L282.1420721350785,250L281.7464282146069,250L281.1869317614148,250L280.4356079528425,250L278.8490358677191,250L278.24957538215614,250L277.96982715556004,250L277.6980717354382,250L277.37835947647125,250L276.8188630232791,250L275.4081326805875,250L274.8846038565291,250L273.310020981117,250L272.83045259266663,250L272.18303526825866,250L270.88420421620543,250L269.8811070036967,250L268.9459486462185,250L267.7989809171746,250L266.9557398341493,250L266.11649515436113,250L265.51703466879815,250L264.93355979618343,250L264.66580077929865,250L264.310120891198,250L264.218203616745,250L263.14317114596867,250L262.4278149665302,250L261.32081126985713,250L260.26576081526633,250L259.326606054551,250L258.4394045359177,250L257.5442102108103,250L255.94165251273859,250L255.55400139874115,250L255.10240783295038,250L253.93545808772106,250L253.19612348886005,250L251.8733140173844,250L250.33869517434312,250L249.61534618843046,250L248.18063742631634,250L246.74992506743934,250L245.41912278948948,250L244.59186731941256,250L242.8454391048057,250L241.87431311819364,250L240.38765111399744,250L239.49645319212715,250L237.96583075232297,250L236.31931261864324,250L234.86062543710662,250L233.48586272354882,250L232.5147367369368,250L231.61954241182937,250L230.1768408432411,250L228.6062543710661,250L227.64711759416528,250L226.4521930262764,250L225.04545908682186,250L223.6107503247078,250L222.15206314317118,250L221.20891197921875,250L220.08592266959738,250L219.29863123189133,250L218.51533619742233,250L217.54021380757317,250L216.60105904685784,250L216.053551803377,250L214.7946847836947,250L213.57578179638327,250L212.87241482665604,250L212.00919172744537,250L210.9901089019883,250L210.73034269157765,250L209.65531022080134,250L208.71615546008596,250L207.42531721450695,250L206.32630632430815,250L205.1113997402338,250L203.97642122090122,250L203.2610650414627,250L201.90628434409038,250L201.35078429413528,250L200.32770506544117,250L199.59636327305427,250L198.1696473174144,250L196.4232191028075,250L195.3242082126087,250L193.70166849835152,250L193.40193825557003,250L193.17813967429313,250L191.79938055749827,250L190.82026176441204,250L189.6732940353682,250L188.38245578978922,250L187.0996103506844,250L185.52902387850938,250L184.51393745628937,250L183.16714956539116,250L182.11209911080027,250L181.58857028674197,250L179.94205215306226,250L178.93895494055351,250L178.15565990608457,250L177.02068138675196,250L175.49005894694778,250L174.5229293635728,250L174.05535018483366,250L172.66060545509046,250L171.48965930662408,250L170.23478869017887,250L169.4514936557099,250L168.91997202517737,250L167.98881007093618,250L166.366270356679,250L164.79168748126688,250L164.05235288240587,250L162.6336297332401,250L161.13497851933263,250L160.6993705664902,250L160.13188130682389,250L159.4365071435708,250L158.6572085123389,250L157.40633429913083,250L156.7149565391148,250L155.77580177839948,250L154.79668298531323,250L153.83754620841245,250L152.2749525427116,250L151.4357078629234,250L150.93615745828757,250L149.82515735837748,250L149.10980117893897,250L148.1466679988011,250L147.0756319312619,250L146.0485562993306,250L145.29323608752125,250L143.89449495454093,250L143.19912079128787,250L142.14007393345992,250L140.65341192926368,250L139.4145269257668,250L138.87501248876012,250L137.73204116295338,250L136.81286841842345,250L135.40213807573184,250L134.65880707363374,250L134.0113897492257,250L132.72454790688383,250L131.74942551703467,250L131.0020981116995,250L129.6832850434609,250L128.94395044459986,250L128.41642521730446,250L127.01368768108705,250L126.41422719552406,250L125.53901488660209,250L124.58387451293838,250L124.10830252772504,250L123.62873413927467,250L122.8734139274653,250L121.9222699570387,250L121.09101808372466,250L120.13987411329805,250L119.21670496553102,250L118.24158257568192,250L116.53112199020883,250L115.26026576081527,250L114.35308222599663,250L113.09421520631433,250L111.61954241182937,250L110.26076531121991,250L108.85003496852835,250L107.29543410930165,250L105.82875412129084,250L104.81366769907086,250L103.95843740633433,250L102.8234588870017,250L102.37985812768508,250L101.26486162453794,250L99.98201618543312,250L98.8550304725747,250L97.9278649215706,250L97.4203217104606,250L96.8168648216605,250L95.96563093216108,250L94.33509841142973,250L92.95234289139775,250L91.6295334199221,250L90.35867719052852,250L88.89599360575484,250L87.94085323209111,250L86.62204016385255,250L85.6469177740034,250L85.0234788690179,250L84.45199320611451,250L83.87251473673695,250L83.27305425117397,250L82.44180237785994,250L81.71445698871015,250L80.37166550104907,250L79.8001798381457,250L79.02887401338795,250L77.59816165451096,250L76.33529823159158,250L75.71585572984316,250L74.8646218403437,250L74.15725846737936,250L73.54980517534221,250L72.2989309621341,250L71.41172944350086,250L71.11199920071935,250L70.18083724647818,250L69.62134079328605,250L68.9459486462184,250L68.29453491857329,250L67.61914277150565,250L66.2883404935558,250L65.70486562094115,250L64.84963532820461,250L63.77060645419124,250L62.927365371165955,250L62.27195524028375,250L61.436706963732654,250L60.58147667099612,250L59.65431111999201,250L59.15875711859327,250L57.87990808272555,250L56.83684683784595,250L55.60595464082326,250L54.95853731641523,250L53.79558397442303,250L52.28893995404137,250L51.53761614546909,250L50.714357078629234,250L49.98301528624239,250L48.584274153262065,250L47.34538914976521,250L46.20641422719552,250L45.251273853531835,250L44.08832051153962,250L42.633629733240085,250L41.61055050454591,250L40.23578779098811,250L39.58837046658009,250L38.245578978918985,250L36.81886302327905,250L35.3122190028974,250L33.82955340193826,250L32.51074033369967,250L31.287840943151167,250L30.540513537815972,250L29.41752422819463,250L27.922869417524232,250L27.319412528724158,250L27.059646318313526,250L26.26835847737037,250L25.525027475272253,250L24.82166050554502,250L24.026376261364774,250L23.091217903886506,250L22.707563193126187,250L21.88830052952343,250L21.528624238185635,250L20.725347187531227,250L20.029973024278153,250L19.178739134778702,250L18.92296932760516,250L18.3434908582276,250L17.432310920171847,250L17.272454790688386,250L16.82485762813468,250L15.833749625337202,250L14.530922170046958,250L13.687681087021684,250L12.344889599360577,250L10.914177240483566,250L9.999000899190731,250L8.987910880207815,250L7.497252472774503,250L6.841842341892298,250L5.942651613547809,250L5.407133579778202,250L4.336097512238986,250L3.4249175741832354,250L2.9333599760215807,250L2.2499750224797688,250L1.8703167149565394,250L1.3587771006094518,250L1.0790288740133882,250L0,250Z"></path></g><g clip-path="url(#clip881)" transform="translate(0,0)"><g id="area432" clip-path="url(#clip465)"><path id="line" class="area-chart-curr" d="M0,203.54166666666663L1.0790288740133882,203.75000000000003L1.3587771006094518,203.9583333333333L1.8703167149565394,203.54166666666663L2.2499750224797688,203.75000000000003L2.9333599760215807,204.37500000000006L3.4249175741832354,204.79166666666669L4.336097512238986,205.20833333333334L5.407133579778202,206.04166666666663L5.942651613547809,206.45833333333337L6.841842341892298,206.66666666666663L7.497252472774503,207.0833333333333L8.987910880207815,207.91666666666669L9.999000899190731,208.33333333333334L10.914177240483566,209.375L12.344889599360577,210.41666666666669L13.687681087021684,211.04166666666669L14.530922170046958,211.24999999999994L15.833749625337202,210.00000000000003L16.82485762813468,210.41666666666669L17.272454790688386,210.2083333333333L17.432310920171847,210.00000000000003L18.3434908582276,210.2083333333333L18.92296932760516,210.83333333333331L19.178739134778702,210.83333333333331L20.029973024278153,210.41666666666669L20.725347187531227,209.375L21.528624238185635,209.375L21.88830052952343,208.74999999999997L22.707563193126187,208.33333333333334L23.091217903886506,208.12499999999994L24.026376261364774,207.0833333333333L24.82166050554502,208.33333333333334L25.525027475272253,209.16666666666663L26.26835847737037,209.58333333333337L27.059646318313526,210.2083333333333L27.319412528724158,210.00000000000003L27.922869417524232,210.83333333333331L29.41752422819463,211.24999999999994L30.540513537815972,211.6666666666667L31.287840943151167,211.87499999999997L32.51074033369967,211.6666666666667L33.82955340193826,212.08333333333337L35.3122190028974,211.87499999999997L36.81886302327905,211.6666666666667L38.245578978918985,211.6666666666667L39.58837046658009,211.6666666666667L40.23578779098811,211.45833333333331L41.61055050454591,211.45833333333331L42.633629733240085,211.87499999999997L44.08832051153962,211.24999999999994L45.251273853531835,211.87499999999997L46.20641422719552,211.45833333333331L47.34538914976521,212.08333333333337L48.584274153262065,211.45833333333331L49.98301528624239,211.87499999999997L50.714357078629234,211.24999999999994L51.53761614546909,210.83333333333331L52.28893995404137,210.83333333333331L53.79558397442303,210.00000000000003L54.95853731641523,210.00000000000003L55.60595464082326,209.58333333333337L56.83684683784595,209.375L57.87990808272555,209.375L59.15875711859327,209.375L59.65431111999201,208.95833333333337L60.58147667099612,208.74999999999997L61.436706963732654,209.16666666666663L62.27195524028375,208.74999999999997L62.927365371165955,208.5416666666667L63.77060645419124,208.95833333333337L64.84963532820461,209.16666666666663L65.70486562094115,208.74999999999997L66.2883404935558,209.58333333333337L67.61914277150565,209.375L68.29453491857329,210.2083333333333L68.9459486462184,210.41666666666669L69.62134079328605,210.2083333333333L70.18083724647818,211.04166666666669L71.11199920071935,211.45833333333331L71.41172944350086,211.6666666666667L72.2989309621341,211.6666666666667L73.54980517534221,212.70833333333337L74.15725846737936,213.54166666666666L74.8646218403437,214.16666666666669L75.71585572984316,214.7916666666667L76.33529823159158,214.7916666666667L77.59816165451096,214.99999999999997L79.02887401338795,215.625L79.8001798381457,217.08333333333331L80.37166550104907,217.08333333333331L81.71445698871015,216.66666666666666L82.44180237785994,216.66666666666666L83.27305425117397,218.12499999999997L83.87251473673695,218.33333333333337L84.45199320611451,218.54166666666663L85.0234788690179,218.54166666666663L85.6469177740034,218.54166666666663L86.62204016385255,219.16666666666666L87.94085323209111,219.5833333333333L88.89599360575484,219.79166666666666L90.35867719052852,220.00000000000006L91.6295334199221,220.62499999999994L92.95234289139775,220.41666666666669L94.33509841142973,220.83333333333334L95.96563093216108,221.66666666666663L96.8168648216605,221.875L97.4203217104606,221.875L97.9278649215706,221.66666666666663L98.8550304725747,222.7083333333333L99.98201618543312,223.54166666666669L101.26486162453794,223.33333333333331L102.37985812768508,223.33333333333331L102.8234588870017,223.74999999999994L103.95843740633433,223.54166666666669L104.81366769907086,223.12500000000006L105.82875412129084,223.33333333333331L107.29543410930165,223.74999999999994L108.85003496852835,223.12500000000006L110.26076531121991,222.7083333333333L111.61954241182937,221.66666666666663L113.09421520631433,222.50000000000003L114.35308222599663,222.08333333333337L115.26026576081527,220.41666666666669L116.53112199020883,220.83333333333334L118.24158257568192,220.62499999999994L119.21670496553102,220.62499999999994L120.13987411329805,220.20833333333331L121.09101808372466,220.00000000000006L121.9222699570387,219.79166666666666L122.8734139274653,219.79166666666666L123.62873413927467,219.37500000000003L124.10830252772504,218.33333333333337L124.58387451293838,218.33333333333337L125.53901488660209,218.33333333333337L126.41422719552406,217.29166666666669L127.01368768108705,216.66666666666666L128.41642521730446,216.4583333333333L128.94395044459986,215.625L129.6832850434609,214.58333333333334L131.0020981116995,214.16666666666669L131.74942551703467,213.3333333333333L132.72454790688383,212.91666666666663L134.0113897492257,211.87499999999997L134.65880707363374,211.87499999999997L135.40213807573184,210.62500000000006L136.81286841842345,210.2083333333333L137.73204116295338,209.375L138.87501248876012,208.5416666666667L139.4145269257668,208.5416666666667L140.65341192926368,208.95833333333337L142.14007393345992,209.16666666666663L143.19912079128787,210.62500000000006L143.89449495454093,210.83333333333331L145.29323608752125,211.87499999999997L146.0485562993306,212.91666666666663L147.0756319312619,213.3333333333333L148.1466679988011,213.95833333333331L149.10980117893897,213.95833333333331L149.82515735837748,213.75000000000006L150.93615745828757,212.91666666666663L151.4357078629234,212.5L152.2749525427116,213.12500000000003L153.83754620841245,212.70833333333337L154.79668298531323,212.29166666666663L155.77580177839948,211.87499999999997L156.7149565391148,211.04166666666669L157.40633429913083,210.62500000000006L158.6572085123389,210.83333333333331L159.4365071435708,211.45833333333331L160.13188130682389,211.6666666666667L160.6993705664902,212.70833333333337L161.13497851933263,213.3333333333333L162.6336297332401,213.54166666666666L164.05235288240587,213.75000000000006L164.79168748126688,214.37499999999994L166.366270356679,214.37499999999994L167.98881007093618,214.99999999999997L168.91997202517737,214.16666666666669L169.4514936557099,213.3333333333333L170.23478869017887,214.37499999999994L171.48965930662408,214.37499999999994L172.66060545509046,214.37499999999994L174.05535018483366,214.16666666666669L174.5229293635728,213.75000000000006L175.49005894694778,214.58333333333334L177.02068138675196,214.16666666666669L178.15565990608457,214.37499999999994L178.93895494055351,213.3333333333333L179.94205215306226,213.95833333333331L181.58857028674197,214.16666666666669L182.11209911080027,213.95833333333331L183.16714956539116,214.16666666666669L184.51393745628937,213.54166666666666L185.52902387850938,213.54166666666666L187.0996103506844,212.91666666666663L188.38245578978922,212.29166666666663L189.6732940353682,211.87499999999997L190.82026176441204,211.45833333333331L191.79938055749827,212.08333333333337L193.17813967429313,211.45833333333331L193.40193825557003,211.24999999999994L193.70166849835152,211.6666666666667L195.3242082126087,211.45833333333331L196.4232191028075,210.83333333333331L198.1696473174144,211.24999999999994L199.59636327305427,211.6666666666667L200.32770506544117,211.24999999999994L201.35078429413528,212.29166666666663L201.90628434409038,212.29166666666663L203.2610650414627,213.12500000000003L203.97642122090122,213.54166666666666L205.1113997402338,214.37499999999994L206.32630632430815,214.16666666666669L207.42531721450695,215.625L208.71615546008596,216.25000000000003L209.65531022080134,217.08333333333331L210.73034269157765,217.08333333333331L210.9901089019883,217.29166666666669L212.00919172744537,217.9166666666667L212.87241482665604,218.33333333333337L213.57578179638327,219.16666666666666L214.7946847836947,219.16666666666666L216.053551803377,220.00000000000006L216.60105904685784,220.41666666666669L217.54021380757317,220.83333333333334L218.51533619742233,220.62499999999994L219.29863123189133,220.83333333333334L220.08592266959738,221.24999999999997L221.20891197921875,221.24999999999997L222.15206314317118,221.66666666666663L223.6107503247078,221.875L225.04545908682186,222.50000000000003L226.4521930262764,223.33333333333331L227.64711759416528,223.54166666666669L228.6062543710661,223.54166666666669L230.1768408432411,224.1666666666667L231.61954241182937,224.37499999999997L232.5147367369368,225.62500000000003L233.48586272354882,225.41666666666663L234.86062543710662,226.04166666666666L236.31931261864324,225.62500000000003L237.96583075232297,225.62500000000003L239.49645319212715,225.8333333333333L240.38765111399744,225.8333333333333L241.87431311819364,225L242.8454391048057,225.20833333333337L244.59186731941256,225.41666666666663L245.41912278948948,224.58333333333337L246.74992506743934,225.20833333333337L248.18063742631634,224.58333333333337L249.61534618843046,223.95833333333334L250.33869517434312,222.91666666666666L251.8733140173844,222.91666666666666L253.19612348886005,222.29166666666663L253.93545808772106,220.41666666666669L255.10240783295038,219.5833333333333L255.55400139874115,219.16666666666666L255.94165251273859,219.16666666666666L257.5442102108103,218.33333333333337L258.4394045359177,218.12499999999997L259.326606054551,217.29166666666669L260.26576081526633,217.08333333333331L261.32081126985713,216.66666666666666L262.4278149665302,216.4583333333333L263.14317114596867,215.83333333333337L264.218203616745,214.99999999999997L264.310120891198,214.58333333333334L264.66580077929865,214.7916666666667L264.93355979618343,214.58333333333334L265.51703466879815,214.37499999999994L266.11649515436113,213.75000000000006L266.9557398341493,213.12500000000003L267.7989809171746,212.5L268.9459486462185,211.45833333333331L269.8811070036967,211.24999999999994L270.88420421620543,210.2083333333333L272.18303526825866,209.375L272.83045259266663,208.5416666666667L273.310020981117,207.91666666666669L274.8846038565291,207.0833333333333L275.4081326805875,206.66666666666663L276.8188630232791,205.83333333333337L277.37835947647125,206.25L277.6980717354382,206.25L277.96982715556004,206.66666666666663L278.24957538215614,206.87500000000003L278.8490358677191,206.87500000000003L280.4356079528425,207.50000000000006L281.1869317614148,208.5416666666667L281.7464282146069,208.74999999999997L282.1420721350785,208.74999999999997L283.225097412329,209.16666666666663L284.47597162553706,209.79166666666663L285.1313817564193,210.2083333333333L286.2463782595664,210.41666666666669L287.2974323109202,211.24999999999994L288.8959936057549,212.29166666666663L289.867119592367,213.54166666666666L290.8062743530823,212.70833333333337L292.0291737436308,213.3333333333333L293.1321810370667,213.54166666666666L293.99140773304026,212.5L295.00649415526027,212.91666666666663L296.3492856429214,212.5L297.81596563093217,212.70833333333337L298.7990808272555,212.08333333333337L300.0579478469378,211.04166666666669L300.9971026076531,210.41666666666669L302.3518833050255,211.6666666666667L303.2151064042362,212.29166666666663L304.49795184334107,210.62500000000006L305.98061744430015,210.62500000000006L306.79188730142874,211.6666666666667L307.8789089819163,211.45833333333331L309.2976321310821,211.87499999999997L310.97612149065844,211.45833333333331L312.14307123588776,211.04166666666669L313.721650514537,211.45833333333331L315.0884204216206,211.45833333333331L316.4711759416526,211.04166666666669L317.6141472674594,211.24999999999994L318.94494954540914,212.08333333333337L319.8481366769908,212.5L321.1309821160956,211.87499999999997L322.0661404735739,212.29166666666663L323.2530722349886,212.08333333333337L324.83564791687496,212.29166666666663L325.23928464382067,211.04166666666669L326.38625237286453,211.45833333333331L327.8569287641124,210.83333333333331L329.2516734938556,210.41666666666669L330.26276351283855,209.79166666666663L331.3657708062745,209.58333333333337L332.0171845339196,208.74999999999997L333.66769907083625,208.95833333333337L335.14237186532137,208.95833333333337L335.6299330602459,208.95833333333337L336.9047856928765,208.33333333333334L337.8239584374064,208.74999999999997L339.38655210310725,208.74999999999997L340.57748026775914,208.33333333333334L342.3478869017885,208.95833333333337L343.91048056748934,209.375L344.46997702068154,209.375L345.2173044260166,209.79166666666663L346.48416425217306,209.58333333333337L347.1515635927666,212.5L348.52232990308727,212.70833333333337L350.08092716555115,213.54166666666666L350.90818263562807,213.54166666666666L352.3628734139276,214.7916666666667L353.41392746528135,215.83333333333337L354.6408232590669,215.83333333333337L355.5919672294935,216.25000000000003L356.5271255869718,217.29166666666669L357.84194225197336,217.70833333333334L358.7890898191628,218.12499999999997L359.4764711759417,218.75L360.2677590168849,218.54166666666663L361.77440303726655,218.75L362.5417124587871,221.24999999999997L363.92446797881917,221.45833333333337L365.3711659506445,221.875L366.1904286142473,222.29166666666663L367.52922369867133,222.7083333333333L368.01278849035884,222.7083333333333L369.38355480067946,222.7083333333333L370.33469877110605,223.33333333333331L371.90128884004406,223.12500000000006L373.57578179638335,223.54166666666669L374.0353681686483,224.37499999999997L375.37815965630944,224.58333333333337L376.7489259666301,225.41666666666663L377.43630732340904,225.62500000000003L378.8949945049456,225.8333333333333L380.4615845738836,225.20833333333337L381.44469977020685,225.8333333333333L382.95933659706276,225.62500000000003L383.87451293835556,223.74999999999994L385.33719652312925,224.79166666666663L386.87980817264463,224.1666666666667L388.4823658707164,223.95833333333334L389.8051753421922,223.12500000000006L391.24388050754334,223.54166666666669L392.0791287840944,222.50000000000003L393.5657907882906,222.08333333333337L394.4529923069239,221.66666666666663L396.07153561794394,221.66666666666663L396.994704765711,221.24999999999997L397.52622639624354,220.41666666666669L398.5093415925668,220.62499999999994L399.6003596762914,220.20833333333331L400.37965830752336,220.41666666666669L401.63053252073144,219.5833333333333L401.8623239084825,219.16666666666666L403.04126286342307,218.95833333333337L403.80457588170657,218.12499999999997L404.64382056149464,217.49999999999994L404.94355080427624,217.08333333333331L406.28634229193733,216.4583333333333L407.30942152063153,215.83333333333337L408.4563892496754,215.41666666666663L408.7481266859827,214.7916666666667L409.915076431212,214.16666666666669L410.6703966430214,213.3333333333333L411.9652312918374,212.70833333333337L412.7365371165952,211.87499999999997L413.75561994205225,211.45833333333331L414.4989509441503,210.41666666666669L415.04246178439416,210.00000000000003L415.37815965630944,209.79166666666663L416.46518133679695,210.00000000000003L417.51623538815073,209.16666666666663L418.30352682585675,210.41666666666669L419.2786492157059,211.04166666666669L420.13787591167954,211.45833333333331L421.1649515436109,211.45833333333331L422.5517034668799,212.5L423.3589769207714,213.95833333333331L425.02547707063655,214.16666666666669L425.9006893795585,214.37499999999994L426.5441103007294,215.20833333333337L428.16265361174953,214.37499999999994L428.9179738235589,213.95833333333331L429.08182635627946,213.95833333333331L430.0369667299432,214.16666666666669L431.1959236686983,214.16666666666669L432.750524527925,212.91666666666663L433.89349585373174,212.70833333333337L434.6648016784894,211.6666666666667L435.7478269557399,211.04166666666669L436.86282345888714,211.87499999999997L437.41432710560497,212.70833333333337L437.87391347786996,213.3333333333333L438.58127685083434,213.54166666666666L439.2007193525828,214.58333333333334L439.6203416924768,214.58333333333334L440.2797482265962,215.41666666666663L441.978219602358,215.41666666666663L443.14516934758734,216.04166666666663L444.4360075931662,215.83333333333337L445.483065241283,215.41666666666663L445.68288540313733,215.83333333333337L446.70996103506855,215.83333333333337L448.17664102307936,214.99999999999997L449.3355979618345,215.20833333333337L450.30672394844646,214.7916666666667L451.2458787091619,213.54166666666666L452.23698671195945,214.37499999999994L453.57178539314623,214.16666666666669L455.0784294135279,213.75000000000006L456.4571885303227,213.3333333333333L457.7040663402938,213.75000000000006L459.418523329004,213.54166666666666L460.61744430013,213.3333333333333L462.0241782395845,213.12500000000003L463.570786292337,212.70833333333337L464.35008492356894,212.5L465.7208512338896,211.45833333333331L466.53212109101815,211.45833333333331L467.5192326905786,211.6666666666667L468.5183334998502,211.45833333333331L469.4375062443802,211.24999999999994L470.0089919072836,211.24999999999994L470.92017184533927,211.04166666666669L471.8233589769208,210.83333333333331L473.1541612548707,210.83333333333331L474.6328304525928,210.62500000000006L475.50004995504054,210.41666666666669L476.30332700569494,211.24999999999994L477.1505644919573,211.24999999999994L478.1256868818065,211.04166666666669L478.68518333499867,211.6666666666667L479.4564891597563,211.6666666666667L480.2517734039365,212.08333333333337L481.1269857128585,212.91666666666663L482.7535218303527,212.70833333333337L484.3440903187133,213.54166666666666L484.8716155460086,214.37499999999994L486.41422719552406,214.58333333333334L487.0456589069838,216.25000000000003L487.9568388450396,216.4583333333333L489.2716555100411,216.66666666666666L490.0309721250875,217.49999999999994L491.66150464581887,218.12499999999997L492.2649615346189,218.75L493.651713457888,218.54166666666663L494.63083225097427,217.9166666666667L495.9976021580578,217.49999999999994L496.7808971925268,218.33333333333337L497.3643720651415,218.33333333333337L498.8870016984715,218.33333333333337L500.23778599260675,218.95833333333337L501.6485163352984,220.20833333333331L501.89229693276064,220.00000000000006L502.60765311219916,219.79166666666666L503.4948546308324,219.37500000000003L505.2292936357279,220.41666666666669L506.2883404935559,220.00000000000006L507.86691977220516,220.41666666666669L508.8820061944252,220.83333333333334L509.5893695673895,220.62499999999994L510.39264661804384,221.875L511.33979418523336,222.50000000000003L512.8624238185635,222.29166666666663L513.7776001598563,222.50000000000003L514.8925966630034,222.91666666666666L516.0395643920473,222.50000000000003L516.8428414427017,222.29166666666663L518.3215106404238,222.08333333333337L519.1687481266861,221.66666666666663L519.9640323708663,221.875L521.4466979718255,222.50000000000003L523.0412628634231,221.875L524.2202018183635,221.45833333333337L525.1074033369969,220.62499999999994L526.3542811469679,220.83333333333334L527.7210510540514,219.79166666666666L528.3884503946449,219.37500000000003L529.8191627535219,219.5833333333333L530.650414626836,218.95833333333337L531.3298031771407,218.54166666666663L532.7565191327806,218.95833333333337L534.2951343790589,218.12499999999997L535.5380157857928,217.70833333333334L536.001598561295,217.08333333333331L537.292436806874,216.25000000000003L537.7760015985614,215.83333333333337L538.5193326006595,216.87500000000006L539.6663003297033,216.25000000000003L540.8212608652213,216.04166666666663L541.5565990608454,214.7916666666667L541.8763113198123,214.37499999999994L542.8674193226099,213.75000000000006L543.8825057448298,212.70833333333337L544.3460885203318,212.29166666666663L545.7328404436008,212.08333333333337L546.6040563492858,211.04166666666669L547.7070636427217,210.41666666666669L548.2785493056251,209.375L549.4175242281948,208.74999999999997L550.6484164252175,208.74999999999997L551.3797582176043,209.16666666666663L552.2269957038667,210.00000000000003L552.9303626735939,210.41666666666669L553.9214706763914,210.62500000000006L555.5480067938856,211.24999999999994L556.4631831351784,212.70833333333337L557.9378559296634,213.12500000000003L558.7131581576583,213.3333333333333L560.0319712258968,213.12500000000003L561.6185433110203,213.12500000000003L562.3378958936958,212.70833333333337L563.1491657508244,212.91666666666663L564.3201118992907,212.70833333333337L565.6269357578182,212.08333333333337L565.9186731941253,211.6666666666667L566.5940653411931,211.04166666666669L567.4652812468779,210.00000000000003L568.2006194425019,209.79166666666663L568.7641122989311,209.58333333333337L570.0349685283246,210.62500000000006L570.3346987711061,211.04166666666669L570.9141772404837,212.29166666666663L571.6694974522932,212.70833333333337L572.4368068738136,212.5L572.728544310121,212.70833333333337L574.1472674592868,213.3333333333333L575.4620841242883,213.75000000000006L576.4611849335599,213.3333333333333L577.1245878709163,214.37499999999994L577.9078829053852,213.75000000000006L578.9669297632131,211.45833333333331L579.9300629433511,211.6666666666667L580.9131781396744,211.6666666666667L582.415825756819,211.6666666666667L582.9393545808774,210.83333333333331L584.126286342292,211.6666666666667L585.2932360875214,211.6666666666667L586.3283045259268,211.45833333333331L587.4233190128886,211.45833333333331L588.9059846138476,211.45833333333331L589.6852832450795,211.6666666666667L590.8242581676492,211.6666666666667L592.0951143970427,211.87499999999997L593.7656109501451,211.45833333333331L594.9245678889001,210.83333333333331L596.3712658607254,210.62500000000006L597.0666400239786,210.62500000000006L598.6452193026278,209.58333333333337L599.4484963532822,208.95833333333337L600.1598561294836,209.58333333333337L600.7113597762016,209.375L602.0181836347289,208.95833333333337L602.6016585073435,209.58333333333337L603.824557897892,209.16666666666663L605.1753421920273,208.74999999999997L606.50214806674,208.12499999999994L607.4492956339296,208.95833333333337L608.8160655410132,208.95833333333337L610.1708462383856,209.16666666666663L611.4576880807275,209.79166666666663L611.6694974522931,209.79166666666663L612.3888500349686,210.41666666666669L613.192127085623,210.00000000000003L614.2711559596365,211.04166666666669L615.5060445598963,211.04166666666669L616.4851633529825,211.6666666666667L618.035767808972,212.29166666666663L618.6871815366172,213.54166666666666L619.7981816365273,213.75000000000006L620.7892896393247,214.7916666666667L621.5526026576083,214.7916666666667L622.5317214506945,214.99999999999997L623.067239484464,216.25000000000003L624.725746827855,216.66666666666666L626.3562793485864,216.87500000000006L627.3713657708064,217.49999999999994L628.7421320811271,218.54166666666663L629.1657508242583,218.33333333333337L629.8291537616147,218.95833333333337L631.1759416525128,219.16666666666666L632.2070136876812,218.95833333333337L633.7895893695676,219.5833333333333L634.365071435708,219.79166666666666L634.7886901788393,220.00000000000006L636.1474672794486,219.5833333333333L637.7380357678092,218.95833333333337L638.561294834649,218.75L639.4964531921271,219.79166666666666L640.7872914377061,219.5833333333333L641.6784893595765,220.20833333333331L642.9253671695475,220.41666666666669L643.684683784594,221.45833333333337L645.0954141272855,221.66666666666663L646.4422020181837,221.875L647.4093316015587,221.0416666666667L648.4324108302528,221.0416666666667L649.6712958337497,221.45833333333337L651.16595064442,221.66666666666663L652.7405335198322,221.0416666666667L653.9794185233292,221.875L655.454091317814,221.24999999999997L656.8728144669797,221.0416666666667L658.2475771805375,221.0416666666667L659.6663003297033,220.00000000000006L660.6174443001299,218.95833333333337L661.3168148666202,218.54166666666663L662.9593365970627,218.95833333333337L663.9184733739636,219.16666666666666L665.4011389749227,220.41666666666669L665.9726246378261,220.00000000000006L667.2674592866422,220.00000000000006L668.4743730642423,219.16666666666666L669.2137076631033,219.16666666666666L670.6164451993205,218.54166666666663L671.3357977819962,218.12499999999997L672.2989309621342,219.5833333333333L673.3020281746428,219.37500000000003L674.0773304026377,218.54166666666663L675.0284743730643,218.33333333333337L675.5440103906485,217.49999999999994L676.1594564891599,216.25000000000003L676.7069637326407,216.25000000000003L677.2944350084925,216.4583333333333L677.8619242681588,216.04166666666663L678.6731941252873,215.20833333333337L679.3885503047256,214.58333333333334L679.9280647417323,212.5L681.2189029873115,211.6666666666667L681.8103706664003,210.83333333333331L682.6895793785594,209.375L683.7246478169649,209.58333333333337L684.3520831251874,209.58333333333337L685.3192127085624,210.00000000000003L686.3303027275454,210.83333333333331L686.6420221800379,211.45833333333331L688.3684683784594,211.87499999999997L689.0038964931563,212.29166666666663L689.4874612848437,212.5L690.5824757718055,212.91666666666663L691.5136377260467,213.12500000000003L692.0371665501049,213.54166666666666L693.5997602158058,214.37499999999994L695.1623538815068,213.54166666666666L696.329303626736,213.54166666666666L697.7799980017985,213.54166666666666L698.4593865521032,212.91666666666663L699.4784693775601,212.5L700.8452392846439,212.08333333333337L701.8563293036268,210.83333333333331L702.6276351283844,210.41666666666669L703.5468078729144,211.45833333333331L704.2781496653014,211.6666666666667L705.2133080227796,212.91666666666663L705.7168548306524,213.12500000000003L706.2683584773704,213.95833333333331L707.4672794484965,213.75000000000006L708.3904485962635,214.58333333333334L709.0418623239085,215.20833333333337L710.3486861824359,214.58333333333334L711.1919272654612,214.99999999999997L712.4388050754321,214.7916666666667L713.6337296433211,214.58333333333334L714.5808772105107,214.7916666666667L715.4920571485663,214.99999999999997L716.7908882006196,214.58333333333334L718.3015286242382,214.37499999999994L718.9969027874913,213.75000000000006L719.3645718853033,213.95833333333331L720.2917374363074,213.95833333333331L721.750424617844,213.95833333333331L723.1531621540614,214.16666666666669L723.780597462284,213.3333333333333L724.699770206814,214.37499999999994L725.2672594664803,213.95833333333331L726.1584573883506,214.16666666666669L727.6491157957839,213.95833333333331L729.0998101708464,213.3333333333333L730.3706664002398,212.70833333333337L731.6934758717157,212.5L732.964332101109,211.6666666666667L733.5957638125687,211.87499999999997L735.038465381157,211.45833333333331L736.3053252073134,211.24999999999994L737.8319512438806,211.24999999999994L739.1028074732741,210.83333333333331L740.5055450094915,211.04166666666669L741.8803077230493,211.04166666666669L743.2590668398442,211.04166666666669L744.6817863922471,211.24999999999994L745.9206713957439,211.87499999999997L746.4681786392248,212.29166666666663L747.9068838045758,212.29166666666663L748.6701968228596,212.91666666666663L750.1448696173444,214.99999999999997L751.2238984913578,216.25000000000003L752.7025676890798,216.66666666666666L752.9663303027278,217.29166666666669L754.0413627735039,218.33333333333337L755.3441902287942,218.12499999999997L756.0475571985214,219.5833333333333L757.4702767509243,220.00000000000006L758.245578978919,220.41666666666669L758.98491357778,220.62499999999994L759.5204316115496,220.83333333333334L760.4436007593167,220.62499999999994L761.5226296333301,221.66666666666663L762.6975721850337,221.45833333333337L763.6327305425117,221.875L764.3480867219503,222.91666666666666L765.9866120491558,222.91666666666666L767.3813567788992,223.74999999999994L768.53232091118,223.74999999999994L769.1397742032171,224.1666666666667L770.706364272155,224.37499999999997L771.8693176141473,223.74999999999994L772.6006594065343,224.79166666666663L774.3830552502749,223.95833333333334L775.6219402537715,226.04166666666666L777.4123289039866,226.66666666666669L778.6272354880609,227.49999999999997L780.3936457188531,227.2916666666667L781.7284444000401,226.25000000000006L783.2910380657408,227.2916666666667L785.0814267159558,226.04166666666666L786.8638225596964,226.87499999999994L788.6262363872515,226.04166666666666L790.4006394245181,226.25000000000006L791.7474273154162,225L792.8664202218004,225.20833333333337L794.552902387851,223.95833333333334L796.3472874413029,224.1666666666667L798.1216904785692,222.91666666666666L799.3445898691178,224.1666666666667"></path><path id="area" class="area-chart-curr-fill" d="M0,203.54166666666663L1.0790288740133882,203.75000000000003L1.3587771006094518,203.9583333333333L1.8703167149565394,203.54166666666663L2.2499750224797688,203.75000000000003L2.9333599760215807,204.37500000000006L3.4249175741832354,204.79166666666669L4.336097512238986,205.20833333333334L5.407133579778202,206.04166666666663L5.942651613547809,206.45833333333337L6.841842341892298,206.66666666666663L7.497252472774503,207.0833333333333L8.987910880207815,207.91666666666669L9.999000899190731,208.33333333333334L10.914177240483566,209.375L12.344889599360577,210.41666666666669L13.687681087021684,211.04166666666669L14.530922170046958,211.24999999999994L15.833749625337202,210.00000000000003L16.82485762813468,210.41666666666669L17.272454790688386,210.2083333333333L17.432310920171847,210.00000000000003L18.3434908582276,210.2083333333333L18.92296932760516,210.83333333333331L19.178739134778702,210.83333333333331L20.029973024278153,210.41666666666669L20.725347187531227,209.375L21.528624238185635,209.375L21.88830052952343,208.74999999999997L22.707563193126187,208.33333333333334L23.091217903886506,208.12499999999994L24.026376261364774,207.0833333333333L24.82166050554502,208.33333333333334L25.525027475272253,209.16666666666663L26.26835847737037,209.58333333333337L27.059646318313526,210.2083333333333L27.319412528724158,210.00000000000003L27.922869417524232,210.83333333333331L29.41752422819463,211.24999999999994L30.540513537815972,211.6666666666667L31.287840943151167,211.87499999999997L32.51074033369967,211.6666666666667L33.82955340193826,212.08333333333337L35.3122190028974,211.87499999999997L36.81886302327905,211.6666666666667L38.245578978918985,211.6666666666667L39.58837046658009,211.6666666666667L40.23578779098811,211.45833333333331L41.61055050454591,211.45833333333331L42.633629733240085,211.87499999999997L44.08832051153962,211.24999999999994L45.251273853531835,211.87499999999997L46.20641422719552,211.45833333333331L47.34538914976521,212.08333333333337L48.584274153262065,211.45833333333331L49.98301528624239,211.87499999999997L50.714357078629234,211.24999999999994L51.53761614546909,210.83333333333331L52.28893995404137,210.83333333333331L53.79558397442303,210.00000000000003L54.95853731641523,210.00000000000003L55.60595464082326,209.58333333333337L56.83684683784595,209.375L57.87990808272555,209.375L59.15875711859327,209.375L59.65431111999201,208.95833333333337L60.58147667099612,208.74999999999997L61.436706963732654,209.16666666666663L62.27195524028375,208.74999999999997L62.927365371165955,208.5416666666667L63.77060645419124,208.95833333333337L64.84963532820461,209.16666666666663L65.70486562094115,208.74999999999997L66.2883404935558,209.58333333333337L67.61914277150565,209.375L68.29453491857329,210.2083333333333L68.9459486462184,210.41666666666669L69.62134079328605,210.2083333333333L70.18083724647818,211.04166666666669L71.11199920071935,211.45833333333331L71.41172944350086,211.6666666666667L72.2989309621341,211.6666666666667L73.54980517534221,212.70833333333337L74.15725846737936,213.54166666666666L74.8646218403437,214.16666666666669L75.71585572984316,214.7916666666667L76.33529823159158,214.7916666666667L77.59816165451096,214.99999999999997L79.02887401338795,215.625L79.8001798381457,217.08333333333331L80.37166550104907,217.08333333333331L81.71445698871015,216.66666666666666L82.44180237785994,216.66666666666666L83.27305425117397,218.12499999999997L83.87251473673695,218.33333333333337L84.45199320611451,218.54166666666663L85.0234788690179,218.54166666666663L85.6469177740034,218.54166666666663L86.62204016385255,219.16666666666666L87.94085323209111,219.5833333333333L88.89599360575484,219.79166666666666L90.35867719052852,220.00000000000006L91.6295334199221,220.62499999999994L92.95234289139775,220.41666666666669L94.33509841142973,220.83333333333334L95.96563093216108,221.66666666666663L96.8168648216605,221.875L97.4203217104606,221.875L97.9278649215706,221.66666666666663L98.8550304725747,222.7083333333333L99.98201618543312,223.54166666666669L101.26486162453794,223.33333333333331L102.37985812768508,223.33333333333331L102.8234588870017,223.74999999999994L103.95843740633433,223.54166666666669L104.81366769907086,223.12500000000006L105.82875412129084,223.33333333333331L107.29543410930165,223.74999999999994L108.85003496852835,223.12500000000006L110.26076531121991,222.7083333333333L111.61954241182937,221.66666666666663L113.09421520631433,222.50000000000003L114.35308222599663,222.08333333333337L115.26026576081527,220.41666666666669L116.53112199020883,220.83333333333334L118.24158257568192,220.62499999999994L119.21670496553102,220.62499999999994L120.13987411329805,220.20833333333331L121.09101808372466,220.00000000000006L121.9222699570387,219.79166666666666L122.8734139274653,219.79166666666666L123.62873413927467,219.37500000000003L124.10830252772504,218.33333333333337L124.58387451293838,218.33333333333337L125.53901488660209,218.33333333333337L126.41422719552406,217.29166666666669L127.01368768108705,216.66666666666666L128.41642521730446,216.4583333333333L128.94395044459986,215.625L129.6832850434609,214.58333333333334L131.0020981116995,214.16666666666669L131.74942551703467,213.3333333333333L132.72454790688383,212.91666666666663L134.0113897492257,211.87499999999997L134.65880707363374,211.87499999999997L135.40213807573184,210.62500000000006L136.81286841842345,210.2083333333333L137.73204116295338,209.375L138.87501248876012,208.5416666666667L139.4145269257668,208.5416666666667L140.65341192926368,208.95833333333337L142.14007393345992,209.16666666666663L143.19912079128787,210.62500000000006L143.89449495454093,210.83333333333331L145.29323608752125,211.87499999999997L146.0485562993306,212.91666666666663L147.0756319312619,213.3333333333333L148.1466679988011,213.95833333333331L149.10980117893897,213.95833333333331L149.82515735837748,213.75000000000006L150.93615745828757,212.91666666666663L151.4357078629234,212.5L152.2749525427116,213.12500000000003L153.83754620841245,212.70833333333337L154.79668298531323,212.29166666666663L155.77580177839948,211.87499999999997L156.7149565391148,211.04166666666669L157.40633429913083,210.62500000000006L158.6572085123389,210.83333333333331L159.4365071435708,211.45833333333331L160.13188130682389,211.6666666666667L160.6993705664902,212.70833333333337L161.13497851933263,213.3333333333333L162.6336297332401,213.54166666666666L164.05235288240587,213.75000000000006L164.79168748126688,214.37499999999994L166.366270356679,214.37499999999994L167.98881007093618,214.99999999999997L168.91997202517737,214.16666666666669L169.4514936557099,213.3333333333333L170.23478869017887,214.37499999999994L171.48965930662408,214.37499999999994L172.66060545509046,214.37499999999994L174.05535018483366,214.16666666666669L174.5229293635728,213.75000000000006L175.49005894694778,214.58333333333334L177.02068138675196,214.16666666666669L178.15565990608457,214.37499999999994L178.93895494055351,213.3333333333333L179.94205215306226,213.95833333333331L181.58857028674197,214.16666666666669L182.11209911080027,213.95833333333331L183.16714956539116,214.16666666666669L184.51393745628937,213.54166666666666L185.52902387850938,213.54166666666666L187.0996103506844,212.91666666666663L188.38245578978922,212.29166666666663L189.6732940353682,211.87499999999997L190.82026176441204,211.45833333333331L191.79938055749827,212.08333333333337L193.17813967429313,211.45833333333331L193.40193825557003,211.24999999999994L193.70166849835152,211.6666666666667L195.3242082126087,211.45833333333331L196.4232191028075,210.83333333333331L198.1696473174144,211.24999999999994L199.59636327305427,211.6666666666667L200.32770506544117,211.24999999999994L201.35078429413528,212.29166666666663L201.90628434409038,212.29166666666663L203.2610650414627,213.12500000000003L203.97642122090122,213.54166666666666L205.1113997402338,214.37499999999994L206.32630632430815,214.16666666666669L207.42531721450695,215.625L208.71615546008596,216.25000000000003L209.65531022080134,217.08333333333331L210.73034269157765,217.08333333333331L210.9901089019883,217.29166666666669L212.00919172744537,217.9166666666667L212.87241482665604,218.33333333333337L213.57578179638327,219.16666666666666L214.7946847836947,219.16666666666666L216.053551803377,220.00000000000006L216.60105904685784,220.41666666666669L217.54021380757317,220.83333333333334L218.51533619742233,220.62499999999994L219.29863123189133,220.83333333333334L220.08592266959738,221.24999999999997L221.20891197921875,221.24999999999997L222.15206314317118,221.66666666666663L223.6107503247078,221.875L225.04545908682186,222.50000000000003L226.4521930262764,223.33333333333331L227.64711759416528,223.54166666666669L228.6062543710661,223.54166666666669L230.1768408432411,224.1666666666667L231.61954241182937,224.37499999999997L232.5147367369368,225.62500000000003L233.48586272354882,225.41666666666663L234.86062543710662,226.04166666666666L236.31931261864324,225.62500000000003L237.96583075232297,225.62500000000003L239.49645319212715,225.8333333333333L240.38765111399744,225.8333333333333L241.87431311819364,225L242.8454391048057,225.20833333333337L244.59186731941256,225.41666666666663L245.41912278948948,224.58333333333337L246.74992506743934,225.20833333333337L248.18063742631634,224.58333333333337L249.61534618843046,223.95833333333334L250.33869517434312,222.91666666666666L251.8733140173844,222.91666666666666L253.19612348886005,222.29166666666663L253.93545808772106,220.41666666666669L255.10240783295038,219.5833333333333L255.55400139874115,219.16666666666666L255.94165251273859,219.16666666666666L257.5442102108103,218.33333333333337L258.4394045359177,218.12499999999997L259.326606054551,217.29166666666669L260.26576081526633,217.08333333333331L261.32081126985713,216.66666666666666L262.4278149665302,216.4583333333333L263.14317114596867,215.83333333333337L264.218203616745,214.99999999999997L264.310120891198,214.58333333333334L264.66580077929865,214.7916666666667L264.93355979618343,214.58333333333334L265.51703466879815,214.37499999999994L266.11649515436113,213.75000000000006L266.9557398341493,213.12500000000003L267.7989809171746,212.5L268.9459486462185,211.45833333333331L269.8811070036967,211.24999999999994L270.88420421620543,210.2083333333333L272.18303526825866,209.375L272.83045259266663,208.5416666666667L273.310020981117,207.91666666666669L274.8846038565291,207.0833333333333L275.4081326805875,206.66666666666663L276.8188630232791,205.83333333333337L277.37835947647125,206.25L277.6980717354382,206.25L277.96982715556004,206.66666666666663L278.24957538215614,206.87500000000003L278.8490358677191,206.87500000000003L280.4356079528425,207.50000000000006L281.1869317614148,208.5416666666667L281.7464282146069,208.74999999999997L282.1420721350785,208.74999999999997L283.225097412329,209.16666666666663L284.47597162553706,209.79166666666663L285.1313817564193,210.2083333333333L286.2463782595664,210.41666666666669L287.2974323109202,211.24999999999994L288.8959936057549,212.29166666666663L289.867119592367,213.54166666666666L290.8062743530823,212.70833333333337L292.0291737436308,213.3333333333333L293.1321810370667,213.54166666666666L293.99140773304026,212.5L295.00649415526027,212.91666666666663L296.3492856429214,212.5L297.81596563093217,212.70833333333337L298.7990808272555,212.08333333333337L300.0579478469378,211.04166666666669L300.9971026076531,210.41666666666669L302.3518833050255,211.6666666666667L303.2151064042362,212.29166666666663L304.49795184334107,210.62500000000006L305.98061744430015,210.62500000000006L306.79188730142874,211.6666666666667L307.8789089819163,211.45833333333331L309.2976321310821,211.87499999999997L310.97612149065844,211.45833333333331L312.14307123588776,211.04166666666669L313.721650514537,211.45833333333331L315.0884204216206,211.45833333333331L316.4711759416526,211.04166666666669L317.6141472674594,211.24999999999994L318.94494954540914,212.08333333333337L319.8481366769908,212.5L321.1309821160956,211.87499999999997L322.0661404735739,212.29166666666663L323.2530722349886,212.08333333333337L324.83564791687496,212.29166666666663L325.23928464382067,211.04166666666669L326.38625237286453,211.45833333333331L327.8569287641124,210.83333333333331L329.2516734938556,210.41666666666669L330.26276351283855,209.79166666666663L331.3657708062745,209.58333333333337L332.0171845339196,208.74999999999997L333.66769907083625,208.95833333333337L335.14237186532137,208.95833333333337L335.6299330602459,208.95833333333337L336.9047856928765,208.33333333333334L337.8239584374064,208.74999999999997L339.38655210310725,208.74999999999997L340.57748026775914,208.33333333333334L342.3478869017885,208.95833333333337L343.91048056748934,209.375L344.46997702068154,209.375L345.2173044260166,209.79166666666663L346.48416425217306,209.58333333333337L347.1515635927666,212.5L348.52232990308727,212.70833333333337L350.08092716555115,213.54166666666666L350.90818263562807,213.54166666666666L352.3628734139276,214.7916666666667L353.41392746528135,215.83333333333337L354.6408232590669,215.83333333333337L355.5919672294935,216.25000000000003L356.5271255869718,217.29166666666669L357.84194225197336,217.70833333333334L358.7890898191628,218.12499999999997L359.4764711759417,218.75L360.2677590168849,218.54166666666663L361.77440303726655,218.75L362.5417124587871,221.24999999999997L363.92446797881917,221.45833333333337L365.3711659506445,221.875L366.1904286142473,222.29166666666663L367.52922369867133,222.7083333333333L368.01278849035884,222.7083333333333L369.38355480067946,222.7083333333333L370.33469877110605,223.33333333333331L371.90128884004406,223.12500000000006L373.57578179638335,223.54166666666669L374.0353681686483,224.37499999999997L375.37815965630944,224.58333333333337L376.7489259666301,225.41666666666663L377.43630732340904,225.62500000000003L378.8949945049456,225.8333333333333L380.4615845738836,225.20833333333337L381.44469977020685,225.8333333333333L382.95933659706276,225.62500000000003L383.87451293835556,223.74999999999994L385.33719652312925,224.79166666666663L386.87980817264463,224.1666666666667L388.4823658707164,223.95833333333334L389.8051753421922,223.12500000000006L391.24388050754334,223.54166666666669L392.0791287840944,222.50000000000003L393.5657907882906,222.08333333333337L394.4529923069239,221.66666666666663L396.07153561794394,221.66666666666663L396.994704765711,221.24999999999997L397.52622639624354,220.41666666666669L398.5093415925668,220.62499999999994L399.6003596762914,220.20833333333331L400.37965830752336,220.41666666666669L401.63053252073144,219.5833333333333L401.8623239084825,219.16666666666666L403.04126286342307,218.95833333333337L403.80457588170657,218.12499999999997L404.64382056149464,217.49999999999994L404.94355080427624,217.08333333333331L406.28634229193733,216.4583333333333L407.30942152063153,215.83333333333337L408.4563892496754,215.41666666666663L408.7481266859827,214.7916666666667L409.915076431212,214.16666666666669L410.6703966430214,213.3333333333333L411.9652312918374,212.70833333333337L412.7365371165952,211.87499999999997L413.75561994205225,211.45833333333331L414.4989509441503,210.41666666666669L415.04246178439416,210.00000000000003L415.37815965630944,209.79166666666663L416.46518133679695,210.00000000000003L417.51623538815073,209.16666666666663L418.30352682585675,210.41666666666669L419.2786492157059,211.04166666666669L420.13787591167954,211.45833333333331L421.1649515436109,211.45833333333331L422.5517034668799,212.5L423.3589769207714,213.95833333333331L425.02547707063655,214.16666666666669L425.9006893795585,214.37499999999994L426.5441103007294,215.20833333333337L428.16265361174953,214.37499999999994L428.9179738235589,213.95833333333331L429.08182635627946,213.95833333333331L430.0369667299432,214.16666666666669L431.1959236686983,214.16666666666669L432.750524527925,212.91666666666663L433.89349585373174,212.70833333333337L434.6648016784894,211.6666666666667L435.7478269557399,211.04166666666669L436.86282345888714,211.87499999999997L437.41432710560497,212.70833333333337L437.87391347786996,213.3333333333333L438.58127685083434,213.54166666666666L439.2007193525828,214.58333333333334L439.6203416924768,214.58333333333334L440.2797482265962,215.41666666666663L441.978219602358,215.41666666666663L443.14516934758734,216.04166666666663L444.4360075931662,215.83333333333337L445.483065241283,215.41666666666663L445.68288540313733,215.83333333333337L446.70996103506855,215.83333333333337L448.17664102307936,214.99999999999997L449.3355979618345,215.20833333333337L450.30672394844646,214.7916666666667L451.2458787091619,213.54166666666666L452.23698671195945,214.37499999999994L453.57178539314623,214.16666666666669L455.0784294135279,213.75000000000006L456.4571885303227,213.3333333333333L457.7040663402938,213.75000000000006L459.418523329004,213.54166666666666L460.61744430013,213.3333333333333L462.0241782395845,213.12500000000003L463.570786292337,212.70833333333337L464.35008492356894,212.5L465.7208512338896,211.45833333333331L466.53212109101815,211.45833333333331L467.5192326905786,211.6666666666667L468.5183334998502,211.45833333333331L469.4375062443802,211.24999999999994L470.0089919072836,211.24999999999994L470.92017184533927,211.04166666666669L471.8233589769208,210.83333333333331L473.1541612548707,210.83333333333331L474.6328304525928,210.62500000000006L475.50004995504054,210.41666666666669L476.30332700569494,211.24999999999994L477.1505644919573,211.24999999999994L478.1256868818065,211.04166666666669L478.68518333499867,211.6666666666667L479.4564891597563,211.6666666666667L480.2517734039365,212.08333333333337L481.1269857128585,212.91666666666663L482.7535218303527,212.70833333333337L484.3440903187133,213.54166666666666L484.8716155460086,214.37499999999994L486.41422719552406,214.58333333333334L487.0456589069838,216.25000000000003L487.9568388450396,216.4583333333333L489.2716555100411,216.66666666666666L490.0309721250875,217.49999999999994L491.66150464581887,218.12499999999997L492.2649615346189,218.75L493.651713457888,218.54166666666663L494.63083225097427,217.9166666666667L495.9976021580578,217.49999999999994L496.7808971925268,218.33333333333337L497.3643720651415,218.33333333333337L498.8870016984715,218.33333333333337L500.23778599260675,218.95833333333337L501.6485163352984,220.20833333333331L501.89229693276064,220.00000000000006L502.60765311219916,219.79166666666666L503.4948546308324,219.37500000000003L505.2292936357279,220.41666666666669L506.2883404935559,220.00000000000006L507.86691977220516,220.41666666666669L508.8820061944252,220.83333333333334L509.5893695673895,220.62499999999994L510.39264661804384,221.875L511.33979418523336,222.50000000000003L512.8624238185635,222.29166666666663L513.7776001598563,222.50000000000003L514.8925966630034,222.91666666666666L516.0395643920473,222.50000000000003L516.8428414427017,222.29166666666663L518.3215106404238,222.08333333333337L519.1687481266861,221.66666666666663L519.9640323708663,221.875L521.4466979718255,222.50000000000003L523.0412628634231,221.875L524.2202018183635,221.45833333333337L525.1074033369969,220.62499999999994L526.3542811469679,220.83333333333334L527.7210510540514,219.79166666666666L528.3884503946449,219.37500000000003L529.8191627535219,219.5833333333333L530.650414626836,218.95833333333337L531.3298031771407,218.54166666666663L532.7565191327806,218.95833333333337L534.2951343790589,218.12499999999997L535.5380157857928,217.70833333333334L536.001598561295,217.08333333333331L537.292436806874,216.25000000000003L537.7760015985614,215.83333333333337L538.5193326006595,216.87500000000006L539.6663003297033,216.25000000000003L540.8212608652213,216.04166666666663L541.5565990608454,214.7916666666667L541.8763113198123,214.37499999999994L542.8674193226099,213.75000000000006L543.8825057448298,212.70833333333337L544.3460885203318,212.29166666666663L545.7328404436008,212.08333333333337L546.6040563492858,211.04166666666669L547.7070636427217,210.41666666666669L548.2785493056251,209.375L549.4175242281948,208.74999999999997L550.6484164252175,208.74999999999997L551.3797582176043,209.16666666666663L552.2269957038667,210.00000000000003L552.9303626735939,210.41666666666669L553.9214706763914,210.62500000000006L555.5480067938856,211.24999999999994L556.4631831351784,212.70833333333337L557.9378559296634,213.12500000000003L558.7131581576583,213.3333333333333L560.0319712258968,213.12500000000003L561.6185433110203,213.12500000000003L562.3378958936958,212.70833333333337L563.1491657508244,212.91666666666663L564.3201118992907,212.70833333333337L565.6269357578182,212.08333333333337L565.9186731941253,211.6666666666667L566.5940653411931,211.04166666666669L567.4652812468779,210.00000000000003L568.2006194425019,209.79166666666663L568.7641122989311,209.58333333333337L570.0349685283246,210.62500000000006L570.3346987711061,211.04166666666669L570.9141772404837,212.29166666666663L571.6694974522932,212.70833333333337L572.4368068738136,212.5L572.728544310121,212.70833333333337L574.1472674592868,213.3333333333333L575.4620841242883,213.75000000000006L576.4611849335599,213.3333333333333L577.1245878709163,214.37499999999994L577.9078829053852,213.75000000000006L578.9669297632131,211.45833333333331L579.9300629433511,211.6666666666667L580.9131781396744,211.6666666666667L582.415825756819,211.6666666666667L582.9393545808774,210.83333333333331L584.126286342292,211.6666666666667L585.2932360875214,211.6666666666667L586.3283045259268,211.45833333333331L587.4233190128886,211.45833333333331L588.9059846138476,211.45833333333331L589.6852832450795,211.6666666666667L590.8242581676492,211.6666666666667L592.0951143970427,211.87499999999997L593.7656109501451,211.45833333333331L594.9245678889001,210.83333333333331L596.3712658607254,210.62500000000006L597.0666400239786,210.62500000000006L598.6452193026278,209.58333333333337L599.4484963532822,208.95833333333337L600.1598561294836,209.58333333333337L600.7113597762016,209.375L602.0181836347289,208.95833333333337L602.6016585073435,209.58333333333337L603.824557897892,209.16666666666663L605.1753421920273,208.74999999999997L606.50214806674,208.12499999999994L607.4492956339296,208.95833333333337L608.8160655410132,208.95833333333337L610.1708462383856,209.16666666666663L611.4576880807275,209.79166666666663L611.6694974522931,209.79166666666663L612.3888500349686,210.41666666666669L613.192127085623,210.00000000000003L614.2711559596365,211.04166666666669L615.5060445598963,211.04166666666669L616.4851633529825,211.6666666666667L618.035767808972,212.29166666666663L618.6871815366172,213.54166666666666L619.7981816365273,213.75000000000006L620.7892896393247,214.7916666666667L621.5526026576083,214.7916666666667L622.5317214506945,214.99999999999997L623.067239484464,216.25000000000003L624.725746827855,216.66666666666666L626.3562793485864,216.87500000000006L627.3713657708064,217.49999999999994L628.7421320811271,218.54166666666663L629.1657508242583,218.33333333333337L629.8291537616147,218.95833333333337L631.1759416525128,219.16666666666666L632.2070136876812,218.95833333333337L633.7895893695676,219.5833333333333L634.365071435708,219.79166666666666L634.7886901788393,220.00000000000006L636.1474672794486,219.5833333333333L637.7380357678092,218.95833333333337L638.561294834649,218.75L639.4964531921271,219.79166666666666L640.7872914377061,219.5833333333333L641.6784893595765,220.20833333333331L642.9253671695475,220.41666666666669L643.684683784594,221.45833333333337L645.0954141272855,221.66666666666663L646.4422020181837,221.875L647.4093316015587,221.0416666666667L648.4324108302528,221.0416666666667L649.6712958337497,221.45833333333337L651.16595064442,221.66666666666663L652.7405335198322,221.0416666666667L653.9794185233292,221.875L655.454091317814,221.24999999999997L656.8728144669797,221.0416666666667L658.2475771805375,221.0416666666667L659.6663003297033,220.00000000000006L660.6174443001299,218.95833333333337L661.3168148666202,218.54166666666663L662.9593365970627,218.95833333333337L663.9184733739636,219.16666666666666L665.4011389749227,220.41666666666669L665.9726246378261,220.00000000000006L667.2674592866422,220.00000000000006L668.4743730642423,219.16666666666666L669.2137076631033,219.16666666666666L670.6164451993205,218.54166666666663L671.3357977819962,218.12499999999997L672.2989309621342,219.5833333333333L673.3020281746428,219.37500000000003L674.0773304026377,218.54166666666663L675.0284743730643,218.33333333333337L675.5440103906485,217.49999999999994L676.1594564891599,216.25000000000003L676.7069637326407,216.25000000000003L677.2944350084925,216.4583333333333L677.8619242681588,216.04166666666663L678.6731941252873,215.20833333333337L679.3885503047256,214.58333333333334L679.9280647417323,212.5L681.2189029873115,211.6666666666667L681.8103706664003,210.83333333333331L682.6895793785594,209.375L683.7246478169649,209.58333333333337L684.3520831251874,209.58333333333337L685.3192127085624,210.00000000000003L686.3303027275454,210.83333333333331L686.6420221800379,211.45833333333331L688.3684683784594,211.87499999999997L689.0038964931563,212.29166666666663L689.4874612848437,212.5L690.5824757718055,212.91666666666663L691.5136377260467,213.12500000000003L692.0371665501049,213.54166666666666L693.5997602158058,214.37499999999994L695.1623538815068,213.54166666666666L696.329303626736,213.54166666666666L697.7799980017985,213.54166666666666L698.4593865521032,212.91666666666663L699.4784693775601,212.5L700.8452392846439,212.08333333333337L701.8563293036268,210.83333333333331L702.6276351283844,210.41666666666669L703.5468078729144,211.45833333333331L704.2781496653014,211.6666666666667L705.2133080227796,212.91666666666663L705.7168548306524,213.12500000000003L706.2683584773704,213.95833333333331L707.4672794484965,213.75000000000006L708.3904485962635,214.58333333333334L709.0418623239085,215.20833333333337L710.3486861824359,214.58333333333334L711.1919272654612,214.99999999999997L712.4388050754321,214.7916666666667L713.6337296433211,214.58333333333334L714.5808772105107,214.7916666666667L715.4920571485663,214.99999999999997L716.7908882006196,214.58333333333334L718.3015286242382,214.37499999999994L718.9969027874913,213.75000000000006L719.3645718853033,213.95833333333331L720.2917374363074,213.95833333333331L721.750424617844,213.95833333333331L723.1531621540614,214.16666666666669L723.780597462284,213.3333333333333L724.699770206814,214.37499999999994L725.2672594664803,213.95833333333331L726.1584573883506,214.16666666666669L727.6491157957839,213.95833333333331L729.0998101708464,213.3333333333333L730.3706664002398,212.70833333333337L731.6934758717157,212.5L732.964332101109,211.6666666666667L733.5957638125687,211.87499999999997L735.038465381157,211.45833333333331L736.3053252073134,211.24999999999994L737.8319512438806,211.24999999999994L739.1028074732741,210.83333333333331L740.5055450094915,211.04166666666669L741.8803077230493,211.04166666666669L743.2590668398442,211.04166666666669L744.6817863922471,211.24999999999994L745.9206713957439,211.87499999999997L746.4681786392248,212.29166666666663L747.9068838045758,212.29166666666663L748.6701968228596,212.91666666666663L750.1448696173444,214.99999999999997L751.2238984913578,216.25000000000003L752.7025676890798,216.66666666666666L752.9663303027278,217.29166666666669L754.0413627735039,218.33333333333337L755.3441902287942,218.12499999999997L756.0475571985214,219.5833333333333L757.4702767509243,220.00000000000006L758.245578978919,220.41666666666669L758.98491357778,220.62499999999994L759.5204316115496,220.83333333333334L760.4436007593167,220.62499999999994L761.5226296333301,221.66666666666663L762.6975721850337,221.45833333333337L763.6327305425117,221.875L764.3480867219503,222.91666666666666L765.9866120491558,222.91666666666666L767.3813567788992,223.74999999999994L768.53232091118,223.74999999999994L769.1397742032171,224.1666666666667L770.706364272155,224.37499999999997L771.8693176141473,223.74999999999994L772.6006594065343,224.79166666666663L774.3830552502749,223.95833333333334L775.6219402537715,226.04166666666666L777.4123289039866,226.66666666666669L778.6272354880609,227.49999999999997L780.3936457188531,227.2916666666667L781.7284444000401,226.25000000000006L783.2910380657408,227.2916666666667L785.0814267159558,226.04166666666666L786.8638225596964,226.87499999999994L788.6262363872515,226.04166666666666L790.4006394245181,226.25000000000006L791.7474273154162,225L792.8664202218004,225.20833333333337L794.552902387851,223.95833333333334L796.3472874413029,224.1666666666667L798.1216904785692,222.91666666666666L799.3445898691178,224.1666666666667L799.3445898691178,250L798.1216904785692,250L796.3472874413029,250L794.552902387851,250L792.8664202218004,250L791.7474273154162,250L790.4006394245181,250L788.6262363872515,250L786.8638225596964,250L785.0814267159558,250L783.2910380657408,250L781.7284444000401,250L780.3936457188531,250L778.6272354880609,250L777.4123289039866,250L775.6219402537715,250L774.3830552502749,250L772.6006594065343,250L771.8693176141473,250L770.706364272155,250L769.1397742032171,250L768.53232091118,250L767.3813567788992,250L765.9866120491558,250L764.3480867219503,250L763.6327305425117,250L762.6975721850337,250L761.5226296333301,250L760.4436007593167,250L759.5204316115496,250L758.98491357778,250L758.245578978919,250L757.4702767509243,250L756.0475571985214,250L755.3441902287942,250L754.0413627735039,250L752.9663303027278,250L752.7025676890798,250L751.2238984913578,250L750.1448696173444,250L748.6701968228596,250L747.9068838045758,250L746.4681786392248,250L745.9206713957439,250L744.6817863922471,250L743.2590668398442,250L741.8803077230493,250L740.5055450094915,250L739.1028074732741,250L737.8319512438806,250L736.3053252073134,250L735.038465381157,250L733.5957638125687,250L732.964332101109,250L731.6934758717157,250L730.3706664002398,250L729.0998101708464,250L727.6491157957839,250L726.1584573883506,250L725.2672594664803,250L724.699770206814,250L723.780597462284,250L723.1531621540614,250L721.750424617844,250L720.2917374363074,250L719.3645718853033,250L718.9969027874913,250L718.3015286242382,250L716.7908882006196,250L715.4920571485663,250L714.5808772105107,250L713.6337296433211,250L712.4388050754321,250L711.1919272654612,250L710.3486861824359,250L709.0418623239085,250L708.3904485962635,250L707.4672794484965,250L706.2683584773704,250L705.7168548306524,250L705.2133080227796,250L704.2781496653014,250L703.5468078729144,250L702.6276351283844,250L701.8563293036268,250L700.8452392846439,250L699.4784693775601,250L698.4593865521032,250L697.7799980017985,250L696.329303626736,250L695.1623538815068,250L693.5997602158058,250L692.0371665501049,250L691.5136377260467,250L690.5824757718055,250L689.4874612848437,250L689.0038964931563,250L688.3684683784594,250L686.6420221800379,250L686.3303027275454,250L685.3192127085624,250L684.3520831251874,250L683.7246478169649,250L682.6895793785594,250L681.8103706664003,250L681.2189029873115,250L679.9280647417323,250L679.3885503047256,250L678.6731941252873,250L677.8619242681588,250L677.2944350084925,250L676.7069637326407,250L676.1594564891599,250L675.5440103906485,250L675.0284743730643,250L674.0773304026377,250L673.3020281746428,250L672.2989309621342,250L671.3357977819962,250L670.6164451993205,250L669.2137076631033,250L668.4743730642423,250L667.2674592866422,250L665.9726246378261,250L665.4011389749227,250L663.9184733739636,250L662.9593365970627,250L661.3168148666202,250L660.6174443001299,250L659.6663003297033,250L658.2475771805375,250L656.8728144669797,250L655.454091317814,250L653.9794185233292,250L652.7405335198322,250L651.16595064442,250L649.6712958337497,250L648.4324108302528,250L647.4093316015587,250L646.4422020181837,250L645.0954141272855,250L643.684683784594,250L642.9253671695475,250L641.6784893595765,250L640.7872914377061,250L639.4964531921271,250L638.561294834649,250L637.7380357678092,250L636.1474672794486,250L634.7886901788393,250L634.365071435708,250L633.7895893695676,250L632.2070136876812,250L631.1759416525128,250L629.8291537616147,250L629.1657508242583,250L628.7421320811271,250L627.3713657708064,250L626.3562793485864,250L624.725746827855,250L623.067239484464,250L622.5317214506945,250L621.5526026576083,250L620.7892896393247,250L619.7981816365273,250L618.6871815366172,250L618.035767808972,250L616.4851633529825,250L615.5060445598963,250L614.2711559596365,250L613.192127085623,250L612.3888500349686,250L611.6694974522931,250L611.4576880807275,250L610.1708462383856,250L608.8160655410132,250L607.4492956339296,250L606.50214806674,250L605.1753421920273,250L603.824557897892,250L602.6016585073435,250L602.0181836347289,250L600.7113597762016,250L600.1598561294836,250L599.4484963532822,250L598.6452193026278,250L597.0666400239786,250L596.3712658607254,250L594.9245678889001,250L593.7656109501451,250L592.0951143970427,250L590.8242581676492,250L589.6852832450795,250L588.9059846138476,250L587.4233190128886,250L586.3283045259268,250L585.2932360875214,250L584.126286342292,250L582.9393545808774,250L582.415825756819,250L580.9131781396744,250L579.9300629433511,250L578.9669297632131,250L577.9078829053852,250L577.1245878709163,250L576.4611849335599,250L575.4620841242883,250L574.1472674592868,250L572.728544310121,250L572.4368068738136,250L571.6694974522932,250L570.9141772404837,250L570.3346987711061,250L570.0349685283246,250L568.7641122989311,250L568.2006194425019,250L567.4652812468779,250L566.5940653411931,250L565.9186731941253,250L565.6269357578182,250L564.3201118992907,250L563.1491657508244,250L562.3378958936958,250L561.6185433110203,250L560.0319712258968,250L558.7131581576583,250L557.9378559296634,250L556.4631831351784,250L555.5480067938856,250L553.9214706763914,250L552.9303626735939,250L552.2269957038667,250L551.3797582176043,250L550.6484164252175,250L549.4175242281948,250L548.2785493056251,250L547.7070636427217,250L546.6040563492858,250L545.7328404436008,250L544.3460885203318,250L543.8825057448298,250L542.8674193226099,250L541.8763113198123,250L541.5565990608454,250L540.8212608652213,250L539.6663003297033,250L538.5193326006595,250L537.7760015985614,250L537.292436806874,250L536.001598561295,250L535.5380157857928,250L534.2951343790589,250L532.7565191327806,250L531.3298031771407,250L530.650414626836,250L529.8191627535219,250L528.3884503946449,250L527.7210510540514,250L526.3542811469679,250L525.1074033369969,250L524.2202018183635,250L523.0412628634231,250L521.4466979718255,250L519.9640323708663,250L519.1687481266861,250L518.3215106404238,250L516.8428414427017,250L516.0395643920473,250L514.8925966630034,250L513.7776001598563,250L512.8624238185635,250L511.33979418523336,250L510.39264661804384,250L509.5893695673895,250L508.8820061944252,250L507.86691977220516,250L506.2883404935559,250L505.2292936357279,250L503.4948546308324,250L502.60765311219916,250L501.89229693276064,250L501.6485163352984,250L500.23778599260675,250L498.8870016984715,250L497.3643720651415,250L496.7808971925268,250L495.9976021580578,250L494.63083225097427,250L493.651713457888,250L492.2649615346189,250L491.66150464581887,250L490.0309721250875,250L489.2716555100411,250L487.9568388450396,250L487.0456589069838,250L486.41422719552406,250L484.8716155460086,250L484.3440903187133,250L482.7535218303527,250L481.1269857128585,250L480.2517734039365,250L479.4564891597563,250L478.68518333499867,250L478.1256868818065,250L477.1505644919573,250L476.30332700569494,250L475.50004995504054,250L474.6328304525928,250L473.1541612548707,250L471.8233589769208,250L470.92017184533927,250L470.0089919072836,250L469.4375062443802,250L468.5183334998502,250L467.5192326905786,250L466.53212109101815,250L465.7208512338896,250L464.35008492356894,250L463.570786292337,250L462.0241782395845,250L460.61744430013,250L459.418523329004,250L457.7040663402938,250L456.4571885303227,250L455.0784294135279,250L453.57178539314623,250L452.23698671195945,250L451.2458787091619,250L450.30672394844646,250L449.3355979618345,250L448.17664102307936,250L446.70996103506855,250L445.68288540313733,250L445.483065241283,250L444.4360075931662,250L443.14516934758734,250L441.978219602358,250L440.2797482265962,250L439.6203416924768,250L439.2007193525828,250L438.58127685083434,250L437.87391347786996,250L437.41432710560497,250L436.86282345888714,250L435.7478269557399,250L434.6648016784894,250L433.89349585373174,250L432.750524527925,250L431.1959236686983,250L430.0369667299432,250L429.08182635627946,250L428.9179738235589,250L428.16265361174953,250L426.5441103007294,250L425.9006893795585,250L425.02547707063655,250L423.3589769207714,250L422.5517034668799,250L421.1649515436109,250L420.13787591167954,250L419.2786492157059,250L418.30352682585675,250L417.51623538815073,250L416.46518133679695,250L415.37815965630944,250L415.04246178439416,250L414.4989509441503,250L413.75561994205225,250L412.7365371165952,250L411.9652312918374,250L410.6703966430214,250L409.915076431212,250L408.7481266859827,250L408.4563892496754,250L407.30942152063153,250L406.28634229193733,250L404.94355080427624,250L404.64382056149464,250L403.80457588170657,250L403.04126286342307,250L401.8623239084825,250L401.63053252073144,250L400.37965830752336,250L399.6003596762914,250L398.5093415925668,250L397.52622639624354,250L396.994704765711,250L396.07153561794394,250L394.4529923069239,250L393.5657907882906,250L392.0791287840944,250L391.24388050754334,250L389.8051753421922,250L388.4823658707164,250L386.87980817264463,250L385.33719652312925,250L383.87451293835556,250L382.95933659706276,250L381.44469977020685,250L380.4615845738836,250L378.8949945049456,250L377.43630732340904,250L376.7489259666301,250L375.37815965630944,250L374.0353681686483,250L373.57578179638335,250L371.90128884004406,250L370.33469877110605,250L369.38355480067946,250L368.01278849035884,250L367.52922369867133,250L366.1904286142473,250L365.3711659506445,250L363.92446797881917,250L362.5417124587871,250L361.77440303726655,250L360.2677590168849,250L359.4764711759417,250L358.7890898191628,250L357.84194225197336,250L356.5271255869718,250L355.5919672294935,250L354.6408232590669,250L353.41392746528135,250L352.3628734139276,250L350.90818263562807,250L350.08092716555115,250L348.52232990308727,250L347.1515635927666,250L346.48416425217306,250L345.2173044260166,250L344.46997702068154,250L343.91048056748934,250L342.3478869017885,250L340.57748026775914,250L339.38655210310725,250L337.8239584374064,250L336.9047856928765,250L335.6299330602459,250L335.14237186532137,250L333.66769907083625,250L332.0171845339196,250L331.3657708062745,250L330.26276351283855,250L329.2516734938556,250L327.8569287641124,250L326.38625237286453,250L325.23928464382067,250L324.83564791687496,250L323.2530722349886,250L322.0661404735739,250L321.1309821160956,250L319.8481366769908,250L318.94494954540914,250L317.6141472674594,250L316.4711759416526,250L315.0884204216206,250L313.721650514537,250L312.14307123588776,250L310.97612149065844,250L309.2976321310821,250L307.8789089819163,250L306.79188730142874,250L305.98061744430015,250L304.49795184334107,250L303.2151064042362,250L302.3518833050255,250L300.9971026076531,250L300.0579478469378,250L298.7990808272555,250L297.81596563093217,250L296.3492856429214,250L295.00649415526027,250L293.99140773304026,250L293.1321810370667,250L292.0291737436308,250L290.8062743530823,250L289.867119592367,250L288.8959936057549,250L287.2974323109202,250L286.2463782595664,250L285.1313817564193,250L284.47597162553706,250L283.225097412329,250L282.1420721350785,250L281.7464282146069,250L281.1869317614148,250L280.4356079528425,250L278.8490358677191,250L278.24957538215614,250L277.96982715556004,250L277.6980717354382,250L277.37835947647125,250L276.8188630232791,250L275.4081326805875,250L274.8846038565291,250L273.310020981117,250L272.83045259266663,250L272.18303526825866,250L270.88420421620543,250L269.8811070036967,250L268.9459486462185,250L267.7989809171746,250L266.9557398341493,250L266.11649515436113,250L265.51703466879815,250L264.93355979618343,250L264.66580077929865,250L264.310120891198,250L264.218203616745,250L263.14317114596867,250L262.4278149665302,250L261.32081126985713,250L260.26576081526633,250L259.326606054551,250L258.4394045359177,250L257.5442102108103,250L255.94165251273859,250L255.55400139874115,250L255.10240783295038,250L253.93545808772106,250L253.19612348886005,250L251.8733140173844,250L250.33869517434312,250L249.61534618843046,250L248.18063742631634,250L246.74992506743934,250L245.41912278948948,250L244.59186731941256,250L242.8454391048057,250L241.87431311819364,250L240.38765111399744,250L239.49645319212715,250L237.96583075232297,250L236.31931261864324,250L234.86062543710662,250L233.48586272354882,250L232.5147367369368,250L231.61954241182937,250L230.1768408432411,250L228.6062543710661,250L227.64711759416528,250L226.4521930262764,250L225.04545908682186,250L223.6107503247078,250L222.15206314317118,250L221.20891197921875,250L220.08592266959738,250L219.29863123189133,250L218.51533619742233,250L217.54021380757317,250L216.60105904685784,250L216.053551803377,250L214.7946847836947,250L213.57578179638327,250L212.87241482665604,250L212.00919172744537,250L210.9901089019883,250L210.73034269157765,250L209.65531022080134,250L208.71615546008596,250L207.42531721450695,250L206.32630632430815,250L205.1113997402338,250L203.97642122090122,250L203.2610650414627,250L201.90628434409038,250L201.35078429413528,250L200.32770506544117,250L199.59636327305427,250L198.1696473174144,250L196.4232191028075,250L195.3242082126087,250L193.70166849835152,250L193.40193825557003,250L193.17813967429313,250L191.79938055749827,250L190.82026176441204,250L189.6732940353682,250L188.38245578978922,250L187.0996103506844,250L185.52902387850938,250L184.51393745628937,250L183.16714956539116,250L182.11209911080027,250L181.58857028674197,250L179.94205215306226,250L178.93895494055351,250L178.15565990608457,250L177.02068138675196,250L175.49005894694778,250L174.5229293635728,250L174.05535018483366,250L172.66060545509046,250L171.48965930662408,250L170.23478869017887,250L169.4514936557099,250L168.91997202517737,250L167.98881007093618,250L166.366270356679,250L164.79168748126688,250L164.05235288240587,250L162.6336297332401,250L161.13497851933263,250L160.6993705664902,250L160.13188130682389,250L159.4365071435708,250L158.6572085123389,250L157.40633429913083,250L156.7149565391148,250L155.77580177839948,250L154.79668298531323,250L153.83754620841245,250L152.2749525427116,250L151.4357078629234,250L150.93615745828757,250L149.82515735837748,250L149.10980117893897,250L148.1466679988011,250L147.0756319312619,250L146.0485562993306,250L145.29323608752125,250L143.89449495454093,250L143.19912079128787,250L142.14007393345992,250L140.65341192926368,250L139.4145269257668,250L138.87501248876012,250L137.73204116295338,250L136.81286841842345,250L135.40213807573184,250L134.65880707363374,250L134.0113897492257,250L132.72454790688383,250L131.74942551703467,250L131.0020981116995,250L129.6832850434609,250L128.94395044459986,250L128.41642521730446,250L127.01368768108705,250L126.41422719552406,250L125.53901488660209,250L124.58387451293838,250L124.10830252772504,250L123.62873413927467,250L122.8734139274653,250L121.9222699570387,250L121.09101808372466,250L120.13987411329805,250L119.21670496553102,250L118.24158257568192,250L116.53112199020883,250L115.26026576081527,250L114.35308222599663,250L113.09421520631433,250L111.61954241182937,250L110.26076531121991,250L108.85003496852835,250L107.29543410930165,250L105.82875412129084,250L104.81366769907086,250L103.95843740633433,250L102.8234588870017,250L102.37985812768508,250L101.26486162453794,250L99.98201618543312,250L98.8550304725747,250L97.9278649215706,250L97.4203217104606,250L96.8168648216605,250L95.96563093216108,250L94.33509841142973,250L92.95234289139775,250L91.6295334199221,250L90.35867719052852,250L88.89599360575484,250L87.94085323209111,250L86.62204016385255,250L85.6469177740034,250L85.0234788690179,250L84.45199320611451,250L83.87251473673695,250L83.27305425117397,250L82.44180237785994,250L81.71445698871015,250L80.37166550104907,250L79.8001798381457,250L79.02887401338795,250L77.59816165451096,250L76.33529823159158,250L75.71585572984316,250L74.8646218403437,250L74.15725846737936,250L73.54980517534221,250L72.2989309621341,250L71.41172944350086,250L71.11199920071935,250L70.18083724647818,250L69.62134079328605,250L68.9459486462184,250L68.29453491857329,250L67.61914277150565,250L66.2883404935558,250L65.70486562094115,250L64.84963532820461,250L63.77060645419124,250L62.927365371165955,250L62.27195524028375,250L61.436706963732654,250L60.58147667099612,250L59.65431111999201,250L59.15875711859327,250L57.87990808272555,250L56.83684683784595,250L55.60595464082326,250L54.95853731641523,250L53.79558397442303,250L52.28893995404137,250L51.53761614546909,250L50.714357078629234,250L49.98301528624239,250L48.584274153262065,250L47.34538914976521,250L46.20641422719552,250L45.251273853531835,250L44.08832051153962,250L42.633629733240085,250L41.61055050454591,250L40.23578779098811,250L39.58837046658009,250L38.245578978918985,250L36.81886302327905,250L35.3122190028974,250L33.82955340193826,250L32.51074033369967,250L31.287840943151167,250L30.540513537815972,250L29.41752422819463,250L27.922869417524232,250L27.319412528724158,250L27.059646318313526,250L26.26835847737037,250L25.525027475272253,250L24.82166050554502,250L24.026376261364774,250L23.091217903886506,250L22.707563193126187,250L21.88830052952343,250L21.528624238185635,250L20.725347187531227,250L20.029973024278153,250L19.178739134778702,250L18.92296932760516,250L18.3434908582276,250L17.432310920171847,250L17.272454790688386,250L16.82485762813468,250L15.833749625337202,250L14.530922170046958,250L13.687681087021684,250L12.344889599360577,250L10.914177240483566,250L9.999000899190731,250L8.987910880207815,250L7.497252472774503,250L6.841842341892298,250L5.942651613547809,250L5.407133579778202,250L4.336097512238986,250L3.4249175741832354,250L2.9333599760215807,250L2.2499750224797688,250L1.8703167149565394,250L1.3587771006094518,250L1.0790288740133882,250L0,250Z"></path></g></g><g id="heartrate" clip-path="url(#clip527)" display="none"><path fill="none" stroke-width="1.5px" class="simple-line" d="M0.9458154327771674,235.79999999999998C1.1722782828787426,234.26666666666665,1.2655276917440972,232.73333333333332,1.3974089985679559,230.81666666666666C1.5292903053918143,228.89999999999998,1.6998035101741769,226.6,1.8483364971525629,224.10833333333332C1.9968694841309491,221.61666666666667,2.1234222533053586,218.93333333333334,2.3005961301495326,215.86666666666665C2.4777700069937056,212.79999999999998,2.705564991507643,209.34999999999997,2.901388750124888,207.04999999999995C3.097212508742132,204.74999999999997,3.2610650414626834,203.59999999999997,3.4948546308322515,203.02499999999998C3.7286442202018186,202.44999999999996,4.032370866220402,202.44999999999996,4.36274020048623,202.45C4.6931095347520575,202.44999999999996,5.05012155726513,202.44999999999996,5.3178805741499335,201.6833333333333C5.585639591034738,200.91666666666663,5.764145602291273,199.3833333333333,6.003263729310289,198.8083333333333C6.242381856329305,198.2333333333333,6.542112099110802,198.61666666666665,6.80121224231525,198.04166666666666C7.060312385519699,197.46666666666664,7.278782429147101,195.93333333333334,7.636460518866353,195.54999999999998C7.994138608585606,195.16666666666666,8.49102474439671,195.93333333333334,8.907982815466083,195.93333333333334C9.324940886535455,195.93333333333334,9.661970892863092,195.16666666666666,9.983015286242383,194.975C10.304059679621675,194.78333333333333,10.60911846005262,195.16666666666669,11.000099910080927,194.97500000000002C11.391081360109236,194.78333333333333,11.867985479734905,194.01666666666665,12.33023612082459,194.01666666666665C12.792486761914278,194.01666666666665,13.24008392446798,194.78333333333333,13.604422686249043,195.54999999999998C13.968761448030108,196.31666666666666,14.249841809038532,197.08333333333331,14.607519898757785,197.6583333333333C14.965197988477039,198.2333333333333,15.399473806907121,198.61666666666665,15.781796383255074,199.76666666666665C16.164118959603027,200.91666666666666,16.494488293868855,202.83333333333331,16.73427248809405,203.4083333333333C16.974056682319247,203.98333333333332,17.123255736503815,203.21666666666664,17.224497951843343,202.64166666666665C17.32574016718287,202.06666666666663,17.379025543677358,201.6833333333333,17.557531554933895,201.49166666666667C17.736037566190433,201.29999999999998,18.039764212209015,201.29999999999998,18.288207280114566,201.3C18.536650348020117,201.29999999999998,18.72980983781264,201.29999999999998,18.869017883904487,200.15C19.00822592999634,199,19.09348253238752,196.7,19.277983148499686,194.7833333333333C19.46248376461185,192.86666666666667,19.746228394445,191.33333333333331,20.00399640323709,190.56666666666666C20.261764412029176,189.8,20.4935557997802,189.8,20.743331002098113,189.79999999999998C20.99310620441603,189.8,21.260865221300833,189.8,21.45469077829953,189.79999999999998C21.648516335298233,189.8,21.76840843241083,189.8,21.964898258234257,189.79999999999998C22.161388084057684,189.8,22.434475638591934,189.8,22.63496186765245,189.79999999999998C22.83544809671296,189.8,22.963333000299734,189.8,23.183135178339498,189.79999999999998C23.40293735637926,189.8,23.714656808872018,189.8,24.003063909148437,189.79999999999998C24.291471009424853,189.8,24.556565757484936,189.8,24.80634095980285,189.03333333333333C25.056116162120762,188.26666666666665,25.290571818696506,186.73333333333332,25.531688147334066,185.775C25.772804475971625,184.81666666666666,26.020581476670998,184.43333333333334,26.27635128384454,183.85833333333332C26.532121091018087,183.28333333333333,26.795883704665805,182.51666666666665,26.971059379891436,183.09166666666667C27.146235055117067,183.66666666666666,27.232823791920612,185.58333333333331,27.37669430845573,186.15833333333333C27.52056482499085,186.73333333333332,27.72171712125754,185.96666666666664,28.07140240450262,185.58333333333331C28.421087687747697,185.2,28.91930595797116,185.2,29.355579978019783,185.2C29.791853998068408,185.2,30.16618376794219,185.2,30.477903220434946,185.2C30.789622672927702,185.2,31.038731808039433,185.2,31.367102940686717,185.2C31.695474073333997,185.2,32.103107203516835,185.2,32.52672594664802,185.39166666666665C32.9503446897792,185.58333333333331,33.38994904585873,185.96666666666664,33.85686215739168,185.775C34.323775268924635,185.58333333333331,34.817997135911014,184.81666666666666,35.31621540613448,184.24166666666667C35.81443367635795,183.66666666666669,36.31664834981849,183.28333333333333,36.80554167915543,183.0916666666667C37.29443500849236,182.9,37.77000699370567,182.9,38.23159156758918,182.70833333333334C38.693176141472684,182.51666666666665,39.14077330402638,182.13333333333333,39.47247477270457,181.94166666666663C39.80417624138276,181.75,40.01998201618544,181.75,40.35701202251307,181.94166666666666C40.69404202884071,182.13333333333333,41.15229626669331,182.51666666666665,41.55193659040197,182.325C41.95157691411063,182.13333333333333,42.29260332367536,181.36666666666667,42.70556499150764,180.98333333333332C43.11852665933993,180.6,43.60342358543977,180.6,44.0396976054884,180.79166666666666C44.47597162553702,180.98333333333332,44.86362273953443,181.36666666666665,45.216638358810414,181.5583333333333C45.56965397808639,181.75,45.88803410264096,181.75,46.237053318679855,181.36666666666665C46.58607253471875,180.98333333333332,46.96573084224198,180.21666666666664,47.362040829919735,179.83333333333331C47.758350817597496,179.45,48.17131248542978,179.45,48.61091684150931,179.83333333333331C49.050521197588836,180.21666666666664,49.516768241915614,180.98333333333332,49.87178206281014,180.79166666666666C50.22679588370467,180.6,50.470576481166944,179.45,50.72967662437139,178.49166666666667C50.98877676757584,177.53333333333333,51.263196456522465,176.76666666666665,51.52562693575783,176.57500000000002C51.788057414993176,176.38333333333333,52.038498684517265,176.76666666666665,52.414826656009595,176.76666666666668C52.79115462750192,176.76666666666665,53.293369300962475,176.38333333333333,53.73830219469146,176.76666666666665C54.18323508842043,177.14999999999998,54.57088620241783,178.29999999999998,54.872614646817865,178.10833333333335C55.17434309121791,177.91666666666666,55.39014886602058,176.38333333333333,55.7032004529257,175.80833333333337C56.01625203983082,175.23333333333335,56.42654943883838,175.61666666666667,56.805541679155425,175.04166666666666C57.18453391947247,174.46666666666664,57.53222100109901,172.9333333333333,57.91920604789023,172.16666666666666C58.30619109468145,171.39999999999998,58.732474106637355,171.39999999999998,59.028207946181766,171.39999999999998C59.32394178572618,171.39999999999998,59.48912645285909,171.39999999999998,59.72624637825957,171.01666666666665C59.96336630366004,170.63333333333333,60.272421487328074,169.86666666666665,60.56948746128485,170.0583333333333C60.86655343524163,170.25,61.15163019948714,171.39999999999998,61.43337662770175,172.55C61.71512305591635,173.7,61.993539148100055,174.85,62.2419822160056,175.04166666666666C62.49042528391115,175.23333333333332,62.70889532753855,174.46666666666664,62.95867052985646,173.89166666666665C63.208445732174376,173.31666666666666,63.4895260931828,172.93333333333334,63.80990441935592,173.125C64.13028274552903,173.31666666666666,64.48995903686682,174.08333333333334,64.81233556465847,174.4666666666667C65.13471209245012,174.85000000000002,65.41978885669563,174.85000000000002,65.65957305092084,174.65833333333333C65.89935724514604,174.46666666666667,66.09384886935091,174.08333333333331,66.41289506111166,174.08333333333334C66.73194125287242,174.08333333333331,67.17554201218903,174.46666666666667,67.50990774969195,174.46666666666667C67.84427348719485,174.46666666666667,68.06940420288407,174.08333333333331,68.2905385153362,174.275C68.51167282778832,174.46666666666664,68.72881073700336,175.23333333333332,68.9499450494555,175.80833333333334C69.17107936190762,176.38333333333333,69.39621007759683,176.76666666666665,69.6020248443068,177.53333333333333C69.80783961101676,178.29999999999998,69.99433842874747,179.45,70.24278149665302,180.02499999999998C70.49122456455856,180.6,70.80161188263895,180.6,71.00676058214273,180.025C71.21190928164651,179.45,71.31181936257369,178.29999999999998,71.50964132280947,178.29999999999998C71.70746328304527,178.29999999999998,72.00319712258968,179.45,72.35954307789657,179.64166666666665C72.71588903320347,179.83333333333331,73.13284710427284,179.06666666666666,73.44256835514705,178.68333333333334C73.75228960602126,178.3,73.95477403670031,178.3,74.17391014753389,178.49166666666667C74.39304625836748,178.68333333333334,74.62883404935559,179.06666666666666,74.88860025976622,180.40833333333333C75.14836647017685,181.75,75.43211110001,184.04999999999998,75.67722383188465,185.00833333333333C75.9223365637593,185.96666666666664,76.12881739767543,185.58333333333331,76.44253505178673,185.2C76.75625270589804,184.81666666666666,77.1772071802045,184.43333333333334,77.62613647717056,184.24166666666667C78.07506577413662,184.05,78.55196989376228,184.05,78.91897292436808,183.85833333333335C79.28597595497386,183.66666666666669,79.54307789655978,183.28333333333333,79.76687647783663,183.0916666666667C79.99067505911349,182.9,80.18117028008128,182.9,80.50021647184202,182.90000000000003C80.81926266360276,182.9,81.26685982615645,182.9,81.61188263895826,182.32500000000002C81.95690545176008,181.75,82.19935391481002,180.6,82.45912012522065,180.025C82.71888633563128,179.45,82.99597029340262,179.45,83.23442235321546,179.45C83.4728744130283,179.45,83.67269457488261,179.45,83.86918440070603,179.45C84.06567422652947,179.45,84.25883371632199,179.45,84.45066107170214,179.06666666666666C84.6424884270823,178.68333333333334,84.83298364805009,177.91666666666666,85.03213774269824,178.10833333333332C85.23129183734639,178.29999999999998,85.4391048056749,179.45,85.70553168814733,179.64166666666665C85.97195857061978,179.83333333333331,86.29699936723615,179.06666666666666,86.67932194358411,178.3C87.06164451993206,177.53333333333333,87.50124887601159,176.76666666666665,87.88024111632865,176.57500000000002C88.2592333566457,176.38333333333333,88.57761348120026,176.76666666666665,88.98058414093984,176.95833333333334C89.3835548006794,177.14999999999998,89.87111599560396,177.14999999999998,90.32670596463183,176.575C90.78229593365971,176,91.20591467679091,174.84999999999997,91.63819229360244,174.46666666666667C92.07046991041398,174.08333333333331,92.51140640090586,174.46666666666667,92.96233389949046,174.65833333333336C93.41326139807506,174.85000000000002,93.8741799047524,174.85000000000002,94.37639457821295,174.85000000000002C94.87860925167351,174.85000000000002,95.4221200919173,174.85000000000002,95.83574782695575,174.85000000000002C96.24937556199421,174.85000000000002,96.53312019182735,174.85000000000002,96.77556865487728,174.275C97.01801711792719,173.7,97.21916941419389,172.54999999999998,97.40433609751224,172.74166666666667C97.58950278083059,172.9333333333333,97.75868385120059,174.46666666666664,97.9978019782196,174.6583333333333C98.23692010523862,174.85,98.54597528890666,173.7,98.88833383288376,173.50833333333335C99.23069237686084,173.31666666666666,99.60635428114698,174.08333333333334,100.00799280647419,174.4666666666667C100.40963133180139,174.85000000000002,100.83724647816967,174.85000000000002,101.23688680187833,175.04166666666669C101.63652712558698,175.23333333333335,102.00819262663603,175.61666666666667,102.26795883704666,175.61666666666667C102.52772504745728,175.61666666666667,102.67559196722948,175.23333333333335,102.93868851367102,174.85C103.20178506011257,174.46666666666667,103.58011123322345,174.08333333333331,103.91181270190164,173.50833333333333C104.24351417057983,172.9333333333333,104.52859093482535,172.16666666666663,104.8403103873181,171.39999999999998C105.15202983981085,170.63333333333333,105.49039198055084,169.86666666666665,105.9040197155893,169.67499999999998C106.31764745062777,169.48333333333332,106.8065407799647,169.86666666666667,107.31008758783761,169.86666666666667C107.81363439571054,169.86666666666667,108.33183468211944,169.48333333333332,108.8260565491058,169.67499999999998C109.3202784160922,169.86666666666665,109.79052186365605,170.63333333333333,110.25210643753955,171.20833333333331C110.71369101142307,171.7833333333333,111.16661671162622,172.16666666666666,111.63885836080861,172.35833333333332C112.11110000999102,172.55,112.60265760815267,172.55,113.05824757718054,172.16666666666666C113.51383754620842,171.78333333333333,113.93345988610253,171.01666666666665,114.29446831185268,170.25C114.65547673760284,169.48333333333332,114.95787124920905,168.71666666666664,115.32087787657775,168.14166666666665C115.68388450394644,167.56666666666666,116.10750324707763,167.18333333333334,116.60438938288874,166.99166666666667C117.10127551869985,166.8,117.67142904719088,166.8,118.11902620974459,166.8C118.56662337229828,166.8,118.89166416891464,166.8,119.20804609185066,167.375C119.52442801478668,167.95,119.83215106404236,169.1,120.1445365837413,168.90833333333333C120.45692210344025,168.71666666666664,120.77397009358245,167.1833333333333,121.07103606753923,166.60833333333332C121.368102041496,166.0333333333333,121.64518599926734,166.41666666666666,121.9422519732241,166.8C122.23931794718088,167.18333333333334,122.55636593732308,167.56666666666666,122.84077663436241,168.14166666666665C123.12518733140175,168.71666666666664,123.3769607353382,169.48333333333332,123.58277550204815,169.86666666666667C123.78859026875813,170.25,123.94844639824157,170.25,124.10763646051888,169.675C124.26682652279615,169.1,124.42535051786726,167.95,124.6638025776801,167.375C124.90225463749294,166.8,125.22063476204751,166.8,125.52569354247845,166.225C125.8307523229094,165.65,126.12248975921673,164.5,126.36826855829756,163.73333333333335C126.61404735737838,162.96666666666667,126.81386751923272,162.58333333333331,127.14756718952944,162.39166666666665C127.48126685982618,162.2,127.9488460385653,162.2,128.27055649915079,162.00833333333333C128.59226695973626,161.81666666666666,128.76810870216804,161.43333333333334,128.97925200652747,161.43333333333334C129.19039531088686,161.43333333333334,129.43684017717388,161.81666666666666,129.77986478835714,161.81666666666666C130.12288939954044,161.81666666666666,130.56249375561995,161.43333333333334,130.9068505012156,161.43333333333334C131.25120724681122,161.43333333333334,131.50031638192294,161.81666666666666,131.787391347787,161.625C132.07446631365104,161.43333333333334,132.39950711026745,160.66666666666666,132.77650114896593,160.66666666666666C133.15349518766445,160.66666666666666,133.58244246844507,161.43333333333334,133.9048189962367,161.81666666666666C134.2271955240284,162.2,134.44300129883106,162.2,134.67479268658207,162.39166666666665C134.9065840743331,162.58333333333331,135.15436107503245,162.96666666666667,135.51337129916408,163.15833333333333C135.8723815232957,163.35000000000002,136.34262497085956,163.35000000000002,136.73094215206316,163.15833333333333C137.11925933326677,162.96666666666667,137.42565024811006,162.58333333333331,137.76934092649952,162.39166666666665C138.11303160488896,162.2,138.49402204682454,162.2,138.77443634062678,161.625C139.05485063442902,161.04999999999998,139.2346887800979,159.89999999999998,139.5310886868485,159.51666666666668C139.8274885935991,159.13333333333333,140.2404502614314,159.51666666666665,140.6947080960469,160.09166666666667C141.14896593066243,160.66666666666666,141.64451993206117,161.43333333333334,142.06880474239853,161.81666666666666C142.4930895527359,162.2,142.84610517201187,162.2,143.13850867552537,162.2C143.43091217903887,162.2,143.6627035667899,162.2,144.0117227828288,162.77499999999998C144.3607419988677,163.34999999999997,144.82698904319446,164.49999999999997,145.18599926732608,165.64999999999998C145.54500949145768,166.79999999999995,145.79678289539413,167.95,146.09384886935092,168.71666666666664C146.3909148433077,169.48333333333332,146.73327338728478,169.86666666666667,147.08295867052988,170.63333333333333C147.43264395377497,171.39999999999998,147.78965597628803,172.54999999999998,148.1286841842342,172.74166666666665C148.46771239218037,172.9333333333333,148.78875678555966,172.16666666666663,149.06850501215573,171.7833333333333C149.3482532387518,171.39999999999998,149.58670529856465,171.39999999999998,149.8910980117894,171.39999999999998C150.19549072501417,171.39999999999998,150.56582409165085,171.39999999999998,150.83424917574183,171.39999999999998C151.10267425983284,171.39999999999998,151.26919106137814,171.39999999999998,151.4923235754488,171.01666666666665C151.71545608951948,170.63333333333333,151.99520431611552,169.86666666666665,152.39551070703035,168.71666666666664C152.7958170979452,167.56666666666666,153.31668165317882,166.0333333333333,153.73697006027908,165.26666666666665C154.15725846737936,164.5,154.47697072634628,164.5,154.80001332134412,164.3083333333333C155.12305591634197,164.11666666666667,155.4494288473707,163.73333333333335,155.76914110633766,163.54166666666666C156.0888533653046,163.35000000000002,156.4019049522097,163.35000000000002,156.67366037233157,163.15833333333333C156.94541579245347,162.96666666666667,157.17587504579217,162.58333333333331,157.49958370799618,162.2C157.8232923702002,161.81666666666666,158.24025044126955,161.43333333333334,158.57861258200955,161.05C158.91697472274953,160.66666666666669,159.17674093316015,160.28333333333333,159.42251973224097,160.09166666666667C159.66829853132182,159.89999999999998,159.90008991907285,159.89999999999998,160.11056715622607,160.09166666666667C160.3210443933793,160.28333333333333,160.51020747993473,160.66666666666669,160.6773903486862,160.85833333333335C160.84457321743764,161.05,160.98977586838515,161.05,161.31215239617677,161.24166666666667C161.63452892396845,161.43333333333334,162.1340793286043,161.81666666666666,162.62030838911647,162.00833333333333C163.1065374496287,162.2,163.57944516601728,162.2,163.93912145735507,162.39166666666665C164.29879774869286,162.58333333333331,164.54524261497988,162.96666666666667,164.93089552735873,163.73333333333335C165.31654843973757,164.5,165.84140939820827,165.65,166.37426316315316,166.41666666666669C166.90711692809805,167.18333333333334,167.44796349951713,167.56666666666666,167.87358044426685,167.37499999999997C168.29919738901657,167.1833333333333,168.60958470709699,166.41666666666663,168.85336530455925,166.0333333333333C169.09714590202154,165.64999999999998,169.2743197788657,165.64999999999998,169.4934558896993,165.64999999999995C169.71259200053288,165.64999999999998,169.97369034535586,165.64999999999998,170.31338462050823,165.4583333333333C170.6530788956606,165.26666666666665,171.07136910114235,164.88333333333333,171.47567189529428,164.11666666666665C171.87997468944621,163.35,172.27029007226832,162.2,172.6979052186366,161.81666666666666C173.12552036500486,161.43333333333334,173.59043527491926,161.81666666666666,173.90082259299965,162.00833333333333C174.21120991108003,162.2,174.36706963732644,162.2,174.60618776434544,162.2C174.84530589136446,162.2,175.1676824191561,162.2,175.58397442301933,162.00833333333333C176.0002664268825,161.81666666666666,176.51047390681723,161.43333333333334,176.95474073334003,161.43333333333334C177.3990075598628,161.43333333333334,177.7773337329737,161.81666666666666,178.09704599194063,162.00833333333333C178.41675825090755,162.2,178.67785659573053,162.2,178.9755886368935,161.625C179.27332067805642,161.04999999999998,179.60768641555933,159.89999999999998,180.04928897325743,159.70833333333334C180.49089153095548,159.51666666666665,181.03973090884872,160.28333333333333,181.40140540180508,160.85833333333335C181.7630798947614,161.43333333333334,181.93758950278084,161.81666666666666,182.20068604922238,162.00833333333333C182.4637825956639,162.2,182.81546608052753,162.2,183.2157724714424,162.2C183.61607886235723,162.2,184.0650081593233,162.2,184.45865387817634,162.00833333333333C184.85229959702937,161.81666666666666,185.19066173776937,161.43333333333334,185.62160722016856,161.24166666666667C186.0525527025677,161.05,186.57608152662607,161.05,187.05165351183936,160.66666666666669C187.52722549705265,160.28333333333333,187.95484064342094,159.51666666666665,188.38378792420158,159.32500000000002C188.8127352049822,159.13333333333333,189.2430146201752,159.51666666666665,189.64931561594565,159.325C190.05561661171615,159.13333333333333,190.4379391880641,158.36666666666667,190.79228694175242,157.98333333333335C191.14663469544078,157.6,191.47300762646952,157.6,191.8659872781164,157.02499999999998C192.25896692976323,156.45,192.71855330202817,155.29999999999998,192.98564625170678,154.91666666666663C193.25273920138542,154.5333333333333,193.3273387284777,154.91666666666666,193.41459353248746,155.29999999999998C193.50184833649718,155.68333333333334,193.60175841742435,156.06666666666666,193.92213674359743,156.45C194.24251506977058,156.83333333333331,194.78336164118963,157.21666666666664,195.23695340859896,157.4083333333333C195.6905451760083,157.6,196.0568821394079,157.6,196.53112199020885,157.59999999999997C197.0053618410098,157.6,197.58750457921207,157.6,198.1163619409199,157.59999999999997C198.64521930262765,157.6,199.12079128784097,157.6,199.48046757917876,157.79166666666666C199.84014387051656,157.98333333333332,200.08392446797887,158.36666666666667,200.37632797149237,158.75C200.66873147500587,159.13333333333333,201.00975788457058,159.51666666666665,201.27285443101212,159.51666666666668C201.53595097745364,159.51666666666665,201.721117660772,159.13333333333333,202.03949778532655,158.75C202.35787790988113,158.36666666666667,202.8094714756719,157.98333333333332,203.1544942884737,157.98333333333335C203.4995171012755,157.98333333333332,203.73796916108836,158.36666666666667,204.0463582775502,158.94166666666666C204.35474739401207,159.51666666666665,204.73307356712291,160.28333333333333,205.12472108435742,160.47500000000002C205.51636860159192,160.66666666666669,205.92133746295002,160.28333333333333,206.30699037532887,160.475C206.69264328770774,160.66666666666666,207.05898025110736,161.43333333333334,207.45728844040366,161.81666666666666C207.85559662969996,162.2,208.28587604489294,162.2,208.65754154594202,162.2C209.02920704699108,162.2,209.34225863389622,162.2,209.6779565058115,162.77499999999998C210.01365437772677,163.34999999999997,210.3719985346522,164.49999999999997,210.5944649815167,165.07499999999996C210.81693142838117,165.64999999999998,210.90352016518472,165.64999999999998,211.11666167116266,165.4583333333333C211.32980317714063,165.26666666666665,211.669497452293,164.88333333333333,211.9832151064043,164.49999999999997C212.29693276051557,164.11666666666667,212.5846737935858,163.73333333333335,212.8457721384088,163.15833333333333C213.10687048323177,162.58333333333334,213.3413261398075,161.81666666666666,213.66170446598062,161.625C213.98208279215373,161.43333333333334,214.3883837879242,161.81666666666666,214.8013454557565,162.00833333333333C215.21430712358875,162.2,215.63392946348287,162.2,215.93499184067673,162.00833333333333C216.2360542178706,161.81666666666666,216.4185566323642,161.43333333333334,216.66633363306357,161.24166666666667C216.91411063376293,161.05,217.22716222066805,161.05,217.5462084124288,161.24166666666667C217.86525460418954,161.43333333333334,218.19029540080592,161.81666666666666,218.4833649715256,162.39166666666665C218.7764345422453,162.96666666666664,219.03753288706832,163.73333333333332,219.2992972990975,163.92499999999998C219.56106171112668,164.11666666666667,219.82349219036203,163.73333333333335,220.14187231491658,163.15833333333333C220.46025243947116,162.58333333333334,220.83458220934494,161.81666666666666,221.17893895494058,161.05C221.5232957005362,160.28333333333333,221.8376794218537,159.51666666666665,222.23798581276853,159.70833333333334C222.63829220368336,159.89999999999998,223.12452126419558,161.04999999999998,223.6067539214707,161.24166666666667C224.0889865787458,161.43333333333334,224.56722283278384,160.66666666666666,225.0407966163786,160.09166666666667C225.51437039997336,159.51666666666665,225.98328171312488,159.13333333333333,226.4168914643488,158.94166666666666C226.85050121557268,158.75,227.24880940486898,158.75,227.60781962900057,158.55833333333334C227.9668298531322,158.36666666666667,228.28654211209914,157.98333333333332,228.70816265361177,157.40833333333333C229.12978319512442,156.83333333333331,229.65331201918275,156.06666666666666,230.15552669264332,155.875C230.65774136610386,155.68333333333334,231.13864188896662,156.06666666666666,231.52829120458256,156.45C231.9179405201985,156.83333333333331,232.21633862856766,157.21666666666664,232.5273920138542,157.4083333333333C232.8384453991408,157.6,233.16215406134478,157.6,233.55313551137309,158.17499999999998C233.9441169614014,158.75,234.402371199254,159.9,234.8746128484364,159.89999999999998C235.3468544976188,159.9,235.83308355813102,158.75,236.35061777733375,158.75C236.86815199653648,158.75,237.41699137442973,159.9,237.9465148033437,160.09166666666667C238.47603823225768,160.28333333333333,238.9862457121924,159.51666666666665,239.38988243913815,159.13333333333335C239.7935191660839,158.75,240.09058514004067,158.75,240.4868951277184,158.36666666666665C240.88320511539615,157.98333333333332,241.37875911679487,157.21666666666664,241.78839044859626,156.64166666666665C242.19802178039765,156.06666666666666,242.52173044260167,155.68333333333334,242.97465614280483,155.29999999999998C243.42758184300797,154.91666666666666,244.00972458121026,154.5333333333333,244.43867186199088,154.72499999999997C244.8676191427715,154.91666666666663,245.14337096613048,155.6833333333333,245.50304725746827,156.25833333333333C245.86272354880606,156.83333333333331,246.3063243081227,157.21666666666664,246.76657674759383,157.02499999999998C247.226829187065,156.83333333333331,247.70373330669065,156.06666666666666,248.1813034935225,155.3C248.65887368035436,154.53333333333333,249.1371099343924,153.76666666666665,249.4967862257302,153.38333333333333C249.856462517068,153,250.09757884570553,153,250.47390681719787,152.61666666666667C250.8502347886902,152.23333333333332,251.3617744030373,151.46666666666664,251.83801245545675,151.6583333333333C252.31425050787627,151.84999999999997,252.75518699836815,152.99999999999997,253.0988776767576,153.38333333333333C253.44256835514705,153.76666666666665,253.68901322143404,153.38333333333333,254.00672727878245,153.19166666666666C254.3244413361308,153,254.71342458454058,153,254.98318180304395,153.19166666666666C255.2529390215473,153.38333333333333,255.40347021014423,153.76666666666665,255.54334432344226,153.95833333333331C255.68321843674028,154.14999999999998,255.81243547473943,154.14999999999998,256.1441369434176,154.34166666666664C256.4758384120958,154.5333333333333,257.01002431145304,154.91666666666666,257.4263163153162,155.10833333333332C257.8426083191794,155.3,258.1410064275485,155.3,258.43807240150534,155.10833333333332C258.7351383754621,154.91666666666666,259.0308722150065,154.5333333333333,259.3352649282313,154.14999999999998C259.6396576414561,153.76666666666665,259.9527092283612,153.38333333333333,260.28507676424556,153C260.61744430012993,152.61666666666667,260.9691277849935,152.23333333333332,261.3294701435375,152.04166666666666C261.68981250208145,151.84999999999997,262.05881373430583,151.84999999999997,262.36254038032445,151.46666666666667C262.666267026343,151.08333333333331,262.9047190861558,150.31666666666666,263.20311719452496,149.54999999999998C263.50151530289406,148.78333333333333,263.8598594598195,148.01666666666665,264.0543510840244,147.63333333333333C264.2488427082293,147.25,264.2794817997136,147.25,264.3540813268059,147.825C264.4286808538982,148.39999999999998,264.54724081659845,149.54999999999998,264.65114730076266,150.7C264.7550537849269,151.84999999999997,264.84430679055515,152.99999999999997,264.9861791054717,154.34166666666664C265.1280514203883,155.6833333333333,265.3225430445932,157.21666666666664,265.5196989376228,158.17499999999998C265.71685483065244,159.13333333333333,265.9166749925068,159.51666666666665,266.156459186732,159.70833333333334C266.3962433809572,159.89999999999998,266.6759916075532,159.89999999999998,266.9564059013555,159.70833333333334C267.23682019515775,159.51666666666665,267.5179005561662,159.13333333333333,267.8496020248444,158.75C268.1813034935226,158.36666666666667,268.5636260698705,157.98333333333332,268.9106470842909,157.79166666666669C269.2576680987112,157.6,269.56938755120393,157.6,269.8924301462017,157.21666666666664C270.2154727411996,156.83333333333331,270.5498384787025,156.06666666666666,270.93349318946287,155.3C271.3171479002232,154.53333333333333,271.7500915842409,153.76666666666665,272.0744663136511,153.575C272.39884104306134,153.38333333333333,272.61464681786396,153.76666666666665,272.80247777000704,153.76666666666665C272.9903087221501,153.76666666666665,273.1501648516336,153.38333333333333,273.49252339561065,152.80833333333334C273.8348819395877,152.23333333333332,274.3597428980584,151.46666666666664,274.7094281813035,151.08333333333331C275.05911346454855,150.7,275.23362307256804,150.7,275.5559996003597,150.50833333333333C275.87837612815133,150.31666666666666,276.34861957571525,149.93333333333334,276.6769907083625,155.3C277.0053618410098,160.66666666666669,277.19186065874055,171.78333333333333,277.3383954441004,177.3416666666667C277.48493022946025,182.9,277.5915009824492,182.9,277.690078928964,184.05C277.78865687547875,185.2,277.87924201551937,187.5,277.97115928997243,189.41666666666666C278.0630765644254,191.33333333333331,278.1563259732908,192.86666666666667,278.30286075865064,192.67499999999998C278.4493955440105,192.48333333333332,278.6492157058648,190.56666666666666,279.0135544676458,188.64999999999998C279.3778932294269,186.73333333333335,279.9067505911347,184.81666666666666,280.29639990675065,183.09166666666667C280.6860492223666,181.36666666666667,280.9364904918907,179.83333333333334,281.1549605355181,178.10833333333335C281.3734305791455,176.38333333333333,281.5599293968762,174.46666666666667,281.7191194591535,172.35833333333332C281.87830952143077,170.25,282.0101908282546,167.95,282.2566356945416,166.22499999999997C282.5030805608286,164.49999999999997,282.8640889865788,163.34999999999997,283.25307223498857,163.1583333333333C283.6420554833983,162.96666666666664,284.0590135544677,163.73333333333332,284.376727611816,164.3083333333333C284.69444166916446,164.88333333333333,284.9129117127918,165.26666666666665,285.20797948513007,165.4583333333333C285.5030472574683,165.64999999999998,285.8747127585174,165.64999999999998,286.2357211842675,165.84166666666664C286.59672961001763,166.0333333333333,286.94708096046895,166.41666666666666,287.388683518167,166.60833333333335C287.83028607586505,166.8,288.36313984080994,166.8,288.79142105438444,166.99166666666667C289.2197022679589,167.18333333333334,289.54341093016296,167.56666666666666,289.8617910547175,167.56666666666666C290.18017117927207,167.56666666666666,290.49322276617715,167.18333333333334,290.8535651247212,166.60833333333332C291.21390748326513,166.03333333333333,291.62154061344796,165.26666666666665,292.00919172744534,164.88333333333333C292.3968428414428,164.5,292.7645119392547,164.5,293.0915509374896,164.69166666666663C293.4185899357245,164.88333333333333,293.7049988343824,165.26666666666665,294.01738435408134,164.8833333333333C294.32976987378026,164.49999999999997,294.66813201452027,163.34999999999997,295.0611116661671,162.00833333333333C295.454091317814,160.66666666666666,295.9016884803677,159.13333333333333,296.369933726313,157.98333333333332C296.83817897225833,156.83333333333331,297.32707230159525,156.06666666666666,297.73537149898425,155.49166666666667C298.1436706963733,154.91666666666666,298.4713757618144,154.5333333333333,298.845039464482,154.34166666666664C299.21870316714956,154.14999999999998,299.63832550704365,154.14999999999998,300.0046624704433,154.14999999999998C300.3709994338429,154.14999999999998,300.68405102074803,154.14999999999998,301.066373597096,154.14999999999998C301.4486961734439,154.14999999999998,301.9002897392347,154.14999999999998,302.2699570386652,154.14999999999998C302.63962433809576,154.14999999999998,302.927365371166,154.14999999999998,303.2850434608853,154.34166666666664C303.6427215506045,154.5333333333333,304.0703366969728,154.91666666666666,304.5312552036501,155.49166666666667C304.9921737103274,156.06666666666666,305.4863955773138,156.83333333333331,305.8687181536617,157.21666666666664C306.25104073000966,157.6,306.5214640157192,157.6,306.8378459386552,157.59999999999997C307.15422786159127,157.6,307.5165684217538,157.6,307.9341925600294,157.98333333333332C308.3518166983049,158.36666666666667,308.8247244146935,159.13333333333333,309.3409264994838,159.51666666666668C309.85712858427416,159.89999999999998,310.4166250374663,159.89999999999998,310.89086488826723,159.51666666666665C311.3651047390682,159.13333333333333,311.754087987478,158.36666666666667,312.21167615812436,157.79166666666666C312.6692643287708,157.21666666666664,313.1954574216539,156.83333333333331,313.68634895260936,156.83333333333331C314.17724048356484,156.83333333333331,314.6328304525927,157.21666666666664,315.0910846904453,157.02499999999998C315.5493389282979,156.83333333333331,316.01025743497524,156.06666666666666,316.4312119092817,155.49166666666667C316.85216638358816,154.91666666666666,317.23315682552374,154.5333333333333,317.64545242614986,154.5333333333333C318.0577480267759,154.5333333333333,318.50134878609254,154.91666666666666,318.87368035434775,155.49166666666667C319.24601192260303,156.06666666666666,319.5470742997969,156.83333333333331,319.91141306157795,157.21666666666664C320.2757518233591,157.6,320.7033669697273,157.6,321.07303426915786,157.4083333333333C321.44270156858835,157.21666666666664,321.75442102108116,156.83333333333331,322.1081027075633,156.45C322.4617843940455,156.06666666666666,322.85742831451705,155.68333333333334,323.31901288840055,155.49166666666665C323.78059746228405,155.3,324.3081226895795,155.3,324.6391580910515,155.29999999999998C324.9701934925235,155.3,325.1047390681721,155.3,325.36317314417033,155.68333333333334C325.6216072201686,156.06666666666666,326.00392979651656,156.83333333333331,326.4402038165652,156.83333333333331C326.87647783661384,156.83333333333331,327.3667033003631,156.06666666666666,327.8442734871949,155.68333333333334C328.3218436740268,155.3,328.78675858394115,155.3,329.18773104206224,154.91666666666666C329.5887035001832,154.53333333333333,329.9257335065109,153.76666666666665,330.2780830585807,153.19166666666666C330.63043261065053,152.61666666666667,330.9981017084625,152.23333333333332,331.290505211976,151.85C331.5829087154895,151.46666666666664,331.8000466247045,151.08333333333331,332.18370133546483,150.89166666666665C332.5673560462251,150.7,333.1175275585307,150.7,333.63839211376427,150.89166666666665C334.15925666899795,151.08333333333331,334.6508142671596,151.46666666666664,334.9778532653946,151.84999999999997C335.30489226362954,152.23333333333332,335.4674126619377,152.61666666666667,335.7611482998635,152.80833333333334C336.0548839377894,153,336.47983481533294,153,336.84550571152636,152.80833333333334C337.2111766077198,152.61666666666667,337.51756752256307,152.23333333333332,337.93119525760153,152.23333333333332C338.34482299264,152.23333333333332,338.8656875478736,152.61666666666667,339.32460785293244,152.425C339.7835281579912,152.23333333333332,340.1805042128752,151.46666666666664,340.6740600126554,151.6583333333333C341.1676158124356,151.84999999999997,341.75775135711206,152.99999999999997,342.31325140706707,153.76666666666665C342.8687514570221,154.5333333333333,343.3896160122557,154.91666666666666,343.7432976987379,155.29999999999998C344.09697938522004,155.68333333333334,344.2834782029508,156.06666666666666,344.50128217937197,156.2583333333333C344.7190861557932,156.45,344.9681952909049,156.45,345.30389316282015,156.2583333333333C345.6395910347354,156.06666666666666,346.06187764345424,155.68333333333334,346.38425417124586,155.49166666666665C346.70663069903753,155.3,346.92909714590206,155.3,347.2687914210544,155.68333333333334C347.6084856962068,156.06666666666666,348.065407799647,156.83333333333331,348.55363506177775,157.40833333333333C349.04186232390856,157.98333333333332,349.56139474472985,158.36666666666667,349.95903686682004,158.75C350.3566789889101,159.13333333333333,350.6324308122691,159.51666666666665,351.01275518699845,159.51666666666668C351.3930795617279,159.51666666666665,351.87797648782777,159.13333333333333,352.29560062610335,159.13333333333333C352.7132247643789,159.13333333333333,353.0635761148301,159.51666666666665,353.4432344223533,159.9C353.8228927298765,160.28333333333333,354.23185799447174,160.66666666666669,354.59486462184043,160.85833333333335C354.9578712492091,161.05,355.2749192393513,161.05,355.58930296066876,161.43333333333334C355.90368668198624,161.81666666666666,356.21540613447905,162.58333333333334,356.590401971559,163.15833333333333C356.96539780863895,163.73333333333335,357.40367003030616,164.11666666666667,357.7806640690047,163.92499999999998C358.1576581077031,163.73333333333332,358.473373963433,162.96666666666664,358.745795450761,162.77499999999998C359.0182169380891,162.58333333333331,359.2473440570154,162.96666666666667,359.4937889233024,163.15833333333333C359.7402337895894,163.35000000000002,360.0039964032371,163.35000000000002,360.38698504679127,162.96666666666667C360.7699736903454,162.58333333333334,361.272188363806,161.81666666666666,361.65118060412306,161.05C362.0301728444401,160.28333333333333,362.2859426516136,159.51666666666665,362.64428680853905,159.51666666666668C363.00263096546445,159.51666666666665,363.46354947214184,160.28333333333333,363.93512505411803,160.28333333333336C364.4067006360943,160.28333333333333,364.8889332933694,159.51666666666665,365.2665933992741,159.13333333333335C365.64425350517877,158.75,365.917341059713,158.75,366.2770173510508,158.75C366.63669364238865,158.75,367.08295867052993,158.75,367.38668531654855,158.55833333333334C367.69041196256717,158.36666666666667,367.851600226463,157.98333333333332,368.16065541013097,157.98333333333335C368.46971059379905,157.98333333333332,368.92663269723926,158.36666666666667,369.3136177440304,158.55833333333334C369.7006027908216,158.75,370.01765078096383,158.75,370.437273120858,158.75C370.85689546075207,158.75,371.37909215039804,158.75,371.91927265461095,158.94166666666666C372.4594531588238,159.13333333333333,373.0176174776036,159.51666666666665,373.3732973657043,159.70833333333334C373.728977253805,159.89999999999998,373.88217271122664,159.89999999999998,374.1825690212143,159.70833333333334C374.48296533120197,159.51666666666665,374.9305624937557,159.13333333333333,375.38282212675267,158.94166666666666C375.83508175974964,158.75,376.29200386318985,158.75,376.63502847437314,158.94166666666666C376.97805308555644,159.13333333333333,377.2071802044827,159.51666666666665,377.56485829420194,159.51666666666668C377.9225363839212,159.51666666666665,378.4087654444334,159.13333333333333,378.91297831951255,158.94166666666666C379.4171911945916,158.75,379.9393878842376,158.75,380.3643387617811,158.36666666666665C380.7892896393247,157.98333333333332,381.1169947047657,157.21666666666664,381.53328670862896,156.64166666666665C381.9495787124921,156.06666666666666,382.45445765477746,155.68333333333334,382.85942651613556,155.29999999999998C383.26439537749366,154.91666666666666,383.5694541579246,154.5333333333333,383.96576414560235,154.5333333333333C384.3620741332801,154.5333333333333,384.84963532820467,154.91666666666666,385.35051786725285,155.49166666666667C385.851400406301,156.06666666666666,386.3656042894728,156.83333333333331,386.8897991807373,157.21666666666664C387.41399407200186,157.6,387.94817997135914,157.6,388.4357411662838,157.4083333333333C388.92330236120836,157.21666666666664,389.36423885170024,156.83333333333331,389.8244912911714,156.64166666666665C390.2847437306425,156.45,390.7643121190929,156.45,391.14330435940997,156.2583333333333C391.522296599727,156.06666666666666,391.8007126919107,155.68333333333334,392.1876977387019,155.49166666666665C392.5746827854931,155.3,393.0702367868918,155.3,393.4658807073634,155.10833333333332C393.861524627835,154.91666666666666,394.1572584673794,154.5333333333333,394.574882605655,154.14999999999998C394.99250674393056,153.76666666666665,395.53202118093725,153.38333333333333,395.9556399240684,153.38333333333333C396.37925866719957,153.38333333333333,396.6869817164553,153.76666666666665,396.9294301795052,153.76666666666665C397.17187864255516,153.76666666666665,397.3490525193994,153.38333333333333,397.601491990542,153.19166666666666C397.8539314616846,153,398.1816365271257,153,398.5273254071336,153.19166666666666C398.87301428714164,153.38333333333333,399.2366869817165,153.76666666666665,399.54840643420926,153.95833333333331C399.860125886702,154.14999999999998,400.11989209711265,154.14999999999998,400.45825423785266,154.34166666666664C400.79661637859266,154.5333333333333,401.213574449662,154.91666666666666,401.46068538315524,155.10833333333332C401.7077963166484,155.3,401.7850601125654,155.3,402.0201818363474,155.10833333333332C402.2553035601293,154.91666666666666,402.6482832117762,154.5333333333333,402.9719918739802,154.34166666666664C403.2957005361842,154.14999999999998,403.5501382089453,154.14999999999998,403.81723115862394,153.76666666666665C404.08432410830255,153.38333333333333,404.3640723348986,152.61666666666665,404.5539014886602,152.23333333333332C404.74373064242184,151.84999999999997,404.84364072334904,151.84999999999997,405.11739434508945,151.65833333333333C405.3911479668299,151.46666666666664,405.8387451293836,151.08333333333331,406.23305691544283,151.27499999999998C406.627368701502,151.46666666666664,406.96839511106674,152.23333333333332,407.33006960402315,152.61666666666667C407.69174409697945,153,408.0740666733274,153,408.31385086755256,153C408.5536350617778,153,408.6508808738802,153,408.8939954041364,152.61666666666667C409.1371099343924,152.23333333333332,409.5260931828022,151.46666666666664,409.84647150897524,151.08333333333331C410.1668498351484,150.7,410.41862323908487,150.7,410.76031571585577,150.31666666666666C411.10200819262667,149.93333333333334,411.533619742232,149.16666666666666,411.8779764878276,148.78333333333333C412.2223332334233,148.4,412.4794351750092,148.4,412.7778332833783,148.4C413.07623139174746,148.4,413.41592566689985,148.4,413.7096613048258,148.59166666666667C414.0033969427516,148.78333333333333,414.2511739434509,149.16666666666669,414.46564758384125,149.93333333333334C414.6801212242316,150.7,414.8612915043129,151.85,415.0078262896727,153C415.15436107503257,154.14999999999998,415.266260365671,155.29999999999998,415.50338029107144,156.45C415.7405002164719,157.59999999999997,416.1028407766344,158.75,416.45918673194126,158.74999999999997C416.8155326872482,158.75,417.16588403769947,157.59999999999997,417.47227495254276,157.21666666666664C417.77866586738605,156.83333333333331,418.0410963466214,157.21666666666664,418.33483198454724,157.6C418.6285676224731,157.98333333333332,418.9536084190895,158.36666666666667,419.2593332667266,158.36666666666667C419.56505811436375,158.36666666666667,419.85146701302165,157.98333333333332,420.16585073433913,157.6C420.4802344556566,157.21666666666664,420.8225929996338,156.83333333333331,421.22489759216717,157.21666666666667C421.62720218470054,157.59999999999997,422.0894528257902,158.75,422.4551237219837,159.325C422.82079461817705,159.89999999999998,423.0898857694742,159.89999999999998,423.5021813701003,159.9C423.9144769707264,159.89999999999998,424.4699770206815,159.89999999999998,424.8935957638127,160.28333333333333C425.31721450694386,160.66666666666666,425.60895194325116,161.43333333333334,425.8620574816,161.81666666666666C426.1151630199488,162.2,426.3296366603391,162.2,426.7066306990376,161.81666666666666C427.0836247377361,161.43333333333334,427.62313917474285,160.66666666666666,428.0187830952144,160.475C428.414427015686,160.28333333333333,428.66620041962244,160.66666666666669,428.8193958770441,160.66666666666669C428.97259133446573,160.66666666666669,429.02720884537257,160.28333333333333,429.21370766310326,159.9C429.40020648083396,159.51666666666665,429.71858660538857,159.13333333333333,430.0709361574584,158.75C430.42328570952816,158.36666666666667,430.80960468911326,157.98333333333332,431.26186432211017,157.025C431.7141239551072,156.06666666666666,432.23232424151604,154.53333333333333,432.68191960568834,153.95833333333331C433.1315149698605,153.38333333333333,433.51250541179616,153.76666666666665,433.8315516035568,153.76666666666665C434.1505977953176,153.76666666666665,434.4076997369035,153.38333333333333,434.71675492057153,153C435.02581010423955,152.61666666666667,435.38681852998974,152.23333333333332,435.7531554933894,151.85C436.119492456789,151.46666666666664,436.491157957838,151.08333333333331,436.76890798281556,150.89166666666665C437.04665800779304,150.7,437.230492556699,150.7,437.3990075598628,150.12499999999997C437.5675225630266,149.54999999999998,437.72071802044826,148.39999999999998,437.91520964465315,148.01666666666665C438.10970126885803,147.63333333333333,438.34548905984616,148.01666666666665,438.5666233722983,148.78333333333333C438.78775768475043,149.55,438.9942385186666,150.7,439.1674159922737,151.85C439.3405934658807,153,439.48046757917876,154.14999999999998,439.66030572484766,154.91666666666666C439.8401438705166,155.68333333333334,440.0599460485564,156.06666666666666,440.45292570020325,156.45C440.8459053518501,156.83333333333331,441.4120624771041,157.21666666666664,441.8896326639359,157.6C442.36720285076774,157.98333333333332,442.7561860991775,158.36666666666667,443.1658174309789,158.94166666666666C443.5754487627803,159.51666666666665,444.0057281779732,160.28333333333333,444.3953774935892,160.28333333333336C444.7850268092051,160.28333333333333,445.13404602524406,159.51666666666665,445.34185899357254,158.94166666666666C445.5496719619011,158.36666666666667,445.61627868251924,157.98333333333332,445.8207613148168,157.79166666666669C446.0252439471144,157.6,446.3676024910915,157.6,446.78322842774844,157.4083333333333C447.19885436440546,157.21666666666664,447.6877476937424,156.83333333333331,448.12535384820336,156.45C448.56296000266434,156.06666666666666,448.9492789822494,155.68333333333334,449.3042928031439,155.49166666666665C449.65930662403844,155.3,449.98301528624245,155.3,450.301395410797,155.10833333333332C450.6197755353516,154.91666666666666,450.93282712225675,154.5333333333333,451.25453758284226,154.5333333333333C451.57624804342777,154.5333333333333,451.9066173776936,154.91666666666666,452.2942684916909,155.29999999999998C452.68191960568834,155.68333333333334,453.1268524994173,156.06666666666666,453.600426283012,156.2583333333333C454.07400006660674,156.45,454.5762147400673,156.45,455.05711526293004,156.64166666666665C455.5380157857928,156.83333333333331,455.99760215805776,157.21666666666664,456.43520831251874,157.21666666666664C456.8728144669797,157.21666666666664,457.28844040363674,156.83333333333331,457.78199620341695,156.64166666666665C458.27555200319716,156.45,458.84703766610056,156.45,459.3326006594066,156.64166666666665C459.81816365271266,156.83333333333331,460.2178039764213,157.21666666666664,460.6520797948514,157.21666666666664C461.08635561328146,157.21666666666664,461.555266926433,156.83333333333331,462.0474905918008,156.45C462.5397142571686,156.06666666666666,463.0552502747528,155.68333333333334,463.4429013887502,155.29999999999998C463.8305525027476,154.91666666666666,464.09031871315824,154.5333333333333,464.4486628700837,154.5333333333333C464.80700702700915,154.5333333333333,465.26392913044936,154.91666666666666,465.6276018250242,154.34166666666667C465.9912745195991,153.76666666666665,466.2616978053086,152.23333333333332,466.56142804809014,151.46666666666667C466.8611582908716,150.7,467.19019549072505,150.7,467.5212308921971,150.50833333333333C467.8522662936691,150.31666666666666,468.1852998967596,149.93333333333334,468.5050121557266,149.74166666666667C468.8247244146935,149.55,469.1311153295368,149.55,469.37955839744234,149.74166666666667C469.62800146534795,149.93333333333334,469.81849668631577,150.31666666666666,470.065607619809,150.50833333333333C470.31271855330215,150.7,470.6164451993207,150.7,470.9188397109269,150.89166666666665C471.2212342225331,151.08333333333331,471.52229659972693,151.46666666666664,471.89462816798215,151.46666666666664C472.26695973623737,151.46666666666664,472.71056049555403,151.08333333333331,473.1788057414994,150.7C473.6470509874447,150.31666666666666,474.1399407200188,149.93333333333334,474.53092217004706,149.93333333333334C474.92190362007534,149.93333333333334,475.2109767875579,150.31666666666666,475.4893928797417,150.50833333333333C475.7678089719253,150.7,476.03556798881016,150.7,476.3106537449629,151.08333333333331C476.5857395011157,151.46666666666664,476.8681519965365,152.23333333333332,477.1718786425551,152.80833333333334C477.47560528857366,153.38333333333333,477.80064608519007,153.76666666666665,478.0564158923636,154.14999999999998C478.31218569953717,154.5333333333333,478.4986845172679,154.91666666666666,478.7204848969262,155.10833333333332C478.9422852765845,155.3,479.1993872181704,155.3,479.46048556299337,155.10833333333332C479.72158390781635,154.91666666666666,479.9866786558764,154.5333333333333,480.2650947480601,154.5333333333333C480.5435108402438,154.5333333333333,480.83524827655117,154.91666666666666,481.25220634762053,154.91666666666666C481.6691644186899,154.91666666666666,482.2113431245213,154.5333333333333,482.7475272254971,154.72499999999997C483.2837113264729,154.91666666666663,483.81390082259304,155.6833333333333,484.16691644186903,156.25833333333333C484.519932061145,156.83333333333331,484.6957738035768,157.21666666666664,485.0407966163786,157.79166666666666C485.3858194291804,158.36666666666667,485.90002331235223,159.13333333333333,486.26236387251475,159.32500000000002C486.6247044326773,159.51666666666665,486.83518166983055,159.13333333333333,487.09228361141646,158.5583333333333C487.3493855530024,157.98333333333332,487.65311219902094,157.21666666666664,488.0241116328638,157.21666666666667C488.3951110667067,157.21666666666664,488.8333832883739,157.98333333333332,489.1790721683819,158.55833333333334C489.5247610483899,159.13333333333333,489.7778665867387,159.51666666666665,490.17617477603494,159.51666666666668C490.57448296533124,159.51666666666665,491.117993805575,159.13333333333333,491.4903253738303,158.75C491.8626569420855,158.36666666666667,492.0638092383522,157.98333333333332,492.3955107070304,157.40833333333333C492.7272121757086,156.83333333333331,493.18946281679825,156.06666666666666,493.5837746028575,155.875C493.9780863889167,155.68333333333334,494.3044593199455,156.06666666666666,494.6954407699738,156.64166666666665C495.0864222200021,157.21666666666664,495.54201218902995,157.98333333333332,495.90035634595534,158.36666666666667C496.2587005028808,158.75,496.5197988477038,158.75,496.7475938322177,158.55833333333334C496.9753888167317,158.36666666666667,497.1698804409366,157.98333333333332,497.520897858594,157.79166666666669C497.87191527625146,157.6,498.3794584873615,157.6,498.85836080860565,157.59999999999997C499.33726312984993,157.6,499.78752456122834,157.6,500.24777700069944,156.64166666666665C500.7080294401706,155.68333333333334,501.17827288773447,153.76666666666665,501.45402471109344,153.19166666666666C501.72977653445247,152.61666666666665,501.81103673360656,153.38333333333333,501.97089286309,153.76666666666665C502.13074899257344,154.14999999999998,502.3692010523863,154.14999999999998,502.6362940020649,154.14999999999998C502.9033869517435,154.14999999999998,503.1991207912879,154.14999999999998,503.6360608785427,154.14999999999998C504.0730009657975,154.14999999999998,504.6511473007627,154.14999999999998,505.1167282778833,154.34166666666664C505.5823092550039,154.5333333333333,505.9353248742799,154.91666666666666,506.37492923035944,155.10833333333332C506.814533586439,155.3,507.3407266793221,155.3,507.77300429613365,155.29999999999998C508.20528191294517,155.3,508.54364405368517,155.3,508.83071901954924,155.29999999999998C509.1177939854133,155.3,509.35358177640137,155.3,509.6053551803378,155.29999999999998C509.8571285842743,155.3,510.124887601159,155.3,510.41662503746636,155.29999999999998C510.70836247377366,155.3,511.0240783295035,155.3,511.43570786292344,155.49166666666665C511.8473373963434,155.68333333333334,512.3548806074534,156.06666666666666,512.7611816032239,155.6833333333333C513.1674825989944,155.29999999999998,513.4725413794254,154.14999999999998,513.8109035201653,153.76666666666665C514.1492656609053,153.38333333333333,514.5209311619543,153.76666666666665,514.8979252006528,153.575C515.2749192393512,153.38333333333333,515.6572418156993,152.61666666666665,515.9822826123157,152.42499999999998C516.307323408932,152.23333333333332,516.5750824258168,152.61666666666667,516.9554068005463,152.61666666666667C517.3357311752757,152.61666666666667,517.8286209078497,152.23333333333332,518.2162720218471,152.23333333333332C518.6039231358445,152.23333333333332,518.8863356312652,152.61666666666667,519.1600892530057,152.80833333333334C519.4338428747461,153,519.6989376228062,153,520.0785959303295,153C520.4582542378528,153,520.9524761048391,153,521.4653478535986,152.80833333333334C521.978219602358,152.61666666666667,522.5097412328905,152.23333333333332,522.9719918739802,151.85C523.4342425150699,151.46666666666664,523.8272221667166,151.08333333333331,524.1715789123123,150.31666666666663C524.5159356579079,149.54999999999998,524.8116694974524,148.39999999999998,525.167349385553,148.01666666666665C525.5230292736538,147.63333333333333,525.9386552103108,148.01666666666665,526.3742631631533,148.4C526.8098711159956,148.78333333333333,527.2654610850235,149.16666666666669,527.6044892929697,149.55C527.9435175009158,149.93333333333334,528.1659839477803,150.31666666666666,528.5156692310254,150.125C528.8653545142705,149.93333333333334,529.3422586338962,149.16666666666666,529.7192526725947,149.16666666666666C530.0962467112932,149.16666666666666,530.3733306690646,149.93333333333334,530.625104073001,150.125C530.8768774769375,150.31666666666666,531.1033403270391,149.93333333333334,531.4543577446965,150.31666666666666C531.8053751623539,150.7,532.2809471475672,151.85,532.7751690145536,151.85C533.26939088154,151.85,533.7822626302994,150.7,534.2458454058016,149.93333333333334C534.7094281813036,149.16666666666669,535.1237219835482,148.78333333333333,535.4081326805875,148.4C535.6925433776269,148.01666666666665,535.8470709694609,147.63333333333333,536.1394744729745,147.63333333333333C536.431877976488,147.63333333333333,536.862157391681,148.01666666666665,537.1578912312253,148.01666666666665C537.4536250707697,148.01666666666665,537.6148133346655,147.63333333333333,537.8192959669632,147.44166666666666C538.0237785992607,147.25,538.27155559996,147.25,538.5866053884838,147.24999999999997C538.9016551770073,147.25,539.2839777533553,147.25,539.6676324641156,147.0583333333333C540.0512871748759,146.86666666666667,540.4362740200486,146.48333333333335,540.7513238085724,148.59166666666667C541.066373597096,150.7,541.3114863289707,155.3,541.4873280714025,159.13333333333333C541.6631698138343,162.96666666666664,541.7697405668233,166.0333333333333,541.9882106104508,167.56666666666666C542.2066806540781,169.09999999999997,542.5370499883439,169.09999999999997,542.8714157258469,168.52499999999998C543.2057814633498,167.95,543.5441436040899,166.79999999999995,543.7905884703769,165.84166666666664C544.0370333366639,164.88333333333333,544.1915609284978,164.11666666666667,544.4999500449596,162.77499999999998C544.8083391614214,161.43333333333334,545.270589802511,159.51666666666665,545.6469177740034,158.17499999999998C546.0232457454957,156.83333333333331,546.3136510473907,156.06666666666666,546.6426882472442,155.3C546.9717254470977,154.53333333333333,547.3393945449096,153.76666666666665,547.6184767042995,153C547.8975588636895,152.23333333333332,548.0880540846572,151.46666666666664,548.3731308489027,151.08333333333331C548.6582076131483,150.7,549.0378659206715,150.7,549.432843773937,150.50833333333333C549.8278216272024,150.31666666666666,550.2381190262099,149.93333333333334,550.5651580244448,149.93333333333334C550.8921970226797,149.93333333333334,551.1359776201421,150.31666666666666,551.3990741665835,150.7C551.662170713025,151.08333333333331,551.9445832084459,151.46666666666664,552.2030172844442,151.84999999999997C552.4614513604424,152.23333333333332,552.6959070170182,152.61666666666667,552.9783195124389,153C553.2607320078597,153.38333333333333,553.5911013421255,153.76666666666665,554.0273753621741,154.14999999999998C554.4636493822228,154.5333333333333,555.0058280880542,154.91666666666666,555.4294468311854,155.10833333333332C555.8530655743166,155.3,556.1581243547474,155.3,556.5564325440437,156.06666666666666C556.95474073334,156.83333333333331,557.4462983315018,158.36666666666667,557.8212941685817,159.13333333333333C558.1962900056617,159.89999999999998,558.4547240816601,159.89999999999998,558.8037432976989,159.70833333333334C559.1527625137378,159.51666666666665,559.5923668698173,159.13333333333333,560.0765977287109,159.13333333333333C560.5608285876046,159.13333333333333,561.0896859493124,159.51666666666665,561.474006727279,159.325C561.8583275052454,159.13333333333333,562.0981116994706,158.36666666666667,562.3532154394379,157.79166666666666C562.6083191794053,157.21666666666664,562.8787424651148,156.83333333333331,563.2091117993807,156.25833333333333C563.5394811336465,155.6833333333333,563.9297965164686,154.91666666666663,564.3427581843009,154.91666666666663C564.7557198521332,154.91666666666663,565.1913278049757,155.6833333333333,565.4577546874481,156.06666666666663C565.7241815699206,156.45,565.8214273820229,156.45,565.9826156459187,155.87499999999997C566.1438039098146,155.29999999999998,566.3689346255037,154.14999999999998,566.626702634296,153.575C566.884470643088,153,567.1748759449829,153,567.4426349618677,152.80833333333334C567.7103939787526,152.61666666666667,567.9555067106272,152.23333333333332,568.1719785526361,151.85C568.3884503946449,151.46666666666664,568.5762813467879,151.08333333333331,568.8820061944251,150.7C569.1877310420623,150.31666666666666,569.6113497851934,149.93333333333334,569.8731141972225,149.74166666666667C570.1348786092517,149.55,570.2347886901789,149.55,570.3813234755387,149.55C570.5278582608986,149.55,570.7210177506911,149.55,570.9434841975557,149.55C571.1659506444201,149.55,571.4177240483566,149.55,571.6714956539116,150.31666666666666C571.9252672594666,151.08333333333331,572.1810370666401,152.61666666666665,572.3575448762781,152.8083333333333C572.5340526859161,152.99999999999997,572.6312984980185,151.84999999999997,572.9163752622641,151.84999999999997C573.2014520265096,151.84999999999997,573.6743597428982,152.99999999999997,574.1299497119261,153.575C574.585539680954,154.14999999999998,575.0238119026211,154.14999999999998,575.409464815,154.34166666666664C575.7951177273787,154.5333333333333,576.1281513304693,154.91666666666666,576.4052352882406,155.29999999999998C576.682319246012,155.68333333333334,576.9034535584642,156.06666666666666,577.1445698871016,156.45C577.3856862157393,156.83333333333331,577.6467845605623,157.21666666666664,577.9538415426117,157.21666666666664C578.2608985246611,157.21666666666664,578.6139141439371,156.83333333333331,578.9509441502647,156.25833333333333C579.2879741565923,155.6833333333333,579.6090185499718,154.91666666666663,579.9333932793819,154.5333333333333C580.2577680087921,154.14999999999998,580.5854730742333,154.14999999999998,580.9997668764779,154.34166666666664C581.4140606787225,154.5333333333333,581.9149432177708,154.91666666666666,582.2526392913046,154.725C582.5903353648384,154.53333333333333,582.7648449728579,153.76666666666665,583.0499217371034,153C583.334998501349,152.23333333333332,583.7306424218204,151.46666666666664,584.1229560062611,150.31666666666666C584.5152695907018,149.16666666666666,584.9042528391117,147.63333333333333,585.2712558697174,147.25C585.6382589003232,146.86666666666667,585.9832817131249,147.63333333333333,586.3382955340195,148.20833333333334C586.6933093549139,148.78333333333333,587.0583141839013,149.16666666666669,587.4879275318881,149.74166666666667C587.9175408798749,150.31666666666666,588.4117627468613,151.08333333333331,588.7887567855598,151.46666666666664C589.1657508242582,151.84999999999997,589.4255170346689,151.84999999999997,589.7452292936358,151.85C590.0649415526027,151.84999999999997,590.4445998601259,151.84999999999997,590.8462383854531,152.04166666666666C591.2478769107803,152.23333333333332,591.6714956539115,152.61666666666667,592.1617211176608,152.80833333333334C592.6519465814101,153,593.2087787657775,153,593.6803543477538,152.61666666666667C594.15192992973,152.23333333333332,594.5382489093151,151.46666666666664,594.9725247277452,150.89166666666665C595.4068005461752,150.31666666666666,595.8890332034503,149.93333333333334,596.2460452259634,149.55C596.6030572484765,149.16666666666669,596.8348486362275,148.78333333333333,597.2138408765445,148.4C597.5928331168616,148.01666666666665,598.1190262097447,147.63333333333333,598.5160022646286,147.44166666666666C598.9129783195126,147.25,599.1807373363973,147.25,599.43317680754,147.24999999999997C599.6856162786826,147.25,599.9227362040831,147.25,600.1332134412363,147.24999999999997C600.3436906783895,147.25,600.5275252272955,147.25,600.8372464781697,147.825C601.146967729044,148.39999999999998,601.5825756818864,149.54999999999998,601.89762547041,149.54999999999998C602.2126752589337,149.54999999999998,602.4071668831386,148.39999999999998,602.7082292603325,148.20833333333331C603.0092916375263,148.01666666666665,603.4169247677091,148.78333333333333,603.8458720484898,148.97500000000002C604.2748193292704,149.16666666666669,604.7250807606488,148.78333333333333,605.1713457887902,148.01666666666665C605.6176108169316,147.25,606.0598794418357,146.1,606.4388716821528,146.29166666666666C606.8178639224699,146.48333333333332,607.1335797781998,148.01666666666665,607.5192326905786,148.78333333333333C607.9048856029575,149.55,608.3604755719854,149.55,608.8140673393947,149.55C609.267659106804,149.55,609.7192526725948,149.55,610.1595230958806,150.31666666666666C610.5997935191663,151.08333333333331,611.0287407999468,152.61666666666665,611.2785160022647,152.61666666666665C611.5282912045827,152.61666666666665,611.5988943284378,151.08333333333331,611.754087987478,150.31666666666666C611.9092816465181,149.55,612.1490658407433,149.55,612.4028374462985,150.125C612.6566090518534,150.7,612.9243680687382,151.85,613.2380857228495,152.425C613.5518033769608,153,613.9114796682986,153,614.2971325806775,153.19166666666666C614.6827854930564,153.38333333333333,615.0944150264763,153.76666666666665,615.4634162587006,154.14999999999998C615.832417490925,154.5333333333333,616.1587904219537,154.91666666666666,616.5804109634663,154.91666666666666C617.002031504979,154.91666666666666,617.5188996569755,154.5333333333333,617.8859026875812,154.14999999999998C618.252905718187,153.76666666666665,618.4700436274021,153.38333333333333,618.763779265328,153.575C619.0575149032538,153.76666666666665,619.4278482698905,154.53333333333333,619.7781996203419,155.3C620.1285509707931,156.06666666666666,620.4589203050589,156.83333333333331,620.7513238085724,157.21666666666664C621.0437273120858,157.6,621.2981649848471,157.6,621.588570286742,157.21666666666664C621.878975588637,156.83333333333331,622.2053485196657,156.06666666666666,622.4577879908084,155.68333333333334C622.710227461951,155.3,622.8887334732075,155.3,623.2544043694008,155.49166666666665C623.6200752655943,155.68333333333334,624.1729110467247,156.06666666666666,624.7210843574118,156.45C625.2692576680988,156.83333333333331,625.8127685083426,157.21666666666664,626.2537049988346,157.21666666666664C626.6946414893264,157.21666666666664,627.0330036300663,156.83333333333331,627.4306457521566,156.25833333333333C627.8282878742466,155.6833333333333,628.2852099776868,154.91666666666663,628.5842741532622,154.72499999999997C628.8833383288375,154.5333333333333,629.0245445765479,154.91666666666666,629.2057148566291,155.10833333333332C629.3868851367105,155.3,629.6080194491626,155.3,629.9430512538717,154.91666666666666C630.2780830585807,154.53333333333333,630.7270123555468,153.76666666666665,631.1233223432246,153.575C631.5196323309023,153.38333333333333,631.8633230092917,153.76666666666665,632.2989309621341,153.76666666666665C632.7345389149766,153.76666666666665,633.262064142272,153.38333333333333,633.62174043361,153.38333333333333C633.9814167249476,153.38333333333333,634.1732440803278,153.76666666666665,634.3397608818732,153.95833333333331C634.5062776834184,154.14999999999998,634.6474839311288,154.14999999999998,634.9445499050855,154.34166666666664C635.2416158790423,154.5333333333333,635.6945415792454,154.91666666666666,636.1860991774072,154.725C636.6776567755687,154.53333333333333,637.2078462716889,153.76666666666665,637.6101508642223,153.38333333333333C638.0124554567558,153,638.2868751457023,153,638.579944716422,153.19166666666666C638.8730142871416,153.38333333333333,639.1847337396343,153.76666666666665,639.5557331734772,153.95833333333331C639.92673260732,154.14999999999998,640.3570120225131,154.14999999999998,640.7206847170879,153.95833333333331C641.0843574116628,153.76666666666665,641.3814233856197,153.38333333333333,641.7377693409265,153.19166666666666C642.0941152962334,153,642.5097412328904,153,642.8441069703933,153.19166666666666C643.1784727078963,153.38333333333333,643.4315782462452,153.76666666666665,643.7932527392015,153.95833333333331C644.1549272321578,154.14999999999998,644.6251706797216,154.14999999999998,645.0847570519867,154.72499999999997C645.5443434242516,155.29999999999998,645.9932727212176,156.45,646.3789256335965,156.83333333333331C646.7645785459754,157.21666666666664,647.0869550737671,156.83333333333331,647.4186565424452,156.06666666666666C647.7503580111234,155.29999999999998,648.0913844206881,154.14999999999998,648.4683784593867,153.38333333333333C648.8453724980851,152.61666666666667,649.2583341659174,152.23333333333332,649.7139241349453,152.23333333333332C650.1695141039731,152.23333333333332,650.6677323741966,152.61666666666667,651.1792719885436,152.425C651.6908116028908,152.23333333333332,652.2156725613614,151.46666666666664,652.684583874513,150.89166666666665C653.1534951876645,150.31666666666666,653.5664568554969,149.93333333333334,654.0187164884939,150.31666666666666C654.4709761214908,150.7,654.9625337196524,151.85,655.4447663769274,152.23333333333332C655.9269990342025,152.61666666666667,656.3999067505911,152.23333333333332,656.8654877277116,151.85C657.3310687048322,151.46666666666664,657.7893229426849,151.08333333333331,658.2549039198055,150.89166666666665C658.7204848969261,150.7,659.1933926133147,150.7,659.58837046658,150.7C659.9833483198455,150.7,660.3003963099877,150.7,660.5754820661406,150.31666666666666C660.8505678222933,149.93333333333334,661.0836913444568,149.16666666666666,661.474006727279,148.59166666666667C661.864322110101,148.01666666666665,662.4118293535819,147.63333333333333,662.8454391048058,147.44166666666666C663.2790488560297,147.25,663.5987611149966,147.25,664.0057281779733,146.86666666666665C664.4126952409499,146.48333333333332,664.9069171079364,145.71666666666664,665.2492756519134,144.95C665.5916341958905,144.1833333333333,665.7821294168583,143.41666666666663,666.093182802145,142.84166666666664C666.4042361874315,142.26666666666665,666.8358477370368,141.88333333333333,667.2528058081061,141.88333333333333C667.6697638791755,141.88333333333333,668.0720684717089,142.26666666666665,668.396443201119,142.45833333333331C668.7208179305293,142.64999999999998,668.9672627968163,142.64999999999998,669.3242748193293,143.0333333333333C669.6812868418424,143.41666666666663,670.1488660205814,144.1833333333333,670.5025477070636,144.75833333333333C670.8562293935457,145.33333333333331,671.096013587771,145.71666666666667,671.3764278815732,145.71666666666667C671.6568421753756,145.71666666666667,671.9778865687549,145.33333333333331,672.3055916341959,144.75833333333333C672.6332966996371,144.1833333333333,672.9676624371399,143.41666666666663,673.2640623438905,143.22499999999997C673.5604622506411,143.0333333333333,673.8188963266393,143.41666666666666,674.1066373597096,143.60833333333335C674.3943783927799,143.8,674.7114263829221,143.8,674.9558730475906,149.93333333333334C675.200319712259,156.06666666666666,675.3721650514537,168.33333333333331,675.5606620708031,174.85000000000002C675.7491590901523,181.36666666666667,675.954307789656,182.13333333333333,676.1481333466547,181.75C676.3419589036534,181.36666666666667,676.5244613181471,179.83333333333334,676.7136244047025,177.91666666666669C676.902787491258,176,677.0986112498753,173.7,677.2911046724616,171.78333333333333C677.4835980950479,169.86666666666665,677.6727611816033,168.33333333333331,677.9025543677358,166.60833333333332C678.1323475538682,164.88333333333333,678.4027708395777,162.96666666666667,678.6572085123389,161.43333333333334C678.9116461851,159.9,679.1500982449129,158.75,679.3592433476538,157.79166666666666C679.5683884503945,156.83333333333331,679.7482265960634,156.06666666666666,680.0532853764944,155.3C680.3583441569253,154.53333333333333,680.7886235721185,153.76666666666665,681.1023412262298,153.19166666666666C681.4160588803411,152.61666666666667,681.6132147733707,152.23333333333332,681.8583275052454,151.85C682.10344023712,151.46666666666664,682.3965098078397,151.08333333333331,682.7155559996004,149.9333333333333C683.0346021913613,148.7833333333333,683.379625004163,146.86666666666665,683.6567089619343,146.29166666666666C683.9337929197056,145.71666666666664,684.1429380224465,146.48333333333332,684.4086988377128,146.1C684.6744596529791,145.71666666666664,684.9968361807707,144.1833333333333,685.3265394478303,143.79999999999998C685.65624271489,143.41666666666663,685.9932727212176,144.1833333333333,686.2137409664635,144.75833333333333C686.4342092117095,145.33333333333331,686.5381156958737,145.71666666666667,686.877809971026,145.71666666666667C687.2175042461784,145.71666666666667,687.7929863123188,145.33333333333331,688.1866320311719,145.90833333333333C688.5802777500251,146.48333333333332,688.7920871215906,148.01666666666665,688.9785859393214,149.35833333333335C689.165084757052,150.7,689.3262730209478,151.85,689.5893695673893,152.80833333333334C689.8524661138309,153.76666666666665,690.2174709428182,154.53333333333333,690.5551670163521,155.10833333333332C690.8928630898859,155.68333333333334,691.2032504079663,156.06666666666666,691.4456988710162,156.06666666666663C691.6881473340661,156.06666666666666,691.8626569420854,155.68333333333334,692.210344023712,155.875C692.5580311053385,156.06666666666666,693.0788956605721,156.83333333333331,693.5997602158059,156.83333333333331C694.1206247710394,156.83333333333331,694.6414893262731,156.06666666666666,695.0964132280948,155.49166666666667C695.5513371299164,154.91666666666666,695.9403203783262,154.5333333333333,696.3765943983749,154.34166666666664C696.8128684184235,154.14999999999998,697.296433210111,154.14999999999998,697.6514470310055,154.5333333333333C698.0064608519001,154.91666666666663,698.2329237020016,155.6833333333333,698.5160022646285,156.45C698.7990808272555,157.21666666666664,699.1387751024079,157.98333333333332,699.536417224498,157.79166666666666C699.934059346588,157.6,700.389649315616,156.45,700.7859593032937,156.25833333333333C701.1822692909715,156.06666666666666,701.5192992972991,156.83333333333331,701.8163652712559,156.83333333333331C702.1134312452126,156.83333333333331,702.3705331867985,156.06666666666666,702.6522796150132,156.25833333333335C702.9340260432277,156.45,703.240416958071,157.6,703.5155027142239,156.83333333333334C703.7905884703766,156.06666666666666,704.034369067839,153.38333333333333,704.3121190928166,151.85C704.589869117794,150.31666666666666,704.9015885702868,149.93333333333334,705.1413727645121,149.74166666666667C705.3811569587372,149.55,705.5490058946948,149.55,705.7248476371266,149.55C705.9006893795583,149.55,706.0845239284644,149.55,706.3762613647718,150.31666666666666C706.6679988010791,151.08333333333331,707.0676391247878,152.61666666666665,707.42132081127,153.575C707.7750024977521,154.5333333333333,708.0827255470078,154.91666666666666,708.3451560262431,155.10833333333332C708.6075865054785,155.3,708.8247244146935,155.3,709.1510973457222,155.875C709.477470276751,156.45,709.9130782295935,157.6,710.2714223865189,157.6C710.6297665434444,157.6,710.9108469044528,156.45,711.2592000532856,155.68333333333334C711.6075532021182,154.91666666666666,712.0231791387752,154.5333333333333,712.4301462017518,154.34166666666664C712.8371132647285,154.14999999999998,713.2354214540247,154.14999999999998,713.592433476538,153.95833333333331C713.949445499051,153.76666666666665,714.2651613547808,153.38333333333333,714.574882605655,153.19166666666666C714.8846038565292,153,715.1883305025478,153,715.556665667566,153.19166666666666C715.9250008325841,153.38333333333333,716.3579445166018,153.76666666666665,716.8261897625472,153.95833333333331C717.2944350084924,154.14999999999998,717.7979818163653,154.14999999999998,718.1656509141773,153.95833333333331C718.5333200119892,153.76666666666665,718.7651113997402,153.38333333333333,718.9422852765845,153C719.1194591534286,152.61666666666667,719.242015519366,152.23333333333332,719.4578212941688,152.04166666666666C719.6736270689713,151.84999999999997,719.9826822526393,151.84999999999997,720.3803243747295,151.46666666666667C720.7779664968195,151.08333333333331,721.2641955573317,150.31666666666666,721.7410996769574,150.125C722.2180037965832,149.93333333333334,722.6855829753222,150.31666666666666,723.0239451160622,150.7C723.3623072568023,151.08333333333331,723.5714523595432,151.46666666666664,723.8292203683352,152.23333333333332C724.0869883771273,153,724.3933792919706,154.14999999999998,724.6411562926701,153.95833333333334C724.8889332933694,153.76666666666665,725.0780963799248,152.23333333333332,725.321210910181,151.46666666666667C725.564325440437,150.7,725.8613914143938,150.7,726.2583674692778,150.50833333333333C726.6553435241617,150.31666666666666,727.1522296599728,149.93333333333334,727.6424551237221,149.16666666666666C728.1326805874714,148.4,728.6162453791588,147.25,729.0698371465681,146.86666666666667C729.5234289139775,146.48333333333335,729.9470476571087,146.86666666666667,730.3793252739202,146.86666666666665C730.8116028907317,146.86666666666667,731.2525393812236,146.48333333333335,731.6848169980352,146.29166666666666C732.1170946148468,146.10000000000002,732.5407133579779,146.10000000000002,732.85776134812,146.1C733.1748093382622,146.10000000000002,733.3852865754154,146.10000000000002,733.7309754554235,146.29166666666666C734.0766643354315,146.48333333333335,734.5575648582942,146.86666666666667,735.0091584240851,147.0583333333333C735.4607519898758,147.25,735.8830385985946,147.25,736.3486195757151,147.44166666666666C736.8142005528358,147.63333333333333,737.3230758983582,148.01666666666665,737.789322942685,148.20833333333331C738.2555699870118,148.4,738.6791887301429,148.4,739.124787691078,148.20833333333334C739.5703866520132,148.01666666666665,740.0379658307523,147.63333333333333,740.5008825390482,147.44166666666666C740.963799247344,147.25,741.4220534851967,147.25,741.8809737902554,147.44166666666666C742.3398940953142,147.63333333333333,742.7994804675792,148.01666666666665,743.2663935791122,148.4C743.7333066906451,148.78333333333333,744.207546541446,149.16666666666669,744.6511473007627,149.35833333333335C745.0947480600793,149.55,745.5077097279116,149.55,745.8054417690745,149.55C746.1031738102374,149.55,746.2856762247311,149.55,746.6167116262031,149.93333333333334C746.9477470276752,150.31666666666666,747.4273154161255,151.08333333333331,747.7943184467313,151.27499999999998C748.161321477337,151.46666666666664,748.4157591500982,151.08333333333331,748.7887567855597,151.08333333333331C749.1617544210211,151.08333333333331,749.6533120191827,151.46666666666664,750.0789289639324,152.04166666666663C750.5045459086822,152.61666666666665,750.86422220002,153.38333333333333,751.2905052119759,153.76666666666665C751.7167882239318,154.14999999999998,752.2096779565057,154.14999999999998,752.5000832584008,154.34166666666664C752.7904885602958,154.5333333333333,752.8784094315117,154.91666666666666,753.1015419455824,155.29999999999998C753.3246744596531,155.68333333333334,753.6830186165785,156.06666666666666,754.0793286042563,156.2583333333333C754.4756385919341,156.45,754.9099144103641,156.45,755.244280147867,156.2583333333333C755.57864588537,156.06666666666666,755.8131015419457,155.68333333333334,756.1674492956341,155.29999999999998C756.5217970493223,154.91666666666666,756.9960369001233,154.5333333333333,757.362373863523,154.14999999999998C757.7287108269225,153.76666666666665,757.9871449029207,153.38333333333333,758.2395843740634,153.575C758.492023845206,153.76666666666665,758.7384687114929,154.53333333333333,758.9509441502648,154.91666666666666C759.1634195890365,155.3,759.341925600293,155.3,759.5850401305491,155.10833333333332C759.8281546608052,154.91666666666666,760.135877710061,154.5333333333333,760.4695773803577,154.34166666666664C760.8032770506545,154.14999999999998,761.1629533419923,154.14999999999998,761.5386152462784,154.14999999999998C761.9142771505645,154.14999999999998,762.3059246677991,154.14999999999998,762.6576081526628,153.95833333333331C763.0092916375263,153.76666666666665,763.3210110900189,153.38333333333333,763.5960968461717,153.76666666666665C763.8711826023246,154.14999999999998,764.1096346621373,155.29999999999998,764.5019482465781,155.29999999999998C764.8942618310188,155.29999999999998,765.4404369400872,154.14999999999998,765.9459819495787,153.38333333333333C766.4515269590703,152.61666666666667,766.9164418689847,152.23333333333332,767.3407266793221,152.23333333333332C767.7650114896594,152.23333333333332,768.1486662004197,152.61666666666667,768.4417357711394,152.425C768.734805341859,152.23333333333332,768.937289772538,151.46666666666664,769.2996303327004,150.7C769.661970892863,149.93333333333334,770.184167582509,149.16666666666666,770.6390914843307,148.78333333333333C771.0940153861524,148.4,771.4816665001498,148.4,771.7973823558796,148.01666666666668C772.1130982116096,147.63333333333333,772.3568788090719,146.86666666666667,772.7758350817597,146.48333333333335C773.1947913544477,146.10000000000002,773.7889233023612,146.10000000000002,774.292470110234,146.1C774.796016918107,146.10000000000002,775.2089785859392,146.10000000000002,775.7138575282245,145.90833333333333C776.2187364705098,145.71666666666667,776.8155326872482,145.33333333333331,777.3164152262964,145.14166666666665C777.8172977653446,144.95,778.2222666267028,144.95,778.7191527625139,144.95C779.216038898325,144.95,779.8048423085891,144.95,780.3217104605856,144.75833333333333C780.8385786125821,144.56666666666666,781.283511506311,144.18333333333334,781.7664102307923,144.375C782.2493089552736,144.56666666666666,782.7701735105072,145.33333333333334,783.3290038964932,145.90833333333333C783.8878342824792,146.48333333333335,784.4846304992175,146.86666666666667,785.0800945815433,147.25C785.6755586638692,147.63333333333333,786.2696906117828,148.01666666666665,786.8604922236653,148.4C787.4512938355481,148.78333333333333,788.0387651113997,149.16666666666669,788.6282345888701,148.59166666666667C789.2177040663403,148.01666666666665,789.8091717454292,146.48333333333332,790.3293702334565,145.71666666666664C790.849568721484,144.95,791.2984980184501,144.95,791.7094614846637,144.95C792.1204249508775,144.95,792.4934225863389,144.95,792.961001765078,144.75833333333333C793.4285809438171,144.56666666666666,793.990741665834,144.18333333333334,794.5708862024178,143.8C795.1510307390015,143.41666666666666,795.7491590901521,143.0333333333333,796.3439571052719,142.84166666666664C796.9387551203915,142.64999999999998,797.5302227994804,142.64999999999998,798.0297732041163,142.84166666666664"></path></g><g id="crossBar" display="none"><line x1="682.5" x2="682.5" y1="250" y2="0" class="crossbar" display=""></line><text x="523" y="15" class="crossbar-text" text-anchor="left" display="" pointer-events="none">1:48:31</text></g><g id="infoBox" display="none" transform="translate(523, 0)"><rect x="0" y="20" width="150" height="79"></rect><text id="infobox-text-distance" x="10" width="150" height="13" pointer-events="none" y="41" display=""><tspan class="title" pointer-events="none">Dist: </tspan><tspan class="value" pointer-events="none" font-weight="bold">17.1 km</tspan></text><text id="infobox-text-altitude" x="10" width="150" height="13" pointer-events="none" y="57" display=""><tspan class="title" pointer-events="none">Elev: </tspan><tspan class="value" pointer-events="none" font-weight="bold">899 m</tspan></text><text id="infobox-text-grade_smooth" x="10" width="150" height="13" pointer-events="none" y="73" display=""><tspan class="title" pointer-events="none">Grade: </tspan><tspan class="value" pointer-events="none" font-weight="bold">1.0%</tspan></text><text id="infobox-text-pace" x="10" width="150" height="13" pointer-events="none" y="89" display=""><tspan class="title" pointer-events="none">Pace: </tspan><tspan class="value" pointer-events="none" font-weight="bold">7:09/km</tspan></text></g></g><g class="axis xaxis" id="xaxis" transform="translate(60.5, 260.5)"><g class="tick" transform="translate(79.8841043061245,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">2.0 km</text></g><g class="tick" transform="translate(159.81216904785697,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">4.0 km</text></g><g class="tick" transform="translate(239.7402337895894,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">6.0 km</text></g><g class="tick" transform="translate(319.66829853132185,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">8.0 km</text></g><g class="tick" transform="translate(399.5963632730543,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">10.0 km</text></g><g class="tick" transform="translate(479.5244280147868,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">12.0 km</text></g><g class="tick" transform="translate(559.4524927565193,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">14.0 km</text></g><g class="tick" transform="translate(639.3805574982517,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">16.0 km</text></g><g class="tick" transform="translate(719.3086222399841,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">18.0 km</text></g><g class="tick" transform="translate(799.2366869817165,0)" style="opacity: 1;"><line y2="6" x2="0"></line><text y="9" x="0" dy=".71em" style="text-anchor: middle;">20.0 km</text></g><path class="domain" d="M0,6V0H800V6"></path></g><g class="axis yaxis" id="yaxis" transform="translate(60.5, 10.5)"><g class="tick" transform="translate(0,208.33333333333334)" style="opacity: 1;"><line x2="-6" y2="0"></line><text x="-9" y="0" dy=".32em" style="text-anchor: end;">900 m</text></g><g class="tick" transform="translate(0,156.25)" style="opacity: 1;"><line x2="-6" y2="0"></line><text x="-9" y="0" dy=".32em" style="text-anchor: end;">950 m</text></g><g class="tick" transform="translate(0,104.16666666666666)" style="opacity: 1;"><line x2="-6" y2="0"></line><text x="-9" y="0" dy=".32em" style="text-anchor: end;">1,000 m</text></g><g class="tick" transform="translate(0,52.08333333333334)" style="opacity: 1;"><line x2="-6" y2="0"></line><text x="-9" y="0" dy=".32em" style="text-anchor: end;">1,050 m</text></g><g class="tick" transform="translate(0,0)" style="opacity: 1;"><line x2="-6" y2="0"></line><text x="-9" y="0" dy=".32em" style="text-anchor: end;">1,100 m</text></g><path class="domain" d="M-6,0H0V250H-6"></path></g><defs><clipPath id="clip317"><rect id="clip317" x="0" y="0" height="250" width="800"></rect></clipPath></defs><defs><clipPath id="clip527"><rect id="clip527" x="0" y="0" height="250" width="800"></rect></clipPath></defs><g class="axis yaxis2" id="yaxis2" transform="translate(860.5, 10.5)"><g class="tick" transform="translate(0,35.714285714285715)" style="opacity: 1;"><line x2="6" y2="0"></line><text x="9" y="0" dy=".32em" style="text-anchor: start;">5:00/km</text></g><g class="tick" transform="translate(0,80.35714285714285)" style="opacity: 1;"><line x2="6" y2="0"></line><text x="9" y="0" dy=".32em" style="text-anchor: start;">5:50/km</text></g><g class="tick" transform="translate(0,125)" style="opacity: 1;"><line x2="6" y2="0"></line><text x="9" y="0" dy=".32em" style="text-anchor: start;">6:40/km</text></g><g class="tick" transform="translate(0,169.64285714285714)" style="opacity: 1;"><line x2="6" y2="0"></line><text x="9" y="0" dy=".32em" style="text-anchor: start;">7:30/km</text></g><g class="tick" transform="translate(0,214.28571428571428)" style="opacity: 1;"><line x2="6" y2="0"></line><text x="9" y="0" dy=".32em" style="text-anchor: start;">8:20/km</text></g><path class="domain" d="M6,0H0V250H6"></path></g></svg></div>
+<div class="inline-inputs" id="chart-controls"><table><tbody><tr>
+  <td></td>
+  <td data-type="pace">
+    <div class="label">Pace</div>
+    <div class="toggle-button active">
+      <div class="btn">
+        <div class="light pace"></div>
+      </div>
+      <div class="label">on</div>
+    </div>
+  </td>
+  <td data-type="heartrate">
+    <div class="label">Heart Rate</div>
+    <div class="toggle-button">
+      <div class="btn">
+        <div class="heartrate light"></div>
+      </div>
+      <div class="label">on</div>
+    </div>
+  </td>
+  <td data-type="cadence">
+    <div class="label">Cadence</div>
+    <div class="toggle-button">
+      <div class="btn">
+        <div class="cadence light"></div>
+      </div>
+      <div class="label">on</div>
+    </div>
+  </td>
+  <td data-type="temp">
+    <div class="label">Temperature</div>
+    <div class="toggle-button">
+      <div class="btn">
+        <div class="light temp"></div>
+      </div>
+      <div class="label">on</div>
+    </div>
+  </td>
+</tr><tr>
+  <td>Avg</td>
+  <td>6:19 <abbr class="unit short" title="minutes per kilometer">/km</abbr></td>
+  <td>164 <abbr class="unit short" title="beats per minute">bpm</abbr></td>
+  <td>
+    176 <abbr class="unit short" title="steps per minute">spm</abbr>
+  </td>
+  <td>
+    27 <abbr class="unit short" title="Celsius">℃</abbr>
+  </td>
+</tr></tbody></table></div></div>
+  </div>
+
+</section></div>
+
+
+<script id="follow_with_approval_button" type="text/template">
+<a class="btn btn-primary btn-sm primary button" data-state="follow_with_approval" href="javascript:;">Request to Follow</a>
+</script>
+<script id="follow_button" type="text/template">
+<a class="btn btn-primary btn-sm primary button fixed-small" data-state="follow" href="javascript:;">Follow</a>
+</script>
+<script id="unfollow_button" type="text/template">
+<a class="btn btn-primary btn-sm primary button fixed-small unfollow current-action disabled" data-hovertext="Unfollow" data-original="Following" data-state="unfollow" data-follow="" href="javascript:;">Following</a>
+</script>
+<script id="unfollow_for_approval_button" type="text/template">
+<a class="btn btn-primary primary button fixed-small unfollow current-action disabled" data-hovertext="Unfollow" data-original="Following" data-state="unfollow_for_approval" data-follow="" href="javascript:;">Following</a>
+</script>
+<script id="cancel_pending_button" type="text/template">
+<a class="btn btn-primary btn-sm primary button cancel current-action disabled" data-hovertext="Cancel Request" data-original="Follow Requested" data-state="cancel_pending" data-follow="" href="javascript:;">Follow Requested</a>
+</script>
+<script id="unblock_follow_template" type="text/template">
+<a class="btn btn-secondary btn-sm button secondary unblock" data-follow="" href="javascript:;">Unblock</a>
+</script>
+<script id="block-light-box" type="text/template">
+<div class='subtle-box'>
+<div class='header'>
+<a class='cancel remove' href='#'>Close</a>
+<h3 class='marginless'>Blocking an Athlete will</h3>
+</div>
+<div class='block-warning'>
+<ul class='default'>
+<li>Remove you from each other&#39;s activity feeds, club feeds, and lists of followers.</li>
+<li>Prevent them from following you and seeing your complete profile.</li>
+<li>Prevent them from visiting any of your complete activities via leaderboards or segment explore.</li>
+<li>Prevent them from viewing any of your complete activities.</li>
+</ul>
+<a class='btn btn-primary button confirm-block' href='#'>Block Athlete</a>
+<a class='cancel' href='#'>Cancel</a>
+</div>
+</div>
+</script>
+<script id="remove-light-box" type="text/template">
+<div class='subtle-box'>
+<div class='header'>
+<a class='cancel remove' href='#'>Close</a>
+<h3 class='marginless'>Removing a Follower will</h3>
+</div>
+<div class='block-warning'>
+<ul>
+<li>Remove them from your list of followers</li>
+<li>If you are following them, you will continue to do so</li>
+<li>They can request to follow you again in the future</li>
+</ul>
+<a class='btn btn-primary button confirm-block' href='#'>Remove Follower</a>
+<a class='cancel' href='#'>Cancel</a>
+<br>
+<span>
+<strong>Note:</strong> If you wish to keep the athlete from following you in the future, please block them instead.
+</span>
+</div>
+</div>
+</script>
+<script id="reported-suspicious-lightbox" type="text/template">
+<div class='subtle-box'>
+<div class='header'>
+<a class='cancel remove' href='#'>Close</a>
+<h3 class='marginless'>Report Received</h3>
+</div>
+<div class='block-warning'>
+<p>We have received your report on this profile, and it’s now being evaluated.</p>
+<p>Thank you for taking the time to bring this to our attention.</p>
+<a class='cancel btn btn-primary button' href='#'>Back</a>
+</div>
+</div>
+</script>
+<script id="reported-fake-lightbox" type="text/template">
+<div class='subtle-box'>
+<div class='header'>
+<a class='cancel remove' href='#'>Close</a>
+<h3 class='marginless'>Report Received</h3>
+</div>
+<div class='block-warning'>
+<p>We have received your report on this profile, and it’s now being evaluated.</p>
+<p>Thank you for taking the time to bring this to our attention; this athlete is now blocked.</p>
+<a class='cancel btn btn-primary button' href='#'>Back</a>
+</div>
+</div>
+</script>
+
+<script id="facebook-open-graph-lightbox-template" type="text/template">
+<header class='modal-header'>
+<h3>Share on Facebook</h3>
+</header>
+<div class='content modal-body'>
+<div class='share-container'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div>
+</div>
+</div>
+</script>
+<script id="facebook-open-graph-lightbox-connect-template" type="text/template">
+<div class='share-container connect-with-facebook text-center'>
+<h4>
+<% if (type == 'activity') { %>
+Sign in to Facebook to share your Strava activity
+<% } else if (type == 'challenge' && challenge.isVirtualRace) { %>
+Sign in to Facebook to share this virtual race
+<% } else if (type == 'challenge') { %>
+Sign in to Facebook to share this challenge
+<% } else if (type == 'group_event') { %>
+Sign in to Facebook to share this club event
+<% } else { %>
+Sign in to Facebook
+<% } %>
+</h4>
+<button class='btn btn-facebook mb-md fb-button fb-connect fb-connect-js'>
+Connect with Facebook
+</button>
+<p>You can preview your share before posting after completing this step</p>
+</div>
+</script>
+<script id="facebook-request-publish-template" type="text/template">
+<div class='share-container request-publish-permission text-center'>
+<h4>
+<% if (type == 'activity') { %>
+Before sharing your activity, Strava needs your permission to post to Facebook.
+<% } else if (type == 'challenge' && challenge.isVirtualRace){ %>
+Before sharing this virtual race, Strava needs your permission to post to Facebook.
+<% } else if (type == 'challenge'){ %>
+Before sharing this challenge, Strava needs your permission to post to Facebook.
+<% } else if (type == 'group_event'){ %>
+Before sharing this club event, Strava needs your permission to post to Facebook.
+<% } else { %>
+Strava needs your permission to post to Facebook.
+<% } %>
+</h4>
+<button class='btn btn-facebook mb-md fb-button fb-request-permission-js'>
+Continue
+</button>
+<p>Strava will never post without your consent.</p>
+</div>
+</script>
+<script id="facebook-rejected-publish-template" type="text/template">
+<div class='share-container request-publish-permission text-center'>
+<h4>You previously rejected Facebook sharing permissions</h4>
+<button class='btn btn-facebook mb-md fb-button fb-request-permission-js'>
+Continue
+</button>
+<p>Strava will never post without your consent.</p>
+</div>
+</script>
+<script id="facebook-open-graph-lightbox-share-template" type="text/template">
+<form class='open-graph-form share-container'>
+<div class='row'>
+<div class='message-container spans5 col-md-4'>
+<div class='form-group'>
+<label class='topless'>Message</label>
+<textarea class='form-control wide' name='message' placeholder='Tell your friends about this activity.'></textarea>
+</div>
+</div>
+<div class='friends spans5 col-md-4'>
+<div class='form-group'>
+<label class='topless'>{{ data.also_on_activity_str }}</label>
+<div class='friends-on-this-activity'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'>Loading friends...</span>
+    </div>
+</div>
+</div>
+</div>
+<div class='preview-container spans6 col-md-4'>
+<label class='topless'>Preview</label>
+<div class='preview'></div>
+</div>
+</div>
+<div class='control inline-inputs'>
+<span>
+<button class='btn btn-primary alt post-action'>Share</button>
+</span>
+<span class='checkbox'>
+<label>
+<input type="checkbox" name="autoshare" id="autoshare" value="1" />
+Automatically share activities in the future
+</label>
+</span>
+</div>
+</form>
+</script>
+<script id="facebook-open-graph-share-friends-template" type="text/template">
+<div class='tag-facebook-friends'></div>
+<ul class='strava-friends' style='display: none'></ul>
+</script>
+<script id="facebook-open-graph-share-preview-normal-privacy-template" type="text/template">
+<ul class='list-stats preview-stats bottomless'>
+<li>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.distance_unit-}</span>
+<b class='stat-text value'>{-data.distance-}</b>
+</div>
+</li>
+<li>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.duration_unit-}</span>
+<b class='stat-text value'>{-data.duration-}</b>
+</div>
+</li>
+<li>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.speed_pace_unit-}</span>
+<b class='stat-text value'>{-data.speed_pace-}</b>
+</div>
+</li>
+</ul>
+<div class='facebook-share-preview-map'></div>
+</script>
+<script id="facebook-open-graph-share-preview-no-latlng-stream-template" type="text/template">
+<ul class='list-stats preview-stats bottomless'>
+<li>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.distance_unit-}</span>
+<b class='stat-text value'>{-data.distance-}</b>
+</div>
+</li>
+<li>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.duration_unit-}</span>
+<b class='stat-text value'>{-data.duration-}</b>
+</div>
+</li>
+<li>
+<div class='stat'>
+<span class='stat-subtext caption'>{-data.speed_pace_unit-}</span>
+<b class='stat-text value'>{-data.speed_pace-}</b>
+</div>
+</li>
+</ul>
+<div class='facebook-share-no-preview'>
+A map of your activity will not be shared on Facebook because it does not have position coordinates.
+</div>
+</script>
+<script id="facebook-open-graph-pending-share" type="text/template">
+<div class='status-message'>
+<div class='alert-message pending'>
+Sharing on Facebook
+&hellip;
+</div>
+</div>
+</script>
+<script id="facebook-open-graph-share-success" type="text/template">
+<div class='status-message'>
+<div class='alert alert-success alert-message success'>
+Successfully shared!
+</div>
+</div>
+</script>
+<script id="facebook-open-graph-share-failure" type="text/template">
+<div class='status-message'>
+<div class='alert alert-danger alert-message error'>
+Looks like something went wrong. Please try again.
+</div>
+</div>
+</script>
+<script id="share-success-template" type="text/template">
+<div class='status-message'>
+<div class='alert alert-success alert-message success'>
+{{ successMessage }}
+</div>
+</div>
+</script>
+<script id="share-failure-template" type="text/template">
+<div class='status-message'>
+<div class='alert alert-danger alert-message error'>
+{{ message }}
+</div>
+</div>
+</script>
+<script id="tabbed-share-lightbox" type="text/template">
+<header class='modal-header'>
+<h3>{{header}}</h3>
+</header>
+<div class='content' style='display: none'>
+<div class='main share-area container-fluid'></div>
+<ul class='tabs tabs-inset' id='share-tabs'>
+<li id='invite-tab'>
+<span class='tab'>
+<div class='app-icon icon-strava icon-sm icon-dark'></div>
+Invite Strava Friends
+</span>
+</li>
+</ul>
+<div class='tab-contents' id='share-tab-contents'></div>
+</div>
+<div class='centered' id='spinner'><div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div></div>
+</script>
+<script id="facebook-share-tab" type="text/template">
+<div class='content'>
+<div class='share-container'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div>
+</div>
+</div>
+</script>
+<script id="facebook-simple-share-template" type="text/template">
+<form class='facebook-message'>
+<div class='avatar avatar-athlete'>
+<div class='avatar-content'>
+<img class='avatar-img' id='fb-avatar-img'>
+</div>
+</div>
+<div class='form-group message-container'>
+<textarea class='form-control input-block' id='message'>{{ facebook.message }}</textarea>
+</div>
+<div class='form-actions'>
+<button class='btn btn-facebook alt post-action' id='share-fb'>
+Post
+</button>
+</div>
+</form>
+</script>
+<script id="facebook-message-template" type="text/template">
+<div class='row'>
+<div class='spans8'>
+<div class='invite-facebook-friends'>
+<h3>Invite Facebook Friends to this club</h3>
+<input class='facebook-friend-autocomplete' type='text'>
+</div>
+</div>
+<div class='spans8'>
+<ul class='facebook-friends'></ul>
+</div>
+</div>
+</script>
+<script id="friend-template" type="text/template">
+<div class='avatar avatar-athlete'>
+<div class='avatar-content'>
+<img class='avatar-img profile-picture' height='40' src='{{ data.picture }}' width='40'>
+<div class='avatar-body'>
+<div class='avatar-primary name'>
+{{ data.first_name }} {{ data.last_name }}
+<img class="private-athlete" style="display: none" src="https://d3nn82uaxijpm6.cloudfront.net/assets/common/img-locked-ac90a57829f0f90818b29de9b15ce2f1aca8f2c4c812e76ec6e35393cccc74af.png" />
+</div>
+</div>
+</div>
+</div>
+<button class='btn btn-default invite btn-xs' data-facebook_uid='{{ data.facebook_uid }}'>
+{{ data.call_to_action }}
+</button>
+</script>
+<script id="friends-share-tab" type="text/template">
+<div class='form-group'>
+<label for='strava-athletes'>
+To:
+</label>
+<input class='strava-athletes' data-placeholder='Enter Strava athlete names separated by commas' name='strava-athletes' type='hidden'>
+</div>
+<div class='form-group'>
+<label>Message:</label>
+<blockquote class='set-message mb-md'>{{ invite_friends.message }}</blockquote>
+</div>
+<div class='form-actions'>
+<input class='button btn btn-primary' disabled id='invite_on_strava' type='button' value='Invite'>
+<span class='loading-spinner' style='display: none'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div>
+</span>
+<span class='status-message'></span>
+</div>
+</script>
+<script id="twitter-share-tab" type="text/template">
+<div class='content'>
+<div class='share-container'>
+<div class='spinner sm centered' style=''>
+      <div class='graphic'></div>
+      <span class='status'></span>
+    </div>
+</div>
+</div>
+</script>
+<script id="twitter-lightbox-connect-template" type="text/template">
+<div class='share-container'>
+<div class='connect-with-twitter'>
+<h3>Click the button to connect Twitter and Strava.</h3>
+<button class='btn btn-twitter twitter-button twitter-connect twitter-connect-js'>
+Connect with Twitter
+</button>
+</div>
+</div>
+</script>
+<script id="twitter-share-template" type="text/template">
+<form class='twitter-message'>
+<div class='avatar avatar-athlete'>
+<div class='avatar-content'>
+<img class='avatar-img' id='twitter-avatar-img' src='{{ twitter_status.profile_image_url }}'>
+<div id='twitter-username' style='float: right'>{{ twitter_status.screen_name }}</div>
+</div>
+</div>
+<div class='form-group message-container'>
+<textarea class='form-control input-block' id='message'>{{ twitter_message }}</textarea>
+</div>
+<div class='form-actions'>
+<button class='btn btn-primary post-action' id='share-twitter'>
+Tweet
+</button>
+<b class='tweet-chars'>140</b>
+</div>
+</form>
+</script>
+<script id="twitter-login-free-share-template" type="text/template">
+<div class='share-container'>
+<div class='connect-with-twitter'>
+<a class="btn btn-primary post-actions" id="share-twitter" href="https://twitter.com/intent/tweet?text={{ twitter_message }}&amp;hashtags=strava">Tweet</a>
+</div>
+</div>
+</script>
+<script id="twitter-share-tab" type="text/template">
+<div>Twitter</div>
+</script>
+<script id="challenge-share-lightbox-main" type="text/template">
+<div class='row'>
+<div class='spans3 avatar-container'>
+<img src='{{logo_url}}'>
+</div>
+<div class='spans8'>
+<h3>{{name}}</h3>
+<span class='challenge-date'>{{start_date_formatted}} &#8212; {{end_date_formatted}}</span>
+<div class='row'>{-short_description-}</div>
+</div>
+<div class='spans5' id='share-detail-section'></div>
+</div>
+</script>
+<script id="challenge-share-lightbox-detail-future" type="text/template">
+<div>Starts in&hellip;</div>
+<div class='counter'>
+<span class='days'>
+<span class='unit'>{{starts_in_days}}</span>
+<span class='label'>Days</span>
+</span>
+<span class='hours'>
+<span class='unit'>{{starts_in_hours}}</span>
+<span class='label'>Hours</span>
+</span>
+<span class='minutes'>
+<span class='unit'>{{starts_in_minutes}}</span>
+<span class='label'>Minutes</span>
+</span>
+</div>
+</script>
+<script id="challenge-share-lightbox-detail-started" type="text/template">
+<div class='achieved avatar-container'>
+<img src='{{achievement_url}}'>
+<span class='achievement-earned'>{{achievement_caption}}</span>
+</div>
+</script>
+
+
+
+<script id="pace-zones-template" type="text/template">
+<section class='inset with-border' id='js-snw-adp-pace-zones-upsell'>
+<div class='main'>
+<h2>Pace Distribution</h2>
+<div class='in-app-upsell centered inset'>
+<img alt="Get insight from your runs" src="https://d3nn82uaxijpm6.cloudfront.net/assets/application/upsells/in_app/pace_analysis-04173deafb9ea834dc445e6f3df85d4e108fd118c62518aab882305eedd96d22.png" />
+<h3 class='bottomless'>Get insight from your runs</h3>
+<p class='mt-xs'>Dial in to your pace zones and train more efficiently.</p>
+<a class='button btn-primary' href='/subscribe?origin=pace_analysis' id='js-snw-adp-pace-zones-upsell-cta'>
+Start Your Free Trial
+</a>
+</div>
+</div>
+</section>
+</script>
+<script id="pace-zones-alert-body-template" type="text/template">
+<% if (type == 'warning') { %>
+Your pace zone calculations are no longer current.
+<a class="js-update-pace-zones" href="/settings/performance">Update in settings</a>
+or
+<span class='clickable js-refresh-pace-zones'>keep these zones.</span>
+<% } else if (type == 'error') { %>
+<span class='clickable js-refresh-pace-zones'>Please try again.</span>
+<% } else { /* success */ %>
+Your pace zones will stay current for another 6 weeks.
+<% } %>
+</script>
+<script id="pace-analysis-template" type="text/template">
+<section class='inset with-border' id='js-snw-adp-pace-zones-upsell'>
+<div class='main'>
+<h2>Pace Analysis</h2>
+<div class='in-app-upsell centered inset'>
+<img alt="Get insight from your runs" src="https://d3nn82uaxijpm6.cloudfront.net/assets/application/upsells/in_app/pace_analysis-04173deafb9ea834dc445e6f3df85d4e108fd118c62518aab882305eedd96d22.png" />
+<h3 class='bottomless'>Get insight from your runs</h3>
+<p class='mt-xs'>Get a breakdown of your performance from start to finish, one kilometer/mile at a time.</p>
+<a class='button btn-primary' href='/subscribe?origin=pace_analysis' id='js-snw-adp-pace-zones-upsell-cta'>
+Start Your Free Trial
+</a>
+</div>
+</div>
+</section>
+</script>
+<script id="elevation-pace-chart-template" type="text/template">
+<div class='row pace-controls'>
+<div class='inline-inputs marginless pace-control-buttons'>
+<ul class='small switches'>
+<li>
+<a class='button graph-type selected' data-type='line' href='javascript:;' title='View as a line graph'>
+<div class='line-icon activity-sprite'>Smoothed</div>
+</a>
+</li>
+<li>
+<a class='button graph-type' data-type='bar' href='javascript:;' title='View as a bar graph'>
+<div class='bar-icon activity-sprite'>Splits</div>
+</a>
+</li>
+</ul>
+</div>
+<div class='spans8'>
+<div class='label zoom-level-text'>
+Zoom:
+<span id='zoom-level'>1x</span>
+</div>
+<div id='slider'></div>
+</div>
+</div>
+</script>
+<script id="avg-gap-template" type="text/template">
+{{gap}}<abbr class='unit' title='minutes per kilometer'> /km</abbr>
+</script>
+<script id="pace-zone-row-template" type="text/template">
+<tr>
+<td>{{ zone.name }}</td>
+<td class='name'>{{ zone.description }}</td>
+<td class='range'>{{ zone.range }}</td>
+<td class='time'>
+<b>{{ zone.time }}</b>
+</td>
+<td>
+<div class='bar'>
+<div class='fill pace {{ zone.tag }}' style='width: {{ zone.width }}%'></div>
+</div>
+</td>
+</tr>
+</script>
+
+
+</div>
+```

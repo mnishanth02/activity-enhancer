@@ -1,14 +1,16 @@
 /**
- * Garmin Connect activity edit page adapter
+ * Garmin Connect activity edit page adapter (Placeholder for Phase 8)
  *
  * This adapter provides DOM selectors and field operations for Garmin Connect's
  * activity edit/detail pages where users can modify titles and descriptions.
  *
  * Garmin DOM selectors are provisional and may need verification/adjustment.
  * Test and update selectors as needed when running on live pages.
+ *
+ * TODO: Update with dual-page support (details + edit) in Phase 8
  */
 
-import type { SiteAdapter } from "./types";
+import type { ExtendedActivityData, PageType, SiteAdapter } from "./types";
 
 export const garminAdapter: SiteAdapter = {
 	id: "garmin",
@@ -102,6 +104,38 @@ export const garminAdapter: SiteAdapter = {
 			descInput.dispatchEvent(new Event("change", { bubbles: true }));
 			descInput.dispatchEvent(new Event("blur", { bubbles: true }));
 		}
+	},
+
+	detectPageType(location: Location): PageType {
+		// TODO: Implement page type detection for Garmin in Phase 8
+		// Garmin has similar details/edit page patterns
+		return "unknown";
+	},
+
+	extractDetailsPageData(doc: Document): ExtendedActivityData {
+		// TODO: Implement Garmin details page extraction in Phase 8
+		// Extract comprehensive data (15+ fields) from Garmin's activity details page
+		return { title: "", description: "" };
+	},
+
+	locateEditButton(doc: Document): HTMLElement | null {
+		// TODO: Implement Garmin edit button locator in Phase 8
+		// Find the edit button on Garmin's details page
+		return null;
+	},
+
+	locateTitleField(doc: Document): HTMLInputElement | null {
+		// TODO: Implement Garmin title field locator in Phase 8
+		// Find the title input field on edit page
+		return null;
+	},
+
+	locateDescriptionField(
+		doc: Document,
+	): HTMLTextAreaElement | HTMLElement | null {
+		// TODO: Implement Garmin description field locator in Phase 8
+		// Find the description textarea on edit page
+		return null;
 	},
 
 	onDomReady(cb: () => void): void {

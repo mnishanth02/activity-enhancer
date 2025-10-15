@@ -431,3 +431,238 @@ export function createErrorPanel(
 
 	return panel;
 }
+
+/**
+ * Create enhancement preview panel for edit page
+ */
+export function createEnhancementPreviewPanel(
+	field: "title" | "description",
+	enhancedValue: string,
+	onApply: () => void,
+	onDiscard: () => void,
+): HTMLDivElement {
+	const panel = document.createElement("div");
+	panel.className = CSS_CLASSES.ENHANCEMENT_PREVIEW;
+	panel.setAttribute("data-ae-preview-field", field);
+	panel.setAttribute("role", "region");
+	panel.setAttribute("aria-label", `Enhanced ${field} preview`);
+
+	// Subtle, compact panel styles
+	Object.assign(panel.style, {
+		background: "#fffbf5",
+		border: "1px solid #ffedd5",
+		borderLeft: "3px solid #fc5200",
+		borderRadius: "4px",
+		padding: "8px 12px",
+		marginBottom: "8px",
+		fontFamily: "system-ui, -apple-system, sans-serif",
+		fontSize: "13px",
+	});
+
+	// Header - more compact
+	const header = document.createElement("div");
+	header.style.display = "flex";
+	header.style.alignItems = "center";
+	header.style.justifyContent = "space-between";
+	header.style.marginBottom = "6px";
+
+	const headerText = document.createElement("span");
+	headerText.style.fontWeight = "600";
+	headerText.style.color = "#fc5200";
+	headerText.style.fontSize = "12px";
+	headerText.textContent = `✨ AI ${field === "title" ? "Title" : "Description"}`;
+	header.appendChild(headerText);
+
+	// Action buttons inline in header
+	const actions = document.createElement("div");
+	actions.style.display = "flex";
+	actions.style.gap = "6px";
+
+	// Apply button - smaller
+	const applyButton = document.createElement("button");
+	applyButton.textContent = "Insert";
+	applyButton.setAttribute("data-action", "apply");
+	applyButton.setAttribute("type", "button");
+	Object.assign(applyButton.style, {
+		padding: "4px 10px",
+		background: "#fc5200",
+		color: "white",
+		border: "none",
+		borderRadius: "3px",
+		cursor: "pointer",
+		fontSize: "11px",
+		fontWeight: "600",
+		transition: "opacity 0.2s",
+	});
+	applyButton.addEventListener("mouseenter", () => {
+		applyButton.style.opacity = "0.9";
+	});
+	applyButton.addEventListener("mouseleave", () => {
+		applyButton.style.opacity = "1";
+	});
+	applyButton.addEventListener("click", onApply);
+	actions.appendChild(applyButton);
+
+	// Discard button - smaller
+	const discardButton = document.createElement("button");
+	discardButton.textContent = "Discard";
+	discardButton.setAttribute("data-action", "discard");
+	discardButton.setAttribute("type", "button");
+	Object.assign(discardButton.style, {
+		padding: "4px 10px",
+		background: "transparent",
+		color: "#666",
+		border: "1px solid #ddd",
+		borderRadius: "3px",
+		cursor: "pointer",
+		fontSize: "11px",
+		fontWeight: "600",
+		transition: "background 0.2s",
+	});
+	discardButton.addEventListener("mouseenter", () => {
+		discardButton.style.background = "#f5f5f5";
+	});
+	discardButton.addEventListener("mouseleave", () => {
+		discardButton.style.background = "transparent";
+	});
+	discardButton.addEventListener("click", onDiscard);
+	actions.appendChild(discardButton);
+
+	header.appendChild(actions);
+	panel.appendChild(header);
+
+	// Enhanced value display - compact
+	const valueDisplay = document.createElement("div");
+	valueDisplay.style.padding = "6px 8px";
+	valueDisplay.style.background = "white";
+	valueDisplay.style.borderRadius = "3px";
+	valueDisplay.style.fontSize = "13px";
+	valueDisplay.style.lineHeight = "1.4";
+	valueDisplay.style.color = "#333";
+	valueDisplay.style.maxHeight = field === "description" ? "80px" : "auto";
+	valueDisplay.style.overflow = "auto";
+	valueDisplay.style.whiteSpace =
+		field === "description" ? "pre-wrap" : "normal";
+	valueDisplay.textContent = enhancedValue;
+	panel.appendChild(valueDisplay);
+
+	return panel;
+}
+
+/**
+ * Create reset button for edit page (initially hidden)
+ */
+export function createResetButton(onClick: () => void): HTMLButtonElement {
+	const button = document.createElement("button");
+	button.className = "ae-reset-btn";
+	button.setAttribute(DOM_ATTRIBUTES.RESET_BUTTON, "1");
+	button.setAttribute("aria-label", "Reset to original values");
+	button.setAttribute("type", "button");
+	button.textContent = "🔄 Reset to Original";
+
+	Object.assign(button.style, {
+		display: "none", // Initially hidden
+		marginTop: "16px",
+		padding: "10px 16px",
+		border: "2px solid #666",
+		borderRadius: "4px",
+		background: "white",
+		color: "#666",
+		cursor: "pointer",
+		fontSize: "14px",
+		fontWeight: "600",
+		fontFamily: "system-ui, -apple-system, sans-serif",
+	});
+
+	button.addEventListener("click", onClick);
+
+	// Hover effects
+	button.addEventListener("mouseenter", () => {
+		button.style.background = "#666";
+		button.style.color = "white";
+	});
+
+	button.addEventListener("mouseleave", () => {
+		button.style.background = "white";
+		button.style.color = "#666";
+	});
+
+	return button;
+}
+
+/**
+ * Show toast notification
+ */
+export function showToast(
+	message: string,
+	type: "success" | "error" | "info" = "info",
+): void {
+	const toast = document.createElement("div");
+	toast.setAttribute("role", "alert");
+	toast.setAttribute("aria-live", "polite");
+	toast.textContent = message;
+
+	// Color scheme based on type
+	let bgColor = "#333";
+	let borderColor = "#555";
+
+	if (type === "success") {
+		bgColor = "#10b981";
+		borderColor = "#059669";
+	} else if (type === "error") {
+		bgColor = "#dc2626";
+		borderColor = "#b91c1c";
+	} else if (type === "info") {
+		bgColor = "#3b82f6";
+		borderColor = "#2563eb";
+	}
+
+	Object.assign(toast.style, {
+		position: "fixed",
+		bottom: "24px",
+		right: "24px",
+		background: bgColor,
+		color: "white",
+		padding: "12px 20px",
+		borderRadius: "8px",
+		border: `2px solid ${borderColor}`,
+		fontSize: "14px",
+		fontWeight: "600",
+		fontFamily: "system-ui, -apple-system, sans-serif",
+		zIndex: "10000",
+		boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+		animation: "ae-toast-slide-in 0.3s ease-out",
+	});
+
+	// Add animation keyframes if not already present
+	if (!document.getElementById("ae-toast-styles")) {
+		const style = document.createElement("style");
+		style.id = "ae-toast-styles";
+		style.textContent = `
+			@keyframes ae-toast-slide-in {
+				from {
+					opacity: 0;
+					transform: translateY(20px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+		`;
+		document.head.appendChild(style);
+	}
+
+	document.body.appendChild(toast);
+
+	// Auto-remove after 3 seconds
+	setTimeout(() => {
+		toast.style.opacity = "0";
+		toast.style.transform = "translateY(20px)";
+		toast.style.transition = "all 0.3s ease-out";
+
+		setTimeout(() => {
+			toast.remove();
+		}, 300);
+	}, 3000);
+}

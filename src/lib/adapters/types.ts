@@ -5,6 +5,11 @@
  * for activity enhancement on different fitness platforms
  */
 
+/**
+ * Page type detection for dual-page support
+ */
+export type PageType = "details" | "edit" | "unknown";
+
 export interface SiteAdapter {
 	/** Unique identifier for the adapter */
 	id: string;
@@ -18,6 +23,13 @@ export interface SiteAdapter {
 	 * @returns true if this adapter should be used for the current page
 	 */
 	match(location: Location): boolean;
+
+	/**
+	 * Detect the type of page (details, edit, or unknown)
+	 * @param location - The window.location object
+	 * @returns The page type
+	 */
+	detectPageType(location: Location): PageType;
 
 	/**
 	 * Locate the root element where the enhance button should be anchored
@@ -66,6 +78,36 @@ export interface SiteAdapter {
 	>;
 
 	/**
+	 * Extract comprehensive data from details page (15+ fields)
+	 * @param doc - The document object
+	 * @returns Extended activity data with all available fields
+	 */
+	extractDetailsPageData?(doc: Document): ExtendedActivityData;
+
+	/**
+	 * Locate the edit button on details page
+	 * @param doc - The document object
+	 * @returns The edit button element or null if not found
+	 */
+	locateEditButton?(doc: Document): HTMLElement | null;
+
+	/**
+	 * Locate the title input field on edit page
+	 * @param doc - The document object
+	 * @returns The title input element or null if not found
+	 */
+	locateTitleField?(doc: Document): HTMLInputElement | null;
+
+	/**
+	 * Locate the description textarea/field on edit page
+	 * @param doc - The document object
+	 * @returns The description element or null if not found
+	 */
+	locateDescriptionField?(
+		doc: Document,
+	): HTMLTextAreaElement | HTMLElement | null;
+
+	/**
 	 * Optional callback when DOM is ready (site-specific readiness hook)
 	 * @param cb - Callback to invoke when DOM is ready
 	 */
@@ -97,6 +139,42 @@ export interface ActivityData {
 	elevationGain?: string;
 	/** Activity date (e.g., "Oct 12, 2025") */
 	date?: string;
+}
+
+/**
+ * Extended activity data with comprehensive fields from details page (15+ fields)
+ */
+export interface ExtendedActivityData extends ActivityData {
+	/** Athlete name */
+	athleteName?: string;
+	/** Activity type (e.g., "Run", "Ride") */
+	activityType?: string;
+	/** Workout type (e.g., "Race", "Long Run") */
+	workoutType?: string;
+	/** Time display format (human-readable) */
+	timeDisplay?: string;
+	/** Time in ISO format */
+	timeISO?: string;
+	/** Location of activity */
+	location?: string;
+	/** Moving time (excludes pauses) */
+	movingTime?: string;
+	/** Elapsed time (includes pauses) */
+	elapsedTime?: string;
+	/** Calories burned */
+	calories?: string;
+	/** Average pace */
+	averagePace?: string;
+	/** Average heart rate */
+	averageHeartRate?: string;
+	/** Average cadence */
+	averageCadence?: string;
+	/** Temperature during activity */
+	temperature?: string;
+	/** Humidity level */
+	humidity?: string;
+	/** Wind conditions */
+	wind?: string;
 }
 
 /**

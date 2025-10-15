@@ -1,12 +1,17 @@
 /**
  * Content script for activity enhancement
  *
- * Injects enhancement button into supported activity edit pages
- * (Strava, Garmin) and handles the enhancement flow.
+ * Dual-page support: Handles both details page (data extraction + navigation)
+ * and edit page (preview + insert/discard) for supported platforms.
  */
 
 import { findAdapter } from "@/lib/adapters";
-import { ensureInjected, setupNavigationWatcher } from "@/lib/inject";
+import type { SiteAdapter } from "@/lib/adapters/types";
+import {
+	handleDetailsPage,
+	handleEditPage,
+	setupNavigationWatcher,
+} from "@/lib/inject";
 import { isDomainEnabled } from "@/lib/storage";
 
 // WXT will automatically configure this as a content script based on file location
@@ -29,7 +34,7 @@ export default defineContentScript({
 });
 
 /**
- * Initialize the enhancement system
+ * Initialize the enhancement system with page type detection
  */
 async function initialize(): Promise<void> {
 	// Find matching adapter
@@ -48,10 +53,32 @@ async function initialize(): Promise<void> {
 	// Use adapter's DOM ready hook if available
 	if (adapter.onDomReady) {
 		adapter.onDomReady(() => {
-			ensureInjected(adapter);
+			initializePage(adapter);
 		});
 	} else {
-		// Default: inject immediately
-		ensureInjected(adapter);
+		// Default: initialize immediately
+		initializePage(adapter);
+	}
+}
+
+/**
+ * Initialize page based on detected page type
+ * @param adapter - The site adapter to use
+ */
+async function initializePage(adapter: SiteAdapter): Promise<void> {
+	const pageType = adapter.detectPageType(window.location);
+
+	switch (pageType) {
+		case "details":
+			// Details page: inject AI Enhance button
+			await handleDetailsPage(adapter);
+			break;
+		case "edit":
+			// Edit page: show enhancement preview if available
+			await handleEditPage(adapter);
+			break;
+		default:
+			// Unknown page type, do nothing
+			break;
 	}
 }

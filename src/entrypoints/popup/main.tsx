@@ -27,21 +27,21 @@ function PopupApp() {
 	const tabElement = useMemo(() => {
 		switch (activeTab) {
 			case "status":
-				return <StatusTab domain={ domain } />;
+				return <StatusTab domain={domain} />;
 			case "settings":
 				return (
-					<Suspense fallback={ <SettingsLoadingSkeleton /> }>
+					<Suspense fallback={<SettingsLoadingSkeleton />}>
 						<SettingsTab />
 					</Suspense>
 				);
 			case "account":
 				return (
-					<Suspense fallback={ <AccountLoadingSkeleton /> }>
+					<Suspense fallback={<AccountLoadingSkeleton />}>
 						<AccountTab />
 					</Suspense>
 				);
 			default:
-				return <StatusTab domain={ domain } />;
+				return <StatusTab domain={domain} />;
 		}
 	}, [activeTab, domain]);
 
@@ -54,8 +54,8 @@ function PopupApp() {
 	return (
 		<div className="w-[420px] min-h-[500px] bg-background">
 			<Header />
-			<TabsNavigation activeTab={ activeTab } onTabChange={ setActiveTab }>
-				<TabsContent value={ activeTab }>{ tabElement }</TabsContent>
+			<TabsNavigation activeTab={activeTab} onTabChange={setActiveTab}>
+				<TabsContent value={activeTab}>{tabElement}</TabsContent>
 			</TabsNavigation>
 			<Toaster />
 		</div>

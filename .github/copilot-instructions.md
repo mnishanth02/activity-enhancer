@@ -3,88 +3,137 @@
 Purpose: Enable AI assistants to quickly contribute to the AI Activity Enhancer (MV3 Chrome extension) without re-discovering core architecture or conventions.
 
 ## 1. Architecture Snapshot
-- Tech: WXT (browser extension tooling) + React (popup UI) + Vercel AI SDK (LLM calls). TypeScript-first.
-- Entry points:
-  - `src/entrypoints/content.ts`: DOM integration, site detection, MutationObserver, button + inline enhancement UI logic.
-  - `src/entrypoints/background.ts`: Reserved for messaging, future caching/rate limiting.
-  - `src/entrypoints/popup/`: React UI with tabbed interface (Status, Settings, Account tabs).
-    - `main.tsx`: Root app with lazy-loaded tabs, query param routing, domain detection.
-    - `components/`: StatusTab (toggle + metrics), SettingsTab (forms + BYOK), AccountTab (free/pro views), LoadingSkeletons (shared loading states).
-    - `hooks/`: useCurrentDomain (detects active tab domain for per-site toggles).
-  - `src/lib/`: Shared utilities
-    - `storage.ts`: WXT storage helpers with zod validation
-    - `settings-schema.ts`: Single source of truth for all settings schemas (zod v3)
-    - `query-state.ts`: URL query param state management utility
-    - `metrics.ts`: Enhancement count tracking with monthly auto-reset
-- No backend yet; model calls likely originate from content (may later centralize via background or proxy).
+- **Tech Stack**: WXT (browser extension framework) + React 18 (popup UI) + Vercel AI SDK (LLM integration). TypeScript-first with strict validation.
+- **Entry Points**:
+  - `src/entrypoints/content.ts`: **Dual-page orchestrator** for details→edit workflow. Detects page type, delegates to `handleDetailsPage` or `handleEditPage` from `inject.ts`.
+  - `src/entrypoints/background.ts`: Lifecycle management (currently minimal, reserved for future caching/rate limiting).
+  - `src/entrypoints/popup/`: React UI with lazy-loaded tabs (Status, Settings, Account). Uses Suspense + specialized skeletons.
+- **Key Libraries** (`src/lib/`):
+  - **Adapter Pattern** (`adapters/`): Site-specific DOM logic. Each adapter implements `SiteAdapter` interface (see `types.ts`). Registry in `index.ts` with `findAdapter(location)`.
+  - `inject.ts`: Core injection logic for both page types. Handles button creation, preview panels, LLM calls, navigation watching.
+  - `session.ts`: Cross-page state via `storage.session` (MV3). 10-min expiry. Stores `PendingEnhancement` with 15+ extracted fields.
+  - `storage.ts`: WXT storage wrapper with zod validation. All keys use area prefixes (`sync:`, `local:`, `session:`).
+  - `llm.ts`: LLM invocation (currently mock, ready for real API integration). Returns `EnhancementResult { title, description, success, error? }`.
+  - `ui/components.ts`: Vanilla JS DOM builders for buttons, panels, toasts (injected into content scripts, not React).
 
-## 2. Core Flow (Happy Path)
-1. Detect supported site by `location.host`.
-2. Observe DOM for activity items (infinite scroll / SPA navigation).
-3. Inject an idempotent Enhance button (mark node with a data-attribute to avoid duplicates).
-4. On click, gather: title, description (if present), lightweight stats (distance/time/type) from visible text.
-5. Construct prompt → call model via Vercel AI SDK.
-6. Expect JSON `{ title, description }`; update inline panel with Accept / Cancel.
-7. Accept replaces original text nodes; Cancel restores.
+## 2. Dual-Page Workflow (Production Architecture)
+**Details Page** (e.g., `/activities/123`):
+1. Inject "✨ AI Enhance" button next to activity header (`handleDetailsPage`).
+2. On click: Extract 15+ fields via `adapter.extractDetailsPageData()` (title, description, distance, time, elevation, sport, calories, heart rate, cadence, power, etc.).
+3. Save to session storage (`savePendingEnhancement`) with activityId from URL.
+4. Trigger async LLM call (`triggerEnhancementAPI`).
+5. Programmatically click edit button (`adapter.locateEditButton()`) → navigate to edit page.
 
-## 3. Conventions & Patterns
-- Keep selectors + per‑site logic isolated (prepare for future adapter registry). Prefer small pure functions.
-- Idempotency: Always tag processed DOM nodes (e.g. `data-ai-enhanced="1"`). Before injecting, check tag.
-- Avoid heavy re-query loops—MutationObserver should batch or filter new nodes only.
-- Prompt contract: Title <= 60 chars, Description <= 280 chars, faithful & motivational.
-- **Storage**: Use WXT's `storage.defineItem` API with area prefixes (`sync:`, `local:`, `session:`). Import from `wxt/utils/storage`. All keys must have area prefix (e.g., `sync:ae.settings`).
-- **Validation**: All storage schemas use zod v3 compatibility layer via `import { z } from "zod/v3"` (required for @hookform/resolvers compatibility). Use `z.string().url()` and `z.string().email()` instead of `z.url()` and `z.email()`.
-- **Query State**: Transient UI state (e.g., active tab, collapsible open state) persists in URL query params via `useQueryParam` hook from `@/lib/query-state`. Pattern: `const [value, setValue] = useQueryParam("key", "defaultValue")`. Never persist UI state in storage—use query params.
-- **Forms**: Use react-hook-form + zodResolver for all form validation. Register inputs with `{...register("fieldName")}` or controlled components with `setValue`. Always handle errors with toast notifications.
-- **Loading States**: Use specialized skeleton components from `LoadingSkeletons.tsx` instead of generic spinners. Match skeleton structure to actual content (forms → SettingsLoadingSkeleton, features → AccountLoadingSkeleton).
-- **Error Handling**: All async storage operations must have try/catch with toast error messages. Provide fallback defaults on load failures. Include descriptive error messages with retry guidance.
-- **Accessibility**: All interactive elements need descriptive ARIA labels. Use semantic HTML (`<header>`, `<main>`, `<nav>`). Decorative elements get `aria-hidden="true"`. Form inputs must be associated with `<Label>` using `htmlFor`.
-- Minimal state: ephemeral in content script; persist user config via sync storage with zod validation.
-- Prefer graceful fallback: if AI fails, show original unchanged text and a retry affordance.
+**Edit Page** (e.g., `/activities/123/edit`):
+1. Load pending enhancement from session (`getPendingEnhancement`).
+2. Poll for enhanced data (max 30s timeout) or show "Enhancing..." state.
+3. Display preview panel with Insert/Discard/Reset options (`createEnhancementPreviewPanel`).
+4. Insert: Populate form fields via `adapter.setTitle()` / `adapter.setDescription()`.
+5. Discard: Clear session, hide panel.
+6. Reset: Restore original values from session.
 
-## 4. Error & Edge Handling
-- Network/model error → inline message + Retry button; never silently swallow.
-- Missing stats: still proceed—prompt should omit absent fields (do not send placeholders like `null`).
-- Multiple rapid clicks: debounce or disable button while request in flight.
-- JSON parse failure: show raw text for inspection + retry (LLM drift resilience).
+**Why Dual-Page**: Details page has full context (stats, graphs, maps) that edit page lacks. This enables richer LLM prompts.
 
-## 5. LLM Integration Notes
-- Centralize model invocation in a small utility (add if not present) to ease future streaming or proxy shift.
-- Sanitize outgoing text (strip excessive whitespace, avoid leaking personal names once redaction lands).
-- Keep prompt as a template string with clearly delineated sections.
+## 3. Adapter Pattern (Critical for Site Support)
+**All site-specific logic lives in adapters** (`src/lib/adapters/`). Never hardcode selectors in `content.ts` or `inject.ts`.
 
-## 6. Build & Dev Workflow
-- Install: `pnpm install`
-- Dev (watch): `pnpm dev` → outputs `.output/chrome-mv3/`
-- Load in Chrome: Extensions → Developer Mode → Load Unpacked → select output folder.
-- Production build: `pnpm build`
-- Keep changes incremental; don't over-refactor generated `.output` artifacts (never edit build output).
+**Adding a New Site** (e.g., Garmin, Wahoo):
+1. Create `src/lib/adapters/yoursite.ts` implementing `SiteAdapter` interface:
+   - `match(location)`: Regex/logic to detect site (e.g., `location.host === "connect.garmin.com"`).
+   - `detectPageType(location)`: Return `"details" | "edit" | "unknown"` based on URL pattern.
+   - `locateTitleRoot(doc)`: Find anchor element for button injection.
+   - `getTitle/setTitle`, `getDescription/setDescription`: Read/write form fields.
+   - `extractDetailsPageData(doc)`: Extract 15+ fields (title, description, distance, time, elevation, sport, calories, HR, cadence, power, pace, temperature, location, date, privacy). Return `ExtendedActivityData`.
+   - `locateEditButton(doc)`: Find edit button on details page for programmatic click.
+   - `locateTitleField(doc)`: Find title input on edit page (for focus management).
+   - **Optional**: `onDomReady(callback)`: For SPA sites with delayed rendering (e.g., Strava uses React, DOM not ready on `document_end`). Callback is invoked when DOM is stable.
+2. Register in `src/lib/adapters/index.ts`: Add to `siteAdapters` array.
+3. Update `wxt.config.ts` manifest `matches` array with site's URL pattern.
 
-## 7. Adding a New Site (Pattern)
-1. Define a selector map (container + title + description + optional stats).
-2. Extend site detection (host/pattern list).
-3. Inject button using existing utility; ensure idempotent attribute.
-4. Extract fields defensively (optional chaining, trim text).
-5. Reuse shared enhance function.
+**Example** (see `strava.ts`):
+```typescript
+export const stravaAdapter: SiteAdapter = {
+  id: "strava",
+  name: "Strava",
+  match: (loc) => loc.host === "www.strava.com" && /^\/activities\/\d+(\/edit)?$/.test(loc.pathname),
+  detectPageType: (loc) => loc.pathname.includes("/edit") ? "edit" : "details",
+  onDomReady: (cb) => { /* Wait for React render */ },
+  // ... 10+ more methods
+};
+```
 
-## 8. Popup UI Patterns (Established in Phase 1-5)
-- **Tab Structure**: Three lazy-loaded tabs (Status, Settings, Account) with Suspense boundaries and specific skeletons.
-- **Query State**: Tab selection (`?tab=status`) and collapsible state (`?adv=1`) use query params, not storage.
-- **Forms**: react-hook-form with zodResolver (zod v3 import). Two-form pattern in Settings (general + advanced).
-- **Storage Operations**: Always wrap in try/catch with toast notifications. Provide fallbacks on errors.
-- **Loading UX**: Use skeleton components (TabLoadingSkeleton, SettingsLoadingSkeleton, AccountLoadingSkeleton) not Spinner.
-- **Toast Feedback**: Success/error toasts for all user actions (save, toggle, test). Include descriptions for errors.
-- **Accessibility**: All buttons/inputs have aria-labels. Forms use Label with htmlFor. Decorative icons get aria-hidden.
-- **PRO Gating**: Disabled state + PRO badge for premium features. Account tab shows pricing or subscription details.
+**Idempotency**: Always check for existing elements before injecting (e.g., `document.querySelector('[data-ae-enhance-btn]')`). Use `DOM_ATTRIBUTES` constants from `constants.ts`.
 
-## 9. Future-Friendly Hooks
+## 4. Storage & State Management
+- **WXT Storage API**: Use `storage.defineItem<T>("area:key", { fallback })` pattern. Areas: `sync:` (cross-device), `local:` (device-only), `session:` (tab-scoped, MV3).
+- **Zod v3 Compatibility**: All schemas use `import { z } from "zod/v3"` (required for @hookform/resolvers). Use `z.string().url()` NOT `z.url()`, `z.string().email()` NOT `z.email()`.
+- **Session Storage** (`session.ts`): Cross-page state for dual-page workflow. `PendingEnhancement` expires after 10 min. Contains: activityId, extractedData (15+ fields), original title/description, enhanced title/description (after LLM).
+- **Query State** (`query-state.ts`): Transient UI state (tab selection `?tab=status`, collapsible state `?adv=1`) uses URL params, NEVER storage. Hook: `const [value, setValue] = useQueryParam("key", "default")`.
+- **Never store**: UI state, temporary flags, loading states. These go in query params or React state.
+
+## 5. Popup UI Patterns (React)
+- **Tabs**: Lazy-loaded with `React.lazy()`. Wrap in `<Suspense fallback={<TabLoadingSkeleton />}>`. Three tabs: Status (per-site toggle + metrics), Settings (forms for tone/hashtags/BYOK), Account (free/PRO).
+- **Forms**: react-hook-form + zodResolver. Two-form pattern in Settings (general + advanced). Register inputs: `{...register("fieldName")}`. Controlled components: `setValue("field", value)`. Always toast on success/error.
+- **Loading States**: Use specialized skeletons (`SettingsLoadingSkeleton`, `AccountLoadingSkeleton`) NOT `<Spinner>`. Match skeleton structure to actual content.
+- **Error Handling**: Wrap all async storage ops in try/catch with toast. Provide fallback defaults on failures. Descriptive errors with retry guidance.
+- **Accessibility**: All buttons/inputs need `aria-label`. Forms use `<Label htmlFor="...">`. Decorative icons: `aria-hidden="true"`.
+- **PRO Gating**: Disabled state + PRO badge for premium features (weather context, custom prompts). Check `account.pro` flag.
+
+## 6. LLM Integration & Prompts
+- **Current State**: Mock implementation in `llm.ts`. Returns `EnhancementResult { title, description, success, error? }` after 1s delay.
+- **Future**: Real API calls via Vercel AI SDK. User provides API key (BYOK) or uses default provider. Settings: `provider` (openai/anthropic/gemini/custom), `endpoint`, `apiKey`.
+- **Prompt Contract** (see `prompt.ts`):
+  - Inputs: Extracted data (15+ fields), user settings (tone, hashtags).
+  - Outputs: JSON `{ title: string, description: string }`. Title <= 60 chars, Description <= 280 chars.
+  - Sanitization: Strip excessive whitespace, trim fields. Future: redact personal names/locations.
+- **Prompt Builder**: `buildEnhancedPrompt(data, settings)` constructs final prompt. Omit missing fields (no `null` placeholders). Parser: `parseEnhancedActivity(llmResponse)` validates output.
+
+## 7. Build & Dev Workflow
+- **Install**: `pnpm install` (pnpm required, not npm/yarn)
+- **Dev (watch)**: `pnpm dev` → outputs to `.output/chrome-mv3/`. Hot reload enabled.
+- **Load in Chrome**: Extensions → Developer Mode → Load Unpacked → select `.output/chrome-mv3/`
+- **Production build**: `pnpm build` → minified, optimized for distribution
+- **Firefox**: `pnpm dev:firefox` / `pnpm build:firefox`
+- **Code quality**: `pnpm check` → Biome linter/formatter (auto-fix enabled)
+- **NEVER edit**: `.output/` artifacts (auto-generated). All changes go in `src/`.
+- **Debugging**: Use Chrome DevTools on extension popup (right-click → Inspect). Content script logs appear in page console.
+
+## 8. Error & Edge Handling
+- **Network/Model Errors**: Show inline error panel with Retry button. Never silently fail. Example: `createErrorPanel(message, onRetry, onCancel)` in `ui/components.ts`.
+- **Missing Data**: Proceed anyway. Prompt builder omits absent fields (no `null` placeholders). Example: If HR data missing, prompt won't mention heart rate.
+- **Debouncing**: 500ms debounce on enhance button (`ENHANCEMENT_DEBOUNCE_MS`). Disable button while request in flight.
+- **JSON Parse Failures**: Show raw LLM response + Retry. Handle drift (e.g., extra markdown, comments).
+- **Session Expiry**: 10-min timeout on `PendingEnhancement`. If expired on edit page, show "Session expired, please try again" with link back to details page.
+- **Extension Context Invalidation**: Catch errors with `"Extension context invalidated"` message. Alert user: "Extension was updated. Please reload this page."
+- **Idempotency**: Always check `data-ae-*` attributes before injecting. Example: `if (document.querySelector('[data-ae-enhance-btn]')) return;`
+
+## 9. Constants & Magic Numbers
+All constants live in `src/lib/constants.ts`. Never hardcode:
+- DOM attributes: `DOM_ATTRIBUTES.ENHANCE_BUTTON`, `DOM_ATTRIBUTES.PREVIEW_PANEL`, etc.
+- CSS classes: `CSS_CLASSES.ENHANCE_BUTTON`, `CSS_CLASSES.LOADING`, etc.
+- Content limits: `CONTENT_LIMITS.TITLE_MAX` (60), `CONTENT_LIMITS.DESCRIPTION_MAX` (280)
+- Timeouts: `ENHANCEMENT_DEBOUNCE_MS` (500), `MAX_WAIT_FOR_ENHANCED_DATA_MS` (30000)
+- Domains: `SUPPORTED_DOMAINS.STRAVA`, `SUPPORTED_DOMAINS.GARMIN`
+
+## 10. Navigation & SPA Handling
+- **SPA Detection**: Sites like Strava use client-side routing. `setupNavigationWatcher()` in `inject.ts` polls every 500ms for URL changes (`NAVIGATION_CHECK_INTERVAL`).
+- **Adapter Hook**: `onDomReady(callback)` for sites with delayed rendering (React/Vue). Example: Strava waits for heading element to appear before injecting.
+- **Re-initialization**: On navigation, `initialize()` re-runs: finds adapter, detects page type, injects/previews accordingly. Existing elements are skipped via idempotency checks.
+
+## 11. Testing & Validation
+- **Manual Testing**: Load extension → visit Strava/Garmin → click AI Enhance → verify preview → insert → check form fields updated.
+- **Selector Validation**: Always test on live site. DOM structures change without notice. Document selectors in adapter files with XPath/CSS comments.
+- **Cross-Browser**: Test on Chrome (primary) + Firefox (`pnpm dev:firefox`). Edge/Opera use Chrome build.
+- **Mock Mode**: LLM is mocked by default (`llm.ts` returns fake data after 1s). Toggle `import.meta.env.DEV` checks for dev logs.
+
+## 12. Future-Friendly Hooks
 - Prepare for: streaming responses, adapter registry, caching last N enhancements, redaction pre-pass.
 - Write new utilities as pure functions in `src/` (e.g., `utils/` folder if adding) for testability.
 
-## 10. Non-Goals (Avoid Adding Prematurely)
+## 13. Non-Goals (Avoid Adding Prematurely)
 - Full analytics, complex state management libs, heavy theming, unrelated platform support.
 
-## 11. Pull Request Guidance (Implicit)
+## 14. Pull Request Guidance (Implicit)
 - Show before/after DOM behavior (GIF or description) for UI changes.
 - Note any prompt contract changes explicitly.
 
